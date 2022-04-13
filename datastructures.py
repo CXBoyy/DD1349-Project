@@ -6,11 +6,6 @@ class Node():
         self.Next = None
         self.Previous = None
 
-class Edge():
-    def __init__(self, node1:Node, node2:Node):
-        self.node1 = node1
-        self.node2 = node2
-
 # A class representing a Doubly Linked List
 class DLL():
     def __init__(self):
@@ -165,6 +160,8 @@ class DLL():
             while currentNode != None:
                 if currentNode.data == node.data:
                     return True, index
+                if currentNode.Next != None and currentNode.Next == currentNode:
+                    break
                 currentNode = currentNode.Next
                 index += 1
             return False, -1
@@ -184,17 +181,20 @@ class DLL():
             i += 1
         return currentNode
 
+#################################################################################################################################################################
 
 # A class representing an undirected unweighted graph. 
 class Graph():
     def __init__(self):
-        self.nodeList = list()
+        self.nodeList:list[Node] = list()
         self.adjacencyList : dict[Node, DLL] = dict()
+        self.edges = 0
+        self.currentNode:Node = None
 
     # Function to add a node to a list of all nodes in the graph
     # Duplicates are not allowed. If the node was not already in the list, return True.
     # If the node was already in the list, return False.
-    def add_node(self, node:Node):
+    def addNode(self, node:Node):
         if node not in self.nodeList:
             self.nodeList.append(node)
             return True
@@ -202,25 +202,85 @@ class Graph():
             return False
 
     # Function to add an edge.
+    # Adds the nodes to the list of nodes if they are not already in it.
     # Returns true if the edge was added.
     # Returns false if the edge already existed.
-    def add_edge(self, node1:Node, node2:Node):
-        value = self.adjacencyList[node1]
+    def addEdge(self, node1:Node, node2:Node):
+        if node1 not in self.nodeList:
+            self.addNode(node1)
+        if node2 not in self.nodeList:
+            self.addNode(node2)
+            
+        value = self.adjacencyList.get(node1)
+        
         if value == None:
             doublyLinkedList1 = DLL()
             doublyLinkedList1.pushLast(node2)
+            
             doublyLinkedList2 = DLL()
             doublyLinkedList2.pushLast(node1)
+            
             self.adjacencyList[node1] = doublyLinkedList1
             self.adjacencyList[node2] = doublyLinkedList2
+            
+            self.edges += 1
             return True
         else:
-            if not value.contains(node2):
+            if value.contains(node2) == (False, -1):
                 value.pushLast(node2)
+                if self.adjacencyList.get(node2) == None:
+                    doublyLinkedList2 = DLL()
+                    self.adjacencyList[node2] = doublyLinkedList2
                 self.adjacencyList[node2].pushLast(node1)
+                self.edges += 1
                 return True
             else:
                 return False
+            
+    def hasEdge(self, node1:Node, node2:Node):
+        if self.edges == 0:
+            return False
+        else:
+            if self.adjacencyList.get(node1) == None or self.adjacencyList.get(node2) == None:
+                print("In here")
+                return False
+            return self.adjacencyList[node1].contains(node2) and self.adjacencyList[node2].contains(node1)
+    
+    def removeEdge(self, node1:Node, node2:Node):
+        if self.hasEdge(node1, node2):
+            dll1 = self.adjacencyList[node1]
+            dll2 = self.adjacencyList[node2]
+            
+            dll1.delete(node2)
+            dll2.delete(node1)
+            
+            if dll1.isEmpty():
+                self.nodeList.remove(node1)
+            if dll2.isEmpty():
+                self.nodeList.remove(node1)
+            self.edges -= 1
+            return True
+        else:
+            return False                                # Maybe raise an exception here instead?
+    
+    def setCurrentNode(self, node:Node):
+        if node not in self.nodeList:
+            raise Exception("Node is not in the graph.")
+        else:
+            self.currentNode = node
+    
+    def traverse(self, node:Node):
+        if self.currentNode == None:
+            raise Exception("Current node is 'None'. Please set a valid current node first.")
+        else:
+            currentNode = self.currentNode
+            listOfEdgesFromCurrentNode = self.adjacencyList[currentNode]
+            if not listOfEdgesFromCurrentNode.contains(node):
+                raise Exception("No edge to the specified node from the graph's current node.")
+            else:
+                self.currentNode = node
+        
+    
                 
             
 

@@ -1,23 +1,24 @@
 from cgi import test
 import unittest
-import dll
+from unittest.result import failfast
+import datastructures
 
 class TestDLL(unittest.TestCase):
 
     def setUp(self):
-        self.emptyLL = dll.DLL()
+        self.emptyLL = datastructures.DLL()
 
-        node1 = dll.Node(4)
-        node2 = dll.Node(6)
-        node3 = dll.Node(8)
-        node4 = dll.Node(10)
-        node5 = dll.Node(12)
-        node6 = dll.Node(14)
-        node7 = dll.Node(16)
-        node8 = dll.Node(18)
-        node9 = dll.Node(20)
+        node1 = datastructures.Node(4)
+        node2 = datastructures.Node(6)
+        node3 = datastructures.Node(8)
+        node4 = datastructures.Node(10)
+        node5 = datastructures.Node(12)
+        node6 = datastructures.Node(14)
+        node7 = datastructures.Node(16)
+        node8 = datastructures.Node(18)
+        node9 = datastructures.Node(20)
 
-        self.doublyLL = dll.DLL()
+        self.doublyLL = datastructures.DLL()
 
         self.doublyLL.pushFirst(node1)
         self.doublyLL.pushLast(node2)
@@ -29,6 +30,41 @@ class TestDLL(unittest.TestCase):
         self.doublyLL.pushLast(node8)
         self.doublyLL.pushLast(node9)
 
+##########################################################
+
+        self.node10 = datastructures.Node(4)
+        self.node11 = datastructures.Node(6)
+        self.node12 = datastructures.Node(8)
+        self.node13 = datastructures.Node(10)
+        self.node14 = datastructures.Node(12)
+        self.node15 = datastructures.Node(14)
+        self.node16 = datastructures.Node(16)
+        self.node17 = datastructures.Node(18)
+        self.node18 = datastructures.Node(20)
+        
+        self.udGraph = datastructures.Graph()                                            #                Graph representation:
+        self.udGraph.addNode(self.node10)                                                # 
+        self.udGraph.addNode(self.node11)                                                #                   4 - 20 - 12 - 10
+        self.udGraph.addNode(self.node12)                                                #                  / \ /       \   |
+        self.udGraph.addNode(self.node13)                                                #                 6   8         \  |
+        self.udGraph.addNode(self.node14)                                                #                      \         \ |
+        self.udGraph.addNode(self.node15)                                                #                       18   16 - 14 
+        self.udGraph.addNode(self.node16)                                                #
+        self.udGraph.addNode(self.node17)                                                #
+        self.udGraph.addNode(self.node18)                                                #
+        
+        self.udGraph.addEdge(self.node10, self.node11)
+        self.udGraph.addEdge(self.node10, self.node12)
+        self.udGraph.addEdge(self.node10, self.node18)
+        self.udGraph.addEdge(self.node12, self.node18)
+        self.udGraph.addEdge(self.node12, self.node17)
+        self.udGraph.addEdge(self.node18, self.node14)
+        self.udGraph.addEdge(self.node14, self.node13)
+        self.udGraph.addEdge(self.node13, self.node15)
+        self.udGraph.addEdge(self.node15, self.node16)
+        self.udGraph.addEdge(self.node15, self.node14)
+
+
     def test_isEmptyIsCorrectForEmptyList(self):
         self.assertTrue(self.emptyLL.isEmpty())
 
@@ -36,22 +72,22 @@ class TestDLL(unittest.TestCase):
         self.assertFalse(self.doublyLL.isEmpty())
     
     def test_pushFirstOnEmptyListWorksCorrectly(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         self.assertTrue(self.emptyLL.Start == testNode and self.emptyLL.End == testNode)
 
     def test_pushLastOnEmptyListWorksCorrectly(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushLast(testNode)
         self.assertTrue(self.emptyLL.Start == testNode and self.emptyLL.End == testNode)
 
     def test_pushFirstWorksCorrectly(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.doublyLL.pushFirst(testNode)
         self.assertTrue(self.doublyLL.Start == testNode)
     
     def test_pushLastWorksCorrectly(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.doublyLL.pushLast(testNode)
         self.assertTrue(self.doublyLL.End == testNode)
 
@@ -64,13 +100,13 @@ class TestDLL(unittest.TestCase):
             self.emptyLL.deleteLast()
 
     def test_deleteFirstWorksCorrectlyForListWithOneNode(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         self.emptyLL.deleteFirst()
         self.assertTrue(self.emptyLL.size() == 0)
 
     def test_deleteLastWorksCorrectlyForListWithOneNode(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         self.emptyLL.deleteLast()
         self.assertTrue(self.emptyLL.size() == 0)
@@ -88,13 +124,13 @@ class TestDLL(unittest.TestCase):
         self.assertTrue(self.doublyLL.End.Next == None)
         
     def test_insertThrowsExceptionForIndexLessThanZeroAndGreaterThanSize(self):
-        testNode = dll.Node(2)        
+        testNode = datastructures.Node(2)        
         with self.assertRaises(Exception):
             self.emptyLL.insert(testNode, -1)
             self.emptyLL.insert(testNode, 2)
             
     def test_insertWorksCorrectly(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         oldNodeAtIndex = self.doublyLL.get(5)
         nodeAtIndexMinusOne = oldNodeAtIndex.Previous
         self.doublyLL.insert(testNode, 5)
@@ -104,15 +140,14 @@ class TestDLL(unittest.TestCase):
         self.assertTrue(testNode.Next == oldNodeAtIndex)
     
     def test_insertWorksCorrectlyWhenInsertingAtIndexEqualToSize(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.doublyLL.insert(testNode, 9)
         nodeAtIndex = self.doublyLL.get(9)
         self.assertTrue(testNode.data == nodeAtIndex.data)
         self.assertTrue(testNode.Next == None)
         self.assertTrue(testNode.Previous == self.doublyLL.get(8))
     
-    def test_deleteThrowsExceptionForIndexLessThanZeroAndGreaterThanSizeAndEmptyList(self):
-        testNode = dll.Node(2)        
+    def test_deleteThrowsExceptionForIndexLessThanZeroAndGreaterThanSizeAndEmptyList(self):     
         with self.assertRaises(Exception):
             self.doublyLL.delete(-1)
             self.doublyLL.delete(2)
@@ -140,13 +175,13 @@ class TestDLL(unittest.TestCase):
         self.assertTrue(self.doublyLL.current.data == oldCurrent.Previous.data)
     
     def test_goForwardRaisesExceptionWhenOnlyOneNodeInList(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         with self.assertRaises(Exception):
             self.emptyLL.goForward()
             
     def test_goBackwardRaisesExceptionWhenOnlyOneNodeInList(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         with self.assertRaises(Exception):
             self.emptyLL.goBackward()
@@ -173,7 +208,7 @@ class TestDLL(unittest.TestCase):
         self.assertTrue(self.emptyLL.size() == 0)
 
     def test_sizeWorksCorrectlyForListWithOneNode(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         self.assertTrue(self.emptyLL.size() == 1)
 
@@ -186,19 +221,19 @@ class TestDLL(unittest.TestCase):
         self.assertTrue(self.doublyLL.size() == originalSize - 1)
         
     def test_sizeIncrementsByOneWhenPushingNode(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         originalSize = self.doublyLL.size()
         self.doublyLL.pushFirst(testNode)
         self.assertTrue(self.doublyLL.size() == originalSize + 1)
 
     def test_containsWorksCorrectlyForEmptyList(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.assertTrue(self.emptyLL.contains(testNode) == (False, -1))
 
     def test_containsWorksCorrectlyForNonEmptyList(self):
-        testNode = dll.Node(200)
-        nodeThatExists = dll.Node(4)
-        nodeThatExists2 = dll.Node(20)
+        testNode = datastructures.Node(200)
+        nodeThatExists = datastructures.Node(4)
+        nodeThatExists2 = datastructures.Node(20)
         
         self.assertTrue(self.doublyLL.contains(testNode) == (False, -1))
         self.assertTrue(self.doublyLL.contains(nodeThatExists) == (True, 0))
@@ -213,7 +248,7 @@ class TestDLL(unittest.TestCase):
             self.doublyLL.get(15)
             
     def test_getWorksCorrectlyForListWithOneNode(self):
-        testNode = dll.Node(2)
+        testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
         expectedNode = self.emptyLL.Start
         
@@ -230,6 +265,46 @@ class TestDLL(unittest.TestCase):
         actualData = self.doublyLL.get(4).data
         
         self.assertTrue(expectedData == actualData)
+        
+##########################################################################################################################################################################
 
+    def test_addNodeWorksCorrectly(self):
+        testNode = datastructures.Node(2)
+        self.udGraph.addNode(testNode)
+        self.assertTrue(testNode in self.udGraph.nodeList)
+        
+    def test_addEdgeWorksCorrectlyForNodesAlreadyInGraph(self):
+        self.udGraph.addEdge(self.node16, self.node17)
+        boolean = self.udGraph.hasEdge(self.node16, self.node17)
+        self.assertTrue(boolean)
+
+    def test_addEdgeWorksCorrectlyForNewNodes(self):
+        testNode1 = datastructures.Node(30)
+        testNode2 = datastructures.Node(40)
+        self.udGraph.addEdge(testNode1, testNode2)
+        self.assertTrue(testNode1 in self.udGraph.nodeList)
+        self.assertTrue(testNode2 in self.udGraph.nodeList)
+        self.assertTrue(self.udGraph.hasEdge(testNode1, testNode2))
+
+    def test_hasEdgeWorksCorrectlyForNonExistantEdge(self):
+        testTuple = self.udGraph.hasEdge(self.node16, self.node17)
+        self.assertFalse(testTuple[0])
+    
+    def test_hasEdgeWorksCorrectlyForExistantEdge(self):
+        testTuple = self.udGraph.hasEdge(self.node10, self.node11)
+        self.assertTrue(testTuple[0])
+    
+    def test_removeEdgeWorksCorrectly(self):
+        #TODO
+        self.fail()
+        
+    def test_setCurrentNodeWorksCorrectly(self):
+        #TODO
+        self.fail()
+    
+    def test_traverseWorksCorrectly(self):
+        #TODO
+        self.fail()
+        
     if __name__ == "__main__":
         unittest.main()
