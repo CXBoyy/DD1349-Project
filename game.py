@@ -18,7 +18,7 @@ class Game():
             self.canvas.fill(self.SKY_BLUE)
             self.window.blit(self.canvas, (0,0))
             pygame.display.update()
-        pygame.quit()
+        #pygame.quit()
 
     def check_events(self):
         for event in pygame.event.get():
