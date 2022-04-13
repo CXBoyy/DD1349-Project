@@ -86,6 +86,47 @@ class TestDLL(unittest.TestCase):
         self.doublyLL.deleteLast()
         self.assertTrue(self.doublyLL.End.data == expectedNewLast.data)
         self.assertTrue(self.doublyLL.End.Next == None)
+        
+    def test_insertThrowsExceptionForIndexLessThanZeroAndGreaterThanSize(self):
+        testNode = dll.Node(2)        
+        with self.assertRaises(Exception):
+            self.emptyLL.insert(testNode, -1)
+            self.emptyLL.insert(testNode, 2)
+            
+    def test_insertWorksCorrectly(self):
+        testNode = dll.Node(2)
+        oldNodeAtIndex = self.doublyLL.get(5)
+        nodeAtIndexMinusOne = oldNodeAtIndex.Previous
+        self.doublyLL.insert(testNode, 5)
+        nodeAtIndex = self.doublyLL.get(5)
+        self.assertTrue(testNode.data == nodeAtIndex.data)
+        self.assertTrue(testNode.Previous == nodeAtIndexMinusOne)
+        self.assertTrue(testNode.Next == oldNodeAtIndex)
+    
+    def test_insertWorksCorrectlyWhenInsertingAtIndexEqualToSize(self):
+        testNode = dll.Node(2)
+        self.doublyLL.insert(testNode, 9)
+        nodeAtIndex = self.doublyLL.get(9)
+        self.assertTrue(testNode.data == nodeAtIndex.data)
+        self.assertTrue(testNode.Next == None)
+        self.assertTrue(testNode.Previous == self.doublyLL.get(8))
+    
+    def test_deleteThrowsExceptionForIndexLessThanZeroAndGreaterThanSizeAndEmptyList(self):
+        testNode = dll.Node(2)        
+        with self.assertRaises(Exception):
+            self.doublyLL.delete(-1)
+            self.doublyLL.delete(2)
+            self.emptyLL.delete(2)
+    
+    def test_deleteWorksCorrectly(self):
+        expectedNode = self.doublyLL.get(6)
+        deletedNode = self.doublyLL.get(5)
+        nodeBeforeDeletedNode = deletedNode.Previous
+        self.doublyLL.delete(5)
+        actualNode = self.doublyLL.get(5)
+        self.assertTrue(expectedNode.data == actualNode.data)
+        self.assertTrue(expectedNode.Previous == nodeBeforeDeletedNode)
+        self.assertTrue(nodeBeforeDeletedNode.Next == expectedNode)
 
     def test_goForwardWorksCorrectly(self):
         oldCurrent = self.doublyLL.current
@@ -98,6 +139,36 @@ class TestDLL(unittest.TestCase):
         self.doublyLL.goBackward()
         self.assertTrue(self.doublyLL.current.data == oldCurrent.Previous.data)
     
+    def test_goForwardRaisesExceptionWhenOnlyOneNodeInList(self):
+        testNode = dll.Node(2)
+        self.emptyLL.pushFirst(testNode)
+        with self.assertRaises(Exception):
+            self.emptyLL.goForward()
+            
+    def test_goBackwardRaisesExceptionWhenOnlyOneNodeInList(self):
+        testNode = dll.Node(2)
+        self.emptyLL.pushFirst(testNode)
+        with self.assertRaises(Exception):
+            self.emptyLL.goBackward()
+            
+    def test_goForwardRaisesExceptionForEmptyList(self):
+        with self.assertRaises(Exception):
+            self.emptyLL.goForward()
+    
+    def test_goBackwardRaisesExceptionForEmptyList(self):
+        with self.assertRaises(Exception):
+            self.emptyLL.goBackward()
+    
+    def test_goForwardRaisesExceptionWhenAlreadyAtLastNode(self):
+        self.doublyLL.current = self.doublyLL.get(8)
+        with self.assertRaises(Exception):
+            self.emptyLL.goForward()
+    
+    def test_goBackwardRaisesExceptionWhenAlreadyAtFirstNode(self):
+        self.doublyLL.current = self.doublyLL.get(0)
+        with self.assertRaises(Exception):
+            self.emptyLL.goBackward()
+    
     def test_sizeWorksCorrectlyForEmptyList(self):
         self.assertTrue(self.emptyLL.size() == 0)
 
@@ -108,18 +179,57 @@ class TestDLL(unittest.TestCase):
 
     def test_sizeWorksCorrectlyForNonEmptyList(self):
         self.assertTrue(self.doublyLL.size() == 9) 
+    
+    def test_sizeDecrementsByOneWhenDeletingNode(self):
+        originalSize = self.doublyLL.size()
+        self.doublyLL.deleteFirst()
+        self.assertTrue(self.doublyLL.size() == originalSize - 1)
+        
+    def test_sizeIncrementsByOneWhenPushingNode(self):
+        testNode = dll.Node(2)
+        originalSize = self.doublyLL.size()
+        self.doublyLL.pushFirst(testNode)
+        self.assertTrue(self.doublyLL.size() == originalSize + 1)
 
     def test_containsWorksCorrectlyForEmptyList(self):
         testNode = dll.Node(2)
-        self.assertFalse(self.emptyLL.contains(testNode))
+        self.assertTrue(self.emptyLL.contains(testNode) == (False, -1))
 
     def test_containsWorksCorrectlyForNonEmptyList(self):
         testNode = dll.Node(200)
         nodeThatExists = dll.Node(4)
         nodeThatExists2 = dll.Node(20)
-        self.assertFalse(self.doublyLL.contains(testNode))
-        self.assertTrue(self.doublyLL.contains(nodeThatExists))
-        self.assertTrue(self.doublyLL.contains(nodeThatExists2))
+        
+        self.assertTrue(self.doublyLL.contains(testNode) == (False, -1))
+        self.assertTrue(self.doublyLL.contains(nodeThatExists) == (True, 0))
+        self.assertTrue(self.doublyLL.contains(nodeThatExists2) == (True, 8))
+    
+    def test_getRaisesExceptionForEmptyList(self):
+        with self.assertRaises(Exception):
+            self.emptyLL.get(0)
+            
+    def test_getRaisesExceptionForIndexOutOfBounds(self):
+        with self.assertRaises(Exception):
+            self.doublyLL.get(15)
+            
+    def test_getWorksCorrectlyForListWithOneNode(self):
+        testNode = dll.Node(2)
+        self.emptyLL.pushFirst(testNode)
+        expectedNode = self.emptyLL.Start
+        
+        self.assertTrue(expectedNode.data == self.emptyLL.get(0).data)
+    
+    def test_getWorksCorrectlyForLastNode(self):
+        expectedData = 20
+        actualData = self.doublyLL.get(8).data
+        
+        self.assertTrue(expectedData == actualData)
+    
+    def test_getWorksCorrectly(self):
+        expectedData = 12
+        actualData = self.doublyLL.get(4).data
+        
+        self.assertTrue(expectedData == actualData)
 
     if __name__ == "__main__":
         unittest.main()
