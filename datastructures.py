@@ -1,3 +1,4 @@
+import copy
 
 # A class representing a node for use in an Undirected Graph or Doubly Linked List
 class Node():
@@ -14,24 +15,25 @@ class DLL():
         self.current : Node = None
         self.Size = 0
 
-    # Inserts a node at a specific index, so that the new node
-    # will be placed at the specified index.
+    # Inserts a copy of a node at a specific index, 
+    # so that the new node will be placed at the specified index.
     # Raises an exception if index is out of bounds.
     def insert(self, node:Node, index:int):
+        nodeCopy = copy.deepcopy(node)
         if index < 0 or index > self.size():
             raise Exception("Index out of bounds.")
         if self.isEmpty():
-            self.pushFirst(node)
+            self.pushFirst(nodeCopy)
         if index == self.size():
-            self.pushLast(node)
+            self.pushLast(nodeCopy)
         else:
             currentNodeAtIndex = self.get(index)
             nodeAtIndexMinusOne = currentNodeAtIndex.Previous
             if nodeAtIndexMinusOne != None:
-                nodeAtIndexMinusOne.Next = node
-            currentNodeAtIndex.Previous = node
-            node.Next = currentNodeAtIndex
-            node.Previous = nodeAtIndexMinusOne
+                nodeAtIndexMinusOne.Next = nodeCopy
+            currentNodeAtIndex.Previous = nodeCopy
+            nodeCopy.Next = currentNodeAtIndex
+            nodeCopy.Previous = nodeAtIndexMinusOne
     
     # Deletes the node at a given index.
     # Raises an exception if the list is empty
@@ -50,9 +52,10 @@ class DLL():
             if nextNode != None:
                 nextNode.Previous = previousNode
     
-    # Pushes/inserts a node to the beginning of the list.
+    # Pushes/inserts a copy of a node to the beginning of the list.
     def pushFirst(self, node:Node):
-        newNode = node
+        newNode = copy.deepcopy(node)
+
         
         if self.isEmpty():
             self.Start, self.End = newNode, newNode
@@ -66,9 +69,9 @@ class DLL():
             oldStart.Previous = newNode
             self.Size += 1
 
-    # Pushes/inserts a node to the end of the list.
+    # Pushes/inserts a copy of a node to the end of the list.
     def pushLast(self, node : Node):
-        newNode = node
+        newNode = copy.deepcopy(node)
 
         if self.isEmpty():
             self.Start, self.End = newNode, newNode

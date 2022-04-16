@@ -74,22 +74,22 @@ class TestDLL(unittest.TestCase):
     def test_pushFirstOnEmptyListWorksCorrectly(self):
         testNode = datastructures.Node(2)
         self.emptyLL.pushFirst(testNode)
-        self.assertTrue(self.emptyLL.Start == testNode and self.emptyLL.End == testNode)
+        self.assertTrue(self.emptyLL.Start.data == testNode.data and self.emptyLL.End.data == testNode.data)
 
     def test_pushLastOnEmptyListWorksCorrectly(self):
         testNode = datastructures.Node(2)
         self.emptyLL.pushLast(testNode)
-        self.assertTrue(self.emptyLL.Start == testNode and self.emptyLL.End == testNode)
+        self.assertTrue(self.emptyLL.Start.data == testNode.data and self.emptyLL.End.data == testNode.data)
 
     def test_pushFirstWorksCorrectly(self):
         testNode = datastructures.Node(2)
         self.doublyLL.pushFirst(testNode)
-        self.assertTrue(self.doublyLL.Start == testNode)
+        self.assertTrue(self.doublyLL.Start.data == testNode.data)
     
     def test_pushLastWorksCorrectly(self):
         testNode = datastructures.Node(2)
         self.doublyLL.pushLast(testNode)
-        self.assertTrue(self.doublyLL.End == testNode)
+        self.assertTrue(self.doublyLL.End.data == testNode.data)
 
     def test_deleteFirstThrowsExceptionForEmptyList(self):
         with self.assertRaises(Exception):
@@ -136,16 +136,16 @@ class TestDLL(unittest.TestCase):
         self.doublyLL.insert(testNode, 5)
         nodeAtIndex = self.doublyLL.get(5)
         self.assertTrue(testNode.data == nodeAtIndex.data)
-        self.assertTrue(testNode.Previous == nodeAtIndexMinusOne)
-        self.assertTrue(testNode.Next == oldNodeAtIndex)
+        self.assertTrue(nodeAtIndex.Previous == nodeAtIndexMinusOne)
+        self.assertTrue(nodeAtIndex.Next == oldNodeAtIndex)
     
     def test_insertWorksCorrectlyWhenInsertingAtIndexEqualToSize(self):
         testNode = datastructures.Node(2)
         self.doublyLL.insert(testNode, 9)
         nodeAtIndex = self.doublyLL.get(9)
         self.assertTrue(testNode.data == nodeAtIndex.data)
-        self.assertTrue(testNode.Next == None)
-        self.assertTrue(testNode.Previous == self.doublyLL.get(8))
+        self.assertTrue(nodeAtIndex.Next == None)
+        self.assertTrue(nodeAtIndex.Previous == self.doublyLL.get(8))
     
     def test_deleteThrowsExceptionForIndexLessThanZeroAndGreaterThanSizeAndEmptyList(self):     
         with self.assertRaises(Exception):

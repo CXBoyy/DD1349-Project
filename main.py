@@ -5,8 +5,7 @@ import menu
 
 # Variables
 g = game.Game()
-mainMenu = menu.MainMenu(g)
-mapMenu = menu.MapMenu(g, mainMenu)
+menuVar = menu.Menu(g)
 #CANVAS_WIDTH, CANVAS_HEIGHT = 1000, 600
 
 #window = pygame.display.set_mode((CANVAS_WIDTH, CANVAS_HEIGHT))
@@ -26,12 +25,10 @@ exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
 
 def main():
     clock = pygame.time.Clock()
-    g.playing = True
     print(g.playing)
     while g.running:
-        mainMenu.display_MainMenu()
-        mapMenu.display_MapMenu()
-        g.game_loop()
+        menuVar.display_MainMenu(clock)
+        #g.game_loop(clock)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 g.running = False
