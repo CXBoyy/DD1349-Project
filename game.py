@@ -15,6 +15,8 @@ class Game():
         self.map = None
         back_button_img = pygame.image.load("pics/back.png").convert_alpha()
         self.back_button1 = button.Button(100, 300, back_button_img, 0.3, True)
+        
+        
 
     def game_loop(self, clock:pygame.time.Clock, map):
         mainClock = clock
