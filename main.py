@@ -31,6 +31,7 @@ def main():
         #g.game_loop(clock)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                menuVar.to_display = False
                 g.running = False
         pygame.display.update()
         clock.tick(g.FPS)

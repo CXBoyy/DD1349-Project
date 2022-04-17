@@ -1,5 +1,6 @@
 import pygame
 import button
+import enemy
 
 class Game():
 
@@ -14,8 +15,16 @@ class Game():
         self.SKY_BLUE = (202, 228, 241)
         self.map = None
         back_button_img = pygame.image.load("pics/back.png").convert_alpha()
-        self.back_button1 = button.Button(100, 300, back_button_img, 0.3, True)
+        self.back_button1 = button.Button(500, 50, back_button_img, 0.3, True)
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
+        #self.map1_start = (0, 97)
+        self.map1_path = [(32, 97), (101, 96), (155, 95), (224, 97), (278, 106), (287, 160), (287, 220), (284, 288), (275, 340), 
+                     (224, 347), (162, 348), (102, 356), (93, 412), (105, 470), (161, 482), (225, 478), (287, 478), (351, 472), 
+                     (413, 476), (479, 480), (546, 480), (607, 481), (670, 479), (724, 465), (731, 415), (734, 349), (735, 285), 
+                     (745, 232), (804, 222), (870, 222)]
+
+        
+        self.test_enemy = enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path)
         
         
 
@@ -27,15 +36,20 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         if self.map == "map1":
             while self.playing:
-                self.check_events()
-                self.canvas.fill(self.SKY_BLUE)
-                self.window.blit(self.canvas, (0,0))
-                self.window.blit(self.map1_img, (0,0))
-                self.window.blit(text, rect)
-                if self.back_button1.draw(self.window):
-                    self.playing = False
-                pygame.display.update()
-                mainClock.tick(60)
+                for point in self.map1_path:
+                    self.check_events()
+                    self.canvas.fill(self.SKY_BLUE)
+                    self.window.blit(self.canvas, (0,0))
+                    self.window.blit(self.map1_img, (0,0))
+                    self.window.blit(text, rect)
+                    self.test_enemy.move(self.window, point[0], point[1])
+                    
+                    
+                    
+                    if self.back_button1.draw(self.window):
+                        self.playing = False
+                    pygame.display.update()
+                    mainClock.tick(60)
         #pygame.quit()
 
     def check_events(self):
@@ -43,9 +57,9 @@ class Game():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
-                    print("LMB Clicked")
 
 
     def reset_vars(self):
