@@ -1,32 +1,36 @@
 import pygame
-import time
+import copy
 
 class Enemy():
     imgs = []
     
-    def __init__(self, window, x, y, width, height, path):
-        self.enemyX = x                                                         # Position of
-        self.enemyY = y                                                         # the enemy.
+    def __init__(self, window, x, y, width, height, path, pathDict, pathEnd):
+        self.x = x                                                              # Position of
+        self.y = y                                                              # the enemy.
     
         self.width = width                                                      # Size of the
         self.height = height                                                    # enemy image.
         self.health = 1
         self.window = window
         self.img = None
-        #self.img = pygame.draw.circle(self.window, (255, 0, 0), (x, y), 5, 0)
-        self.speed = 0
-        self.path = path
+        self.speed = 1                                                          # amount of pixels the enemy can move per frame, might have to be changed because this is probably too fast.
+        self.path = copy.deepcopy(path)
+        self.currentPos = self.path.pop()
+        self.pathDict = copy.deepcopy(pathDict)
+        self.pathEnd = pathEnd
         self.animation_count = 0
         #TODO: Path
       
     """ Draws the enemy.
     """  
-    def draw(self, window:pygame.Surface, x, y):
-        #window.blit(self.img, (x, y))
-        pygame.draw.circle(window, (255, 0, 0), (x, y), 5, 0)
-        pygame.display.update()
-        self.enemyX = x
-        self.enemyY = y
+    def draw(self):
+        if (self.x, self.y) == self.pathEnd:
+            print("Lost one life")
+            # Remove enemey from the map and take away one life
+        else:
+            self.move()
+            pygame.draw.circle(self.window, (255, 0, 0), (self.x, self.y), 5, 0)
+            pygame.display.update()
         
     
     """ Returns true if the enemy was hit
@@ -39,34 +43,34 @@ class Enemy():
         else:
             return False
     
-    def move(self, window:pygame.Surface, targetX, targetY):
-        while(self.enemyX != targetX or self.enemyY != targetY):
-            time.sleep(0.01)
-            if self.enemyX < targetX:
-                if self.enemyY < targetY:
-                    self.draw(window, self.enemyX + 1, self.enemyY + 1)
-                elif self.enemyY > targetY:
-                    self.draw(window, self.enemyX + 1, self.enemyY - 1)
+    def move(self):
+        if self.pathDict[self.currentPos] and len(self.path) != 0:
+            self.currentPos = self.path.pop()
+        targetX = self.currentPos[0]
+        targetY = self.currentPos[1]
+        if not self.pathDict[self.currentPos]:
+            if self.x < targetX:
+                if self.x + self.speed <= targetX:
+                    self.x += self.speed
                 else:
-                    self.draw(window, self.enemyX + 1, self.enemyY)
-            elif self.enemyX > targetX:
-                if self.enemyY < targetY:
-                    self.draw(window, self.enemyX - 1, self.enemyY + 1)
-                elif self.enemyY > targetY:
-                    self.draw(window, self.enemyX - 1, self.enemyY - 1)
+                    self.x = targetX
+            elif self.x > targetX:
+                if self.x - self.speed >= targetX:
+                    self.x -= self.speed
                 else:
-                    self.draw(window, self.enemyX - 1, self.enemyY)
-            else:
-                if self.enemyY < targetY:
-                    self.draw(window, self.enemyX, self.enemyY + 1)
-                elif self.enemyY > targetY:
-                    self.draw(window, self.enemyX, self.enemyY - 1)
+                    self.x = targetX
+            if self.y < targetY:
+                if self.y + self.speed <= targetY:
+                    self.y += self.speed
                 else:
-                    self.draw(window, self.enemyX, self.enemyY)
-            # print("\nx pos: " + str(self.enemyX))
-            # print("\ny pos: " + str(self.enemyY))
-            # print("\ntarget x pos: " + str(targetX))
-            # print("\ntarget y pos: " + str(targetY))
+                    self.y = targetY
+            elif self.y > targetY:
+                if self.y - self.speed >= targetY:
+                    self.y -= self.speed
+                else:
+                    self.y = targetY
+        if self.x == targetX and self.y == targetY:
+            self.pathDict[self.currentPos] = True
     
     # Returns true if the enemy has died.
     def hit(self):
