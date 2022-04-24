@@ -1,6 +1,6 @@
 import pygame
 import button
-import enemy
+import enemies.enemy as enemy
 import time
 
 class Game():
@@ -21,22 +21,15 @@ class Game():
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
         
-        self.map1_path = [(896, 222), (870, 222), (804, 222), (745, 232), (735, 285), (734, 349), (731, 415), (724, 465), 
-                          (670, 479), (607, 481), (546, 480), (479, 480), (413, 476), (351, 472), (287, 478), (225, 478), 
-                          (161, 482), (105, 470), (93, 412), (102, 356), (162, 348), (224, 347), (275, 340), (284, 288), 
-                          (287, 220), (287, 160), (278, 106), (224, 97), (155, 95), (101, 96), (32, 97), (0, 97)]
-        
-        self.map1_pathDict = {
-            (0, 97) : False, (32, 97) : False, (101, 96) : False, (155, 95) : False, (224, 97) : False, (278, 106) : False, (287, 160) : False, 
-            (287, 220) : False, (284, 288) : False, (275, 340) : False, (224, 347) : False, (162, 348) : False, (102, 356) : False, (93, 412) : False, 
-            (105, 470) : False, (161, 482) : False, (225, 478) : False, (287, 478) : False, (351, 472) : False, (413, 476) : False, (479, 480) : False, 
-            (546, 480) : False, (607, 481) : False, (670, 479) : False, (724, 465) : False, (731, 415) : False, (734, 349) : False, (735, 285) : False, 
-            (745, 232) : False, (804, 222) : False, (870, 222) : False, (896, 222) : False
-        }
+        self.map1_path = [(0, 97), (32, 97), (101, 96), (155, 95), (224, 97), (278, 106), (287, 160), (287, 220), (284, 288), (275, 340), 
+                          (224, 347), (162, 348), (102, 356), (93, 412), (105, 470), (161, 482), (225, 478), (287, 478), (351, 472), (413, 476), 
+                          (479, 480), (546, 480), (607, 481), (670, 479), (724, 465), (731, 415), (734, 349), (735, 285), (745, 232), (804, 222), 
+                          (870, 222), (896, 222), (900, 222)
+                          ]
 
         self.enemies = [
-                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_pathDict, self.map1_end),
-                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_pathDict, self.map1_end),
+                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
                         ]
         
         
