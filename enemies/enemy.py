@@ -1,6 +1,5 @@
 import pygame
 import copy
-import time
 import numpy as np
 
 
@@ -16,11 +15,9 @@ class Enemy():
         self.health = 1
         self.window = window
         self.img = None
-        self.speed = 1                                                          # amount of pixels the enemy can move per frame, might have to be changed because this is probably too fast.
+        self.speed = 1                                                          # To be set individually for each enemy type
         self.path = copy.deepcopy(path)
         self.currentPathNodePos = 0
-        self.currentPos = self.path.pop()
-        #self.pathDict = copy.deepcopy(pathDict)
         self.pathEnd = pathEnd
         self.animation_count = 0
         self.distanceTraveled = 0
@@ -33,9 +30,15 @@ class Enemy():
             # Remove enemy from the map and take away one life
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
+            index = self.animation_count // len(self.imgs)
+            print("index: ", index)
+            self.img = self.imgs[index]
             #time.sleep(1/100)
             self.move()
-            pygame.draw.circle(self.window, (255, 0, 0), (self.x, self.y), 5, 0)
+            pygame.Surface.blit(self.window, self.img, (self.x-60, self.y-60))
+            self.animation_count += 1
+            if self.animation_count >= len(self.imgs):
+                self.animation_count = 0
         
     
     """ Returns true if the enemy was hit
@@ -60,8 +63,7 @@ class Enemy():
             nodeVector = (x2-x1, y2-y1)
             norm = np.linalg.norm(nodeVector)
             nodeVector = ((x2-x1) / norm, (y2-y1) / norm)
-            print(nodeVector)
-            new_x, new_y = (self.x + nodeVector[0]*1, self.y + nodeVector[1]*1)
+            new_x, new_y = (self.x + nodeVector[0] * self.speed, self.y + nodeVector[1] * self.speed)
             self.distanceTraveled += np.hypot((new_x-self.x), (new_y - self.y))
             self.x, self.y = new_x, new_y
             

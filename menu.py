@@ -4,8 +4,8 @@ import game
 
 class Menu():
 
-    def __init__(self, game:game.Game):
-        self.game = game
+    def __init__(self, game1:game.Game):
+        self.game = game.Game()
         self.MID_WIDTH, self.MID_HEIGHT = self.game.CANVAS_WIDTH / 2, self.game.CANVAS_HEIGHT / 2
         self.to_display = False
         
@@ -52,9 +52,10 @@ class Menu():
             if self.back_button.draw(self.game.window):
                 self.to_display = False
             if self.map1_button.draw(self.game.window):
+                g = game.Game()
                 print("map1")
-                self.game.playing = True
-                self.game.game_loop(clock=mainClock, map="map1")
+                g.playing = True
+                g.game_loop(clock=mainClock, map="map1")
             pygame.display.update()
             mainClock.tick(60)
 

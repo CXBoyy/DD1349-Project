@@ -1,6 +1,7 @@
 import pygame
 import button
-import enemies.enemy as enemy
+from enemies import enemy
+from enemies import single_track as st
 import time
 
 class Game():
@@ -28,8 +29,8 @@ class Game():
                           ]
 
         self.enemies = [
-                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
-                        enemy.Enemy(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+                        #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+                        st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
                         ]
         
         
@@ -54,8 +55,9 @@ class Game():
                     #enemy.draw()
                 self.enemies[0].draw()
                 if counter >= 60:
-                    self.enemies[1].draw()
-                    
+                    #self.enemies[1].draw()
+                    pass
+                
                 if self.back_button1.draw(self.window):
                     self.playing = False
                 pygame.display.update()
