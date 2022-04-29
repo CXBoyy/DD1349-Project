@@ -5,7 +5,8 @@ import game
 class Menu():
 
     def __init__(self, game1:game.Game):
-        self.game = game.Game()
+        #self.game = game.Game()
+        self.game = game1
         self.MID_WIDTH, self.MID_HEIGHT = self.game.CANVAS_WIDTH / 2, self.game.CANVAS_HEIGHT / 2
         self.to_display = False
         
@@ -63,6 +64,8 @@ class Menu():
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.game.running = False
+                self.game.playing= False
                 self.to_display = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
