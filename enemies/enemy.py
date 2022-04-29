@@ -1,7 +1,14 @@
 import pygame
 import copy
 import numpy as np
+import operator
+from math import cos, sin
 
+def normalize(e1, e2):
+        vector = (e1, e2)
+        norm = np.linalg.norm(vector)
+        newVector = (vector[0] / norm, vector[1] / norm)
+        return newVector
 
 class Enemy():
     imgs = []
@@ -21,7 +28,15 @@ class Enemy():
         self.pathEnd = pathEnd
         self.animation_count = 0
         self.distanceTraveled = 0
-      
+        self.directionalVector = normalize(self.path[1][0] - self.x, self.path[1][1] - self.y)       # Setting the starting directional vector
+    
+    
+    def normalize(e1, e2):
+        vector = (e1, e2)
+        norm = np.linalg.norm(vector)
+        newVector = (vector[0] / norm, vector[1] / norm)
+        return newVector
+    
     """ Draws the enemy.
     """  
     def draw(self):
@@ -31,10 +46,16 @@ class Enemy():
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
             index = self.animation_count // len(self.imgs)
-            print("index: ", index)
             self.img = self.imgs[index]
             #time.sleep(1/100)
-            self.move()
+            nodeVector = self.move()
+            factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
+            factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
+            #print("\nFactors: ", factor1, factor2)
+            print(self.directionalVector)
+            #print("\nVectors: ", nodeVector, self.directionalVector)
+            if factor1 != factor2:
+                self.rotate(nodeVector)
             pygame.Surface.blit(self.window, self.img, (self.x-60, self.y-60))
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
@@ -60,19 +81,40 @@ class Enemy():
             x1, y1 = self.path[self.currentPathNodePos][0], self.path[self.currentPathNodePos][1]
             x2, y2 = self.path[self.currentPathNodePos + 1][0], self.path[self.currentPathNodePos + 1][1]
             distanceBetweenPoints = np.hypot((x2-x1), (y2-y1))
-            nodeVector = (x2-x1, y2-y1)
-            norm = np.linalg.norm(nodeVector)
-            nodeVector = ((x2-x1) / norm, (y2-y1) / norm)
+            nodeVector = normalize(x2-x1, y2-y1)
             new_x, new_y = (self.x + nodeVector[0] * self.speed, self.y + nodeVector[1] * self.speed)
+            #self.directionalVector = normalize(new_x-self.x, new_y - self.y)
+            #self.directionalVector = (new_x-self.x, new_y - self.y)
             self.distanceTraveled += np.hypot((new_x-self.x), (new_y - self.y))
             self.x, self.y = new_x, new_y
             
             if self.distanceTraveled >= distanceBetweenPoints:                           # check if we have passed the point
                 self.currentPathNodePos += 1
                 self.distanceTraveled = 0
+        
+        return nodeVector
     
     # Returns true if the enemy has died.
     def hit(self):
         self.health -= 1
         if self.health <= 0:
             return True
+        
+    def rotate(self, nodeVector):
+        print("Trying to rotate")
+        dotProduct = np.dot(nodeVector, self.directionalVector)
+        radianAngleBetweenVectors = np.arccos(dotProduct)/10
+        degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
+        rotationalMatrix1 = np.array([[cos(-radianAngleBetweenVectors), -sin(-radianAngleBetweenVectors)], 
+                                      [sin(-radianAngleBetweenVectors), cos(-radianAngleBetweenVectors)]])
+        
+        rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
+                                      [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
+        print("Angle: ", degreeAngleBetweenVectors)
+        goalVector = np.dot(rotationalMatrix2, self.directionalVector)
+        #while self.directionalVector != goalVector:
+        self.img = pygame.transform.rotate(self.img, -degreeAngleBetweenVectors)   
+        #self.img = pygame.transform.rotate(self.img, 90)
+        self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
+        print("Directional vector: ", self.directionalVector)
+        
