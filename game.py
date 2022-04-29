@@ -22,7 +22,7 @@ class Game():
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
         
-        self.map1_path = [(0, 97), (32, 97), (101, 97), (155, 97), (224, 97), (287, 106), (287, 160), (287, 220), (287, 288), (275, 340), 
+        self.map1_path = [(0, 97), (32, 97), (101, 97), (155, 97), (224, 97), (287, 97), (287, 160), (287, 220), (287, 288), (275, 340), 
                           (224, 348), (162, 348), (102, 356), (98, 412), (105, 470), (161, 478), (225, 478), (287, 478), (351, 478), (413, 478), 
                           (479, 478), (546, 478), (607, 478), (670, 478), (731, 465), (731, 415), (731, 349), (731, 285), (745, 232), (804, 222), 
                           (870, 222), (896, 222), (900, 222)
@@ -70,6 +70,7 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True

@@ -2,6 +2,7 @@ import pygame
 import copy
 import numpy as np
 import operator
+from math import cos, sin
 
 def normalize(e1, e2):
         vector = (e1, e2)
@@ -55,7 +56,6 @@ class Enemy():
             #print("\nVectors: ", nodeVector, self.directionalVector)
             if factor1 != factor2:
                 self.rotate(nodeVector)
-                pass
             pygame.Surface.blit(self.window, self.img, (self.x-60, self.y-60))
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
@@ -102,9 +102,19 @@ class Enemy():
         
     def rotate(self, nodeVector):
         print("Trying to rotate")
-        dotProduct = nodeVector[0] * self.directionalVector[0] + nodeVector[1] * self.directionalVector[1]
-        radianAngleBetweenVectors = np.arccos(dotProduct)
+        dotProduct = np.dot(nodeVector, self.directionalVector)
+        radianAngleBetweenVectors = np.arccos(dotProduct)/10
         degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
+        rotationalMatrix1 = np.array([[cos(-radianAngleBetweenVectors), -sin(-radianAngleBetweenVectors)], 
+                                      [sin(-radianAngleBetweenVectors), cos(-radianAngleBetweenVectors)]])
+        
+        rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
+                                      [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
         print("Angle: ", degreeAngleBetweenVectors)
-        self.img = pygame.transform.rotate(self.img, degreeAngleBetweenVectors)
+        goalVector = np.dot(rotationalMatrix2, self.directionalVector)
+        #while self.directionalVector != goalVector:
+        self.img = pygame.transform.rotate(self.img, -degreeAngleBetweenVectors)   
+        #self.img = pygame.transform.rotate(self.img, 90)
+        self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
+        print("Directional vector: ", self.directionalVector)
         
