@@ -2,6 +2,7 @@ import pygame
 import copy
 import numpy as np
 import operator
+import time
 from math import cos, sin
 
 def normalize(e1, e2):
@@ -13,7 +14,7 @@ def normalize(e1, e2):
 class Enemy():
     imgs = []
     
-    def __init__(self, window, x, y, width, height, path, pathEnd):
+    def __init__(self, window, x, y, width, height, path, pathEnd, game):
         self.x = x                                                              # Position of
         self.y = y                                                              # the enemy.
     
@@ -29,6 +30,8 @@ class Enemy():
         self.animation_count = 0
         self.distanceTraveled = 0
         self.directionalVector = normalize(self.path[1][0] - self.x, self.path[1][1] - self.y)       # Setting the starting directional vector
+        self.game = game
+        self.dead = False
     
     
     def normalize(e1, e2):
@@ -42,6 +45,8 @@ class Enemy():
     def draw(self):
         if (self.x, self.y) >= self.pathEnd:
             print("Lost one life")
+            self.game.health -= 1
+            self.dead = True
             # Remove enemy from the map and take away one life
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
@@ -117,4 +122,5 @@ class Enemy():
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
         print("Directional vector: ", self.directionalVector)
+        #time.sleep(0.1)
         
