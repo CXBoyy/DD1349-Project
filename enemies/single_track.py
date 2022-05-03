@@ -6,6 +6,6 @@ class SingleTrack(Enemy):
     temp = pygame.transform.rotate(temp, -90)
     imgs = [temp]
     
-    def __init__(self, window, x, y, width, height, path, pathEnd):
-        super().__init__(window, x, y, width, height, path, pathEnd)
+    def __init__(self, window, x, y, width, height, path, pathEnd, game):
+        super().__init__(window, x, y, width, height, path, pathEnd, game)
         self.speed = 1

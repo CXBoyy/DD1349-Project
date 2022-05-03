@@ -30,8 +30,10 @@ class Game():
 
         self.enemies = [
                         #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
-                        st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+                        st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                         ]
+        
+        self.health = 10
         
         
 
@@ -44,16 +46,21 @@ class Game():
         counter = 0
         if self.map == "map1":
             while self.playing:
+                health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
+                health_rect = health_text.get_rect()
                 counter += 1
                 self.check_events()
                 self.canvas.fill(self.SKY_BLUE)
                 self.window.blit(self.canvas, (0,0))
                 self.window.blit(self.map1_img, (0,0))
                 self.window.blit(text, rect)
+                self.window.blit(health_text, health_rect)
                 #for enemy in self.enemies:
                     #time.sleep(1)
                     #enemy.draw()
-                self.enemies[0].draw()
+                if not self.enemies[0].dead:
+                    self.enemies[0].draw()
+                    
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
                 if counter >= 60:
