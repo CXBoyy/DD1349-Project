@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import button
 from enemies import enemy
 from enemies import single_track as st
@@ -78,6 +78,7 @@ class Game():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
                 pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
