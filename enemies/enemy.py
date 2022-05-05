@@ -36,13 +36,6 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.dead = False
     
-    
-    def normalize(self, e1, e2):
-        vector = (e1, e2)
-        norm = np.linalg.norm(vector)
-        newVector = (vector[0] / norm, vector[1] / norm)
-        return newVector
-    
     """ Draws the enemy.
     """  
     def update(self):
@@ -60,7 +53,7 @@ class Enemy(pygame.sprite.Sprite):
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
             #print("\nFactors: ", factor1, factor2)
-            print(self.directionalVector)
+            #print(self.directionalVector)
             #print("\nVectors: ", nodeVector, self.directionalVector)
             if factor1 != factor2:
                 self.rotate(nodeVector)
@@ -110,7 +103,7 @@ class Enemy(pygame.sprite.Sprite):
             return True
         
     def rotate(self, nodeVector):
-        print("Trying to rotate")
+        #print("Trying to rotate")
         dotProduct = np.dot(nodeVector, self.directionalVector)
         radianAngleBetweenVectors = np.arccos(dotProduct)/10
         degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
@@ -119,12 +112,12 @@ class Enemy(pygame.sprite.Sprite):
         
         rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
                                       [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
-        print("Angle: ", degreeAngleBetweenVectors)
+        #print("Angle: ", degreeAngleBetweenVectors)
         goalVector = np.dot(rotationalMatrix2, self.directionalVector)
         #while self.directionalVector != goalVector:
         self.image = pygame.transform.rotate(self.image, -degreeAngleBetweenVectors)   
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
-        print("Directional vector: ", self.directionalVector)
+        #print("Directional vector: ", self.directionalVector)
         #time.sleep(0.1)
         
