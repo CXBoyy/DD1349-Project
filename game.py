@@ -35,6 +35,9 @@ class Game():
         
         self.health = 10
         
+        self.enemy_group = pygame.sprite.Group()
+        self.enemy_group.add(self.enemies[0])
+        
         
 
     def game_loop(self, clock:pygame.time.Clock, map):
@@ -59,7 +62,9 @@ class Game():
                     #time.sleep(1)
                     #enemy.draw()
                 if not self.enemies[0].dead:
-                    self.enemies[0].draw()
+                    self.enemy_group.update()
+                    self.enemy_group.draw(self.window)
+                    #self.enemies[0].draw()
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
