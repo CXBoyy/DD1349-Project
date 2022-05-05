@@ -11,10 +11,12 @@ def normalize(e1, e2):
         newVector = (vector[0] / norm, vector[1] / norm)
         return newVector
 
-class Enemy():
+class Enemy(pygame.sprite.Sprite):
     imgs = []
     
     def __init__(self, window, x, y, width, height, path, pathEnd, game):
+        super().__init__()
+        
         self.x = x                                                              # Position of
         self.y = y                                                              # the enemy.
     
@@ -22,7 +24,8 @@ class Enemy():
         self.height = height                                                    # enemy image.
         self.health = 1
         self.window = window
-        self.img = None
+        self.image = None
+        self.rect = None
         self.speed = 1                                                          # To be set individually for each enemy type
         self.path = copy.deepcopy(path)
         self.currentPathNodePos = 0
@@ -34,7 +37,7 @@ class Enemy():
         self.dead = False
     
     
-    def normalize(e1, e2):
+    def normalize(self, e1, e2):
         vector = (e1, e2)
         norm = np.linalg.norm(vector)
         newVector = (vector[0] / norm, vector[1] / norm)
@@ -42,7 +45,7 @@ class Enemy():
     
     """ Draws the enemy.
     """  
-    def draw(self):
+    def update(self):
         if (self.x, self.y) >= self.pathEnd:
             print("Lost one life")
             self.game.health -= 1
@@ -51,8 +54,8 @@ class Enemy():
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
             index = self.animation_count // len(self.imgs)
-            self.img = self.imgs[index]
-            #time.sleep(1/100)
+            self.image = self.imgs[index]
+            self.rect = self.image.get_rect()
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
@@ -61,7 +64,8 @@ class Enemy():
             #print("\nVectors: ", nodeVector, self.directionalVector)
             if factor1 != factor2:
                 self.rotate(nodeVector)
-            pygame.Surface.blit(self.window, self.img, (self.x-60, self.y-60))
+            #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
+            self.rect.center = (self.x, self.y)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
@@ -118,7 +122,7 @@ class Enemy():
         print("Angle: ", degreeAngleBetweenVectors)
         goalVector = np.dot(rotationalMatrix2, self.directionalVector)
         #while self.directionalVector != goalVector:
-        self.img = pygame.transform.rotate(self.img, -degreeAngleBetweenVectors)   
+        self.image = pygame.transform.rotate(self.image, -degreeAngleBetweenVectors)   
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
         print("Directional vector: ", self.directionalVector)
