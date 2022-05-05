@@ -31,12 +31,16 @@ class Game():
         self.enemies = [
                         #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
                         st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                        st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
+                        st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                        st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                         ]
         
         self.health = 10
         
         self.enemy_group = pygame.sprite.Group()
-        self.enemy_group.add(self.enemies[0])
+        for enemy in self.enemies:
+            self.enemy_group.add(enemy)
         
         
 
@@ -47,11 +51,13 @@ class Game():
         text = font.render("Now playing Map 1", True, (0, 0, 0))
         rect = text.get_rect(center=(500, 300))
         counter = 0
+        iterator = iter(self.enemy_group)
+        spawnedEnemies = pygame.sprite.Group()
+        nextEnemy = next(iterator, "1")
         if self.map == "map1":
             while self.playing:
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect()
-                counter += 1
                 self.check_events()
                 self.canvas.fill(self.SKY_BLUE)
                 self.window.blit(self.canvas, (0,0))
@@ -61,9 +67,24 @@ class Game():
                 #for enemy in self.enemies:
                     #time.sleep(1)
                     #enemy.draw()
-                if not self.enemies[0].dead:
-                    self.enemy_group.update()
-                    self.enemy_group.draw(self.window)
+                # print("\n\n", counter%30 == 0)
+                # print(finishedSpawning == "0")
+                print(counter % 120 == 0 and nextEnemy != "1")
+                if counter % 120 == 0 and nextEnemy != "1":
+                    print("\n\nSpawning enemies")
+                    print("Enemy type: ", type(nextEnemy), "\n\n")
+                    spawnedEnemies.add(nextEnemy)
+                    nextEnemy = next(iterator, "1")
+                
+                spawnedIterator = iter(spawnedEnemies)
+                #print("List: ", self.enemy_group.sprites())
+                for spawnedEnemy in spawnedIterator:
+                    #print("Enemy: ", spawnedEnemy)
+                    if spawnedEnemy.dead:
+                        spawnedEnemies.remove(spawnedEnemy)
+                    
+                spawnedEnemies.update()
+                spawnedEnemies.draw(self.window)
                     #self.enemies[0].draw()
                     
                 for point in self.map1_path:
@@ -76,6 +97,7 @@ class Game():
                     self.playing = False
                 pygame.display.update()
                 mainClock.tick(60)
+                counter += 1
         #pygame.quit()
 
     def check_events(self):
