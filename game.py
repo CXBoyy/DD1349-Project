@@ -70,16 +70,24 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
+        wave_delay = 60
         next_enemy = "1"
+        countdown = wave_delay
+        wave_clock = pygame.time.Clock()
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
             while self.playing:
+                timer = wave_clock.tick()
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
                 
+                if not current_wave.wave_started:
+                    pass
+                
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
                     end_tick = pygame.time.get_ticks()
-                    if end_tick - start_tick >= 6*1000:
+                    countdown = 61 + ((start_tick - end_tick) // 1000)
+                    if end_tick - start_tick > wave_delay*1000:
                         loop_counter = 0
                         current_wave.wave_started = True
                         iterator = iter(current_wave)
@@ -89,6 +97,7 @@ class Game():
                 if current_wave.wave_finished:
                     print("Next wave incoming")
                     start_tick = pygame.time.get_ticks()
+                    countdown = wave_delay
                     if wave_counter < len(self.wave_dict):
                         wave_counter +=1
                     else:
@@ -97,12 +106,19 @@ class Game():
                 
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect()
+                wave_text = font.render((str.format("Currently on Wave {}", wave_counter)), True, (0, 0, 0))
+                wave_rect = wave_text.get_rect(center=(250, 11))
+                wave_timer_text = font.render((str.format("Time until wave {}:   {} seconds", wave_counter, countdown)), True, (0, 0, 0))
+                wave_timer_rect = wave_timer_text.get_rect(center=(600, 11))
+                
                 self.check_events()
                 self.canvas.fill(self.SKY_BLUE)
                 self.window.blit(self.canvas, (0,0))
                 self.window.blit(self.map1_img, (0,0))
                 self.window.blit(text, rect)
                 self.window.blit(health_text, health_rect)
+                self.window.blit(wave_text, wave_rect)
+                self.window.blit(wave_timer_text, wave_timer_rect)
                 
                 if current_wave.wave_started:
                     print("\nInside spawning loop")
@@ -136,8 +152,8 @@ class Game():
                 if self.back_button1.draw(self.window):
                     self.playing = False
                 pygame.display.update()
-                mainClock.tick(60)
                 loop_counter += 1
+                mainClock.tick(60)
         #pygame.quit()
 
     def check_events(self):
