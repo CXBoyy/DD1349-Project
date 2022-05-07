@@ -3,6 +3,7 @@ import button
 from enemies import enemy
 from enemies import single_track as st
 import time
+from game_wave import Wave
 
 class Game():
 
@@ -36,17 +37,30 @@ class Game():
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
         
-        self.waves = [wave1]
-        self.wave_dict : dict[str, pygame.sprite.Group] = dict()
+        wave2 = [ 
+                 #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        
+        self.waves = [wave1, wave2]
+        self.wave_dict : dict[str, Wave] = dict()
         
         self.health = 10
+        counter = 1
         for wave in self.waves:
-            counter = 1
-            wave_string = "wave{}", counter
+            wave_string = "wave{}".format(counter)
+            print("Wavestring: ", wave_string)
             counter += 1
-            self.wave_dict[wave_string] = pygame.sprite.Group
+            self.wave_dict[wave_string] = Wave()
             for enemy in wave:
                 self.wave_dict[wave_string].add(enemy)
+        
+        print(self.wave_dict.values())
         
         
 
@@ -58,14 +72,17 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
-        wave_string = "wave{}", wave_counter
-        print("wave: ", self.wave_dict[wave_string])
-        print("type: ", type(self.wave_dict[wave_string]))
-        iterator = iter(self.wave_dict[wave_string])
-        spawnedEnemies = pygame.sprite.Group()
-        nextEnemy = next(iterator, "1")
         if self.map == "map1":
             while self.playing:
+                wave_string = "wave{}".format(wave_counter)
+                current_wave = self.wave_dict[wave_string]
+                
+                if not current_wave.wave_started:                           # Checking if the wave has started or not
+                    current_wave.wave_started = True
+                    iterator = iter(current_wave)
+                    next_enemy = next(iterator, "1")
+                    spawned_enemies = Wave()
+                
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect()
                 self.check_events()
@@ -77,31 +94,27 @@ class Game():
                 #for enemy in self.enemies:
                     #time.sleep(1)
                     #enemy.draw()
-                # print("\n\n", counter%30 == 0)
-                # print(finishedSpawning == "0")
-                print(loop_counter % 120 == 0 and nextEnemy != "1")
-                if loop_counter % 120 == 0 and nextEnemy != "1":
+                if loop_counter % 120 == 0 and next_enemy != "1":
                     print("\n\nSpawning enemies")
-                    print("Enemy type: ", type(nextEnemy), "\n\n")
-                    spawnedEnemies.add(nextEnemy)
-                    nextEnemy = next(iterator, "1")
+                    print("Enemy type: ", type(next_enemy), "\n\n")
+                    spawned_enemies.add(next_enemy)
+                    next_enemy = next(iterator, "1")
                 
-                spawnedIterator = iter(spawnedEnemies)
+                spawned_iterator = iter(spawned_enemies)
                 #print("List: ", self.enemy_group.sprites())
-                for spawnedEnemy in spawnedIterator:
+                for spawned_enemy in spawned_iterator:
                     #print("Enemy: ", spawnedEnemy)
-                    if spawnedEnemy.dead:
-                        spawnedEnemies.remove(spawnedEnemy)
+                    if spawned_enemy.dead:
+                        spawned_enemies.remove(spawned_enemy)
                     
-                spawnedEnemies.update()
-                spawnedEnemies.draw(self.window)
+                spawned_enemies.update()
+                spawned_enemies.draw(self.window)
+                if not bool(spawned_enemies):
+                    spawned_enemies.wave_finished = True
                     #self.enemies[0].draw()
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
-                if counter >= 60:
-                    #self.enemies[1].draw()
-                    pass
                 
                 if self.back_button1.draw(self.window):
                     self.playing = False
