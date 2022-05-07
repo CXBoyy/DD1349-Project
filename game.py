@@ -160,7 +160,8 @@ class Game():
 
                 # loop towers
                 for tw in self.towers:
-                    tw.attack(self.enemies)
+                    #tw.attack(self.enemies)
+                    pass
                 
                 
                 if self.back_button1.draw(self.window):
