@@ -29,16 +29,14 @@ class Game():
                           (870, 222), (896, 222), (900, 222)
                           ]
 
-        wave1 = [ 
-                 #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+        wave1 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
         
-        wave2 = [ 
-                 #st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
+        wave2 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
@@ -72,16 +70,30 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
+        next_enemy = "1"
         if self.map == "map1":
+            start_tick = pygame.time.get_ticks()
             while self.playing:
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
                 
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
-                    current_wave.wave_started = True
-                    iterator = iter(current_wave)
-                    next_enemy = next(iterator, "1")
-                    spawned_enemies = Wave()
+                    end_tick = pygame.time.get_ticks()
+                    if end_tick - start_tick >= 6*1000:
+                        loop_counter = 0
+                        current_wave.wave_started = True
+                        iterator = iter(current_wave)
+                        next_enemy = next(iterator, "1")
+                        spawned_enemies = Wave()
+                
+                if current_wave.wave_finished:
+                    print("Next wave incoming")
+                    start_tick = pygame.time.get_ticks()
+                    if wave_counter < len(self.wave_dict):
+                        wave_counter +=1
+                    else:
+                        pass
+                        #Game won, all waves are over
                 
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect()
@@ -91,27 +103,32 @@ class Game():
                 self.window.blit(self.map1_img, (0,0))
                 self.window.blit(text, rect)
                 self.window.blit(health_text, health_rect)
-                #for enemy in self.enemies:
-                    #time.sleep(1)
-                    #enemy.draw()
-                if loop_counter % 120 == 0 and next_enemy != "1":
-                    print("\n\nSpawning enemies")
-                    print("Enemy type: ", type(next_enemy), "\n\n")
-                    spawned_enemies.add(next_enemy)
-                    next_enemy = next(iterator, "1")
                 
-                spawned_iterator = iter(spawned_enemies)
-                #print("List: ", self.enemy_group.sprites())
-                for spawned_enemy in spawned_iterator:
-                    #print("Enemy: ", spawnedEnemy)
-                    if spawned_enemy.dead:
-                        spawned_enemies.remove(spawned_enemy)
+                if current_wave.wave_started:
+                    print("\nInside spawning loop")
+                    print("next enemy: ", next_enemy)
+                    print("loop counter: ", loop_counter)
+                    if loop_counter % 120 == 0 and next_enemy != "1":
+                        print("\n\nSpawning enemies")
+                        print("Enemy type: ", type(next_enemy), "\n\n")
+                        spawned_enemies.add(next_enemy)
+                        next_enemy = next(iterator, "1")
                     
-                spawned_enemies.update()
-                spawned_enemies.draw(self.window)
-                if not bool(spawned_enemies):
-                    spawned_enemies.wave_finished = True
-                    #self.enemies[0].draw()
+                    spawned_iterator = iter(spawned_enemies)
+                    #print("List: ", self.enemy_group.sprites())
+                    for spawned_enemy in spawned_iterator:
+                        #print("Enemy: ", spawnedEnemy)
+                        if spawned_enemy.dead:
+                            spawned_enemies.remove(spawned_enemy)
+                        
+                    spawned_enemies.update()
+                    spawned_enemies.draw(self.window)
+                    if not bool(spawned_enemies):
+                        current_wave.wave_finished = True
+                        
+                if self.health <= 0:
+                    #Game over
+                    pass
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
