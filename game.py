@@ -2,6 +2,7 @@ import pygame, sys
 import button
 from enemies import enemy
 from enemies import single_track as st
+from towers.basictower import basictower
 import time
 from game_wave import Wave
 
@@ -59,6 +60,8 @@ class Game():
                 self.wave_dict[wave_string].add(enemy)
         
         print(self.wave_dict.values())
+        
+        self.towers = [basictower(500,400)]
         
         
 
@@ -150,6 +153,15 @@ class Game():
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
+                
+                # draw tower
+                for tw in self.towers:
+                    tw.drawTower(self.window)
+
+                # loop towers
+                for tw in self.towers:
+                    tw.attack(self.enemies)
+                
                 
                 if self.back_button1.draw(self.window):
                     self.playing = False
