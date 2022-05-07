@@ -9,6 +9,7 @@ class Tower():
         self.sell_cost = [0,0,0]
         self.cost = [0,0,0]
         self.level = 1
+        self.damage = 1
         self.selected = False
         self.menu = None
         self.tower_img = []
@@ -21,6 +22,7 @@ class Tower():
 
     def upgradeTower(self, towerType):
         self.level += 1
+        self.damage += 1
 
     def uppgradeCost(self):
         return self.cost[self.level-1]
@@ -37,3 +39,4 @@ class Tower():
     def moveTower(self,x,y):
         self.x = x
         self.y = y
+        
