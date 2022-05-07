@@ -2,6 +2,7 @@ import pygame
 import button
 from enemies import enemy
 from enemies import single_track as st
+from towers.basictower import basictower
 import time
 
 class Game():
@@ -33,6 +34,8 @@ class Game():
                         st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end),
                         ]
         
+        self.towers = [basictower(500,400)]
+        
         
 
     def game_loop(self, clock:pygame.time.Clock, map):
@@ -59,6 +62,15 @@ class Game():
                 if counter >= 60:
                     #self.enemies[1].draw()
                     pass
+                
+                # draw tower
+                for tw in self.towers:
+                    tw.drawTower(self.window)
+
+                # loop towers
+                for tw in self.towers:
+                    tw.attack(self.enemies)
+                
                 
                 if self.back_button1.draw(self.window):
                     self.playing = False
