@@ -70,7 +70,7 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
-        wave_delay = 60
+        wave_delay = 6
         next_enemy = "1"
         countdown = wave_delay
         wave_clock = pygame.time.Clock()
@@ -86,7 +86,7 @@ class Game():
                 
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
                     end_tick = pygame.time.get_ticks()
-                    countdown = 61 + ((start_tick - end_tick) // 1000)
+                    countdown = wave_delay + 1 + ((start_tick - end_tick) // 1000)
                     if end_tick - start_tick > wave_delay*1000:
                         loop_counter = 0
                         current_wave.wave_started = True
@@ -134,6 +134,8 @@ class Game():
                     #print("List: ", self.enemy_group.sprites())
                     for spawned_enemy in spawned_iterator:
                         #print("Enemy: ", spawnedEnemy)
+                        if loop_counter % 150 == 0:
+                            spawned_enemy.hit()
                         if spawned_enemy.dead:
                             spawned_enemies.remove(spawned_enemy)
                         
