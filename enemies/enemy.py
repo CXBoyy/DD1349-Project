@@ -125,14 +125,9 @@ class Enemy(pygame.sprite.Sprite):
         #time.sleep(0.1)
         
     def display_health(self, window):
-        print(self.rect.center)
         bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
         length, width = 64, 10
         increment = length / self.default_health
-        
-        print("Length", length)
-        print("Health", self.health)
-        print("Increment", increment)
         pygame.draw.rect(window, (255, 0, 0), (bar_x, bar_y, length, width), 0)
         pygame.draw.rect(window, (0, 255, 0), (bar_x, bar_y, increment * self.health, width), 0)
         

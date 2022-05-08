@@ -58,17 +58,15 @@ class Game():
         counter = 1
         for wave in self.waves:
             wave_string = "wave{}".format(counter)
-            print("Wavestring: ", wave_string)
             counter += 1
             self.wave_dict[wave_string] = Wave()
             for enemy in wave:
                 self.wave_dict[wave_string].add(enemy)
         
-        print(self.wave_dict.values())
+        self.towers = [basictower(500,400)
+                       ]
         
-        self.towers = [basictower(500,400)]
-        
-        self.selcted_tower = None
+        self.selected_tower = None
         
         
 
@@ -107,7 +105,6 @@ class Game():
                         spawned_enemies = Wave()
                 
                 if current_wave.wave_finished:
-                    print("Next wave incoming")
                     start_tick = pygame.time.get_ticks()
                     countdown = wave_delay
                     if wave_counter < len(self.wave_dict):
@@ -134,12 +131,7 @@ class Game():
                 self.window.blit(wave_timer_text, wave_timer_rect)
                 
                 if current_wave.wave_started:
-                    print("\nInside spawning loop")
-                    print("next enemy: ", next_enemy)
-                    print("loop counter: ", loop_counter)
                     if loop_counter % 120 == 0 and next_enemy != "1":
-                        print("\n\nSpawning enemies")
-                        print("Enemy type: ", type(next_enemy), "\n\n")
                         spawned_enemies.add(next_enemy)
                         next_enemy = next(iterator, "1")
                     
@@ -163,6 +155,9 @@ class Game():
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
+                
+                # Temporary point for center of tower, delete later
+                pygame.draw.circle(self.window, (255, 0, 0), (500, 400), 5)
                 
                 # draw tower
                 for tw in self.towers:
@@ -194,15 +189,13 @@ class Game():
                 self.running, self.playing = False, False
                 pygame.quit()
                 sys.exit()
+                
+            for tw in self.towers:
+                self.selected_tower = tw.check_tower_actions(pos, event)
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
-                for tw in self.towers:
-                    if tw.clickTower(pos[0], pos[1]):
-                        tw.selected = True
-                        self.selcted_tower = tw
-                    else:
-                        tw.selected = False
 
 
     def reset_vars(self):

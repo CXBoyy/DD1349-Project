@@ -15,6 +15,11 @@ class basictower(Tower):
 
         for x in range(1,9):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        print("Tower coordinates: ", (self.x, self.y))
+        self.tower_rect.topleft = (self.x, self.y)
+        print("Rect: " ,self.tower_rect)
 
     def draw(self, window):
         super().draw_radius(window)
@@ -42,7 +47,32 @@ class basictower(Tower):
     #             enemy_closest.append(enemy)
     #     enemy_closest.sort(key=lambda x: x.x)
     #     first_enemy = enemy_closest[0]
+    
+    
+    
+    def check_tower_actions(self, pos : tuple, event : pygame.event):
+        # if X <= self.x - self.tower_img[self.level-1].get_width()//2 + self.width and X >= self.x - self.tower_img[self.level-1].get_width()//2:
+        #     if Y <= self.y + self.height - self.tower_img[self.level-1].get_height()//2 and Y >= self.y - self.tower_img[self.level-1].get_height()//2:
+        #         return True
+        # return False
+        if self.tower_rect.collidepoint(pos):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                print("Clicked")
+                if self.selected is False:
+                    print("Showing radius")
+                    self.selected = True
+                    return self
+                                
+                elif self.selected is True:
+                    print("Not showing radius")
+                    self.selected = False
+                    return None
         
+        if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.selected is True:
+                self.selected = False
+                return None
+            
                
         
 
