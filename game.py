@@ -27,6 +27,7 @@ class Game():
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
+        self.map1_grid_img = pygame.image.load("assets/New/Terrain/map1_grid.png").convert_alpha()              # Make the grid blit onto the map if the buy button is pressed
         
         self.map1_path = [(0, 97), (32, 97), (101, 97), (155, 97), (224, 97), (287, 97), (287, 160), (287, 220), (287, 288), (275, 340), 
                           (224, 348), (162, 348), (102, 356), (98, 412), (105, 470), (161, 478), (225, 478), (287, 478), (351, 478), (413, 478), 
