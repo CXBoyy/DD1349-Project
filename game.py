@@ -163,8 +163,14 @@ class Game():
                     tw.drawTower(self.window)
 
                 # loop towers
+<<<<<<< HEAD
                 # for tw in self.towers:
                 #     tw.attack(self.enemies)
+=======
+                for tw in self.towers:
+                    #tw.attack(self.enemies)
+                    pass
+>>>>>>> b2032c41892c6010f881d0e4c897fce75bc5f849
                 
                 
                 if self.back_button1.draw(self.window):
