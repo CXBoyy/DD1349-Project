@@ -18,6 +18,7 @@ class Game():
         self.window = pygame.display.set_mode((self.CANVAS_WIDTH, self.CANVAS_HEIGHT))
         self.SKY_BLUE = (202, 228, 241)
         self.map = None
+        self.show_grid = False
         
         # Buttons
         back_button_img = pygame.image.load("pics/back.png").convert_alpha()
@@ -129,6 +130,8 @@ class Game():
                 self.window.blit(health_text, health_rect)
                 self.window.blit(wave_text, wave_rect)
                 self.window.blit(wave_timer_text, wave_timer_rect)
+                if self.show_grid:
+                    self.window.blit(self.map1_grid_img, (0,0))
                 
                 if current_wave.wave_started:
                     if loop_counter % 120 == 0 and next_enemy != "1":
@@ -174,6 +177,7 @@ class Game():
                 
                 if self.buy_button.draw(self.window):
                     print("Buying a tower")
+                    self.show_grid = True
                     pass
                     # Place a tower
                 pygame.display.update()
@@ -194,6 +198,11 @@ class Game():
                 self.selected_tower = tw.check_tower_actions(pos, event)
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.buy_button.rect.collidepoint(pos) and event.button == 1:
+                    if self.show_grid is False:
+                        self.show_grid = True
+                    else:
+                        self.show_grid = False
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
 

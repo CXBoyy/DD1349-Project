@@ -56,7 +56,7 @@ class basictower(Tower):
         #         return True
         # return False
         if self.tower_rect.collidepoint(pos):
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 print("Clicked")
                 if self.selected is False:
                     print("Showing radius")
@@ -68,7 +68,8 @@ class basictower(Tower):
                     self.selected = False
                     return None
         
-        if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            
             if self.selected is True:
                 self.selected = False
                 return None
