@@ -132,29 +132,29 @@ class Game():
                 self.window.blit(wave_text, wave_rect)
                 self.window.blit(wave_timer_text, wave_timer_rect)
                 
-                # if current_wave.wave_started:
-                #     print("\nInside spawning loop")
-                #     print("next enemy: ", next_enemy)
-                #     print("loop counter: ", loop_counter)
-                #     if loop_counter % 120 == 0 and next_enemy != "1":
-                #         print("\n\nSpawning enemies")
-                #         print("Enemy type: ", type(next_enemy), "\n\n")
-                #         spawned_enemies.add(next_enemy)
-                #         next_enemy = next(iterator, "1")
+                if current_wave.wave_started:
+                    print("\nInside spawning loop")
+                    print("next enemy: ", next_enemy)
+                    print("loop counter: ", loop_counter)
+                    if loop_counter % 120 == 0 and next_enemy != "1":
+                        print("\n\nSpawning enemies")
+                        print("Enemy type: ", type(next_enemy), "\n\n")
+                        spawned_enemies.add(next_enemy)
+                        next_enemy = next(iterator, "1")
                     
-                #     spawned_iterator = iter(spawned_enemies)
-                #     #print("List: ", self.enemy_group.sprites())
-                #     for spawned_enemy in spawned_iterator:
-                #         #print("Enemy: ", spawnedEnemy)
-                #         if loop_counter % 150 == 0:
-                #             spawned_enemy.hit()
-                #         if spawned_enemy.dead:
-                #             spawned_enemies.remove(spawned_enemy)
+                    spawned_iterator = iter(spawned_enemies)
+                    #print("List: ", self.enemy_group.sprites())
+                    for spawned_enemy in spawned_iterator:
+                        #print("Enemy: ", spawnedEnemy)
+                        if loop_counter % 150 == 0:
+                            spawned_enemy.hit()
+                        if spawned_enemy.dead:
+                            spawned_enemies.remove(spawned_enemy)
                         
-                #     spawned_enemies.update()
-                #     spawned_enemies.draw(self.window)
-                #     if not bool(spawned_enemies):
-                #         current_wave.wave_finished = True
+                    spawned_enemies.update()
+                    spawned_enemies.draw(self.window)
+                    if not bool(spawned_enemies):
+                        current_wave.wave_finished = True
                         
                 if self.health <= 0:
                     #Game over
@@ -165,7 +165,7 @@ class Game():
                 
                 # draw tower
                 for tw in self.towers:
-                    tw.drawTower(self.window)
+                    tw.draw(self.window)
 
                 # loop towers
                 for tw in self.towers:
@@ -198,7 +198,6 @@ class Game():
                     self.LEFTMOUSECLICK = True
                 for tw in self.towers:
                     if tw.clickTower(pos[0], pos[1]):
-                        print("run")
                         tw.selected = True
                         self.selcted_tower = tw
                     else:
