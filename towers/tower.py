@@ -1,7 +1,7 @@
 import pygame
 
 class Tower():
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
         self.width = 0
@@ -13,6 +13,8 @@ class Tower():
         self.selected = False
         self.menu = None
         self.tower_img = []
+        self.range = 10
+        self.tower_rect = None
 
     def buyTower(self):
         pass
@@ -27,20 +29,30 @@ class Tower():
     def uppgradeCost(self):
         return self.cost[self.level-1]
 
-    def drawTower(self, window):
-        window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+    def drawTower(self, window : pygame.Surface):
+        #window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+        window.blit(self.tower_img[self.level-1], (self.x, self.y))
 
     def draw_radius(self, window):
         if self.selected:
             surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
             pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
-            window.blit(surface, (self.x - self.range, self.y - self.range))
+            print("Height and width: ", self.width, self.height)
+            window.blit(surface, ((self.x + (self.width/2)) - self.range, (self.y + (self.height/2)) - self.range))
 
-    def clickTower(self, X, Y):
-        if X <= self.x - self.tower_img[self.level-1].get_width()//2 + self.width and X >= self.x - self.tower_img[self.level-1].get_width()//2:
-            if Y <= self.y + self.height - self.tower_img[self.level-1].get_height()//2 and Y >= self.y - self.tower_img[self.level-1].get_height()//2:
-                return True
-        return False
+    def check_tower_actions(self, pos : tuple, event : pygame.event):
+        # if X <= self.x - self.tower_img[self.level-1].get_width()//2 + self.width and X >= self.x - self.tower_img[self.level-1].get_width()//2:
+        #     if Y <= self.y + self.height - self.tower_img[self.level-1].get_height()//2 and Y >= self.y - self.tower_img[self.level-1].get_height()//2:
+        #         return True
+        # return False
+        
+        # if self.tower_rect.collidepoint((X, Y)):
+        #     return True
+        # else:
+        #     return False
+        
+        # Define this method in sub classes
+        pass
 
     def moveTower(self,x,y):
         self.x = x
