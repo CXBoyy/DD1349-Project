@@ -171,7 +171,10 @@ class Game():
                 # loop towers
                 for tw in self.towers:
                     #tw.attack(self.enemies)
-                    pass
+                    print("Selected tower: ", self.selected_tower)
+                    if self.selected_tower == tw and tw.moving_tower:
+                        print("\nTrying to move tower")
+                        tw.moveTower(pos[0] - 32, pos[1] - 32)
                 
                 # Button interactions
                 if self.back_button1.clicked:
@@ -197,7 +200,12 @@ class Game():
                 sys.exit()
                 
             for tw in self.towers:
-                self.selected_tower = tw.check_tower_actions(pos, event)
+                old_selected_tower = self.selected_tower
+                result_of_action = tw.check_tower_actions(pos, event)
+                if not isinstance(result_of_action, bool):
+                    self.selected_tower = result_of_action
+                    print("Is instance of bool")
+                print("selected tower after event: ", self.selected_tower)
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.buy_button.rect.collidepoint(pos) and event.button == 1:
