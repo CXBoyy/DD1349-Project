@@ -10,17 +10,19 @@ class basictower(Tower):
         self.basic_imgs = []
         self.basic_count = 0
         self.range = 200
+        self.width = self.height = 60
         self.in_range = False
 
         for x in range(1,9):
-            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets\New\Towers\tower1\tower1_1.png"), (64, 64)))
+            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
 
     def draw(self, window):
-        super().draw(window)
+        super().draw_radius(window)
+        super().drawTower(window)
         
         if self.basic_count >= len(self.basic_imgs):
             self.basic_count = 0
-        window.blit(self.basic_imgs[self.basic_count], ((self.x + self.width/2) - (self.basic_imgs[self.basic_count].get_width()/2), (self.y - (self.basic_imgs[self.basic_count].height()))))
+        # window.blit(self.basic_imgs[self.basic_count], ((self.x + self.width/2) - (self.basic_imgs[self.basic_count].get_width()/2), (self.y - (self.basic_imgs[self.basic_count].height()))))
         self.basic_count += 1
 
     def change_range(self, r):
