@@ -35,6 +35,8 @@ class Game():
                           (479, 478), (546, 478), (607, 478), (670, 478), (731, 465), (731, 415), (731, 349), (731, 285), (745, 232), (804, 222), 
                           (870, 222), (896, 222), (900, 222)
                           ]
+        
+        self.map1_grid_rects = []
 
         wave1 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
@@ -63,6 +65,16 @@ class Game():
             self.wave_dict[wave_string] = Wave()
             for enemy in wave:
                 self.wave_dict[wave_string].add(enemy)
+        
+        # Adding grid rects        
+        for x_coordinate in range (0, 896, 64):
+            for y_coordinate in range (0, 640, 64):
+                self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
+                
+        
+        #print("\n\n", self.map1_grid_rects)
+        #print("length: ", len(self.map1_grid_rects))
+            
         
         self.towers = [basictower(500,400)
                        ]
@@ -171,10 +183,12 @@ class Game():
                 # loop towers
                 for tw in self.towers:
                     #tw.attack(self.enemies)
-                    print("Selected tower: ", self.selected_tower)
+                    
+                    # Moving towers when left clicking on them.
                     if self.selected_tower == tw and tw.moving_tower:
-                        print("\nTrying to move tower")
-                        tw.moveTower(pos[0] - 32, pos[1] - 32)
+                        for grid_rect in self.map1_grid_rects:
+                            if grid_rect.collidepoint(pos):
+                                tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
                 
                 # Button interactions
                 if self.back_button1.clicked:
@@ -200,12 +214,9 @@ class Game():
                 sys.exit()
                 
             for tw in self.towers:
-                old_selected_tower = self.selected_tower
                 result_of_action = tw.check_tower_actions(pos, event)
                 if not isinstance(result_of_action, bool):
                     self.selected_tower = result_of_action
-                    print("Is instance of bool")
-                print("selected tower after event: ", self.selected_tower)
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.buy_button.rect.collidepoint(pos) and event.button == 1:

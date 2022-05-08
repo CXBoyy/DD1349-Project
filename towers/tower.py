@@ -71,7 +71,6 @@ class Tower():
                     elif self.moving_tower is False:
                         self.moving_tower = True
                         return self
-                    print("Moving tower: ", self.moving_tower)
                 
         if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             
