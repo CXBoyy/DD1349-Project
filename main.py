@@ -19,10 +19,6 @@ pygame.display.set_caption("Test")
 start_img = pygame.image.load("pics/start_button.png").convert_alpha()
 exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
 
-# Buttons
-# start_button = button.Button(100, 235, start_img, 0.4)
-# exit_button = button.Button(400, 200, exit_img, 0.9)
-
 def main():
     clock = pygame.time.Clock()
     print(g.playing)

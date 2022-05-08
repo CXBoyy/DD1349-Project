@@ -18,8 +18,12 @@ class Game():
         self.window = pygame.display.set_mode((self.CANVAS_WIDTH, self.CANVAS_HEIGHT))
         self.SKY_BLUE = (202, 228, 241)
         self.map = None
+        
+        # Buttons
         back_button_img = pygame.image.load("pics/back.png").convert_alpha()
         self.back_button1 = button.Button(500, 50, back_button_img, 0.3, True)
+        buy_button_img = pygame.transform.scale(pygame.image.load("pics/buy.png").convert_alpha(), (86, 37))
+        self.buy_button = button.Button(600, 20, buy_button_img, 1, True)
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
@@ -118,6 +122,7 @@ class Game():
                 wave_timer_text = font.render((str.format("Time until wave {}:   {} seconds", wave_counter, countdown)), True, (0, 0, 0))
                 wave_timer_rect = wave_timer_text.get_rect(center=(600, 11))
                 
+                # Drawing everything
                 self.check_events()
                 self.canvas.fill(self.SKY_BLUE)
                 self.window.blit(self.canvas, (0,0))
@@ -163,18 +168,18 @@ class Game():
                     tw.drawTower(self.window)
 
                 # loop towers
-<<<<<<< HEAD
-                # for tw in self.towers:
-                #     tw.attack(self.enemies)
-=======
                 for tw in self.towers:
                     #tw.attack(self.enemies)
                     pass
->>>>>>> b2032c41892c6010f881d0e4c897fce75bc5f849
                 
-                
+                # Button interactions
                 if self.back_button1.draw(self.window):
                     self.playing = False
+                
+                if self.buy_button.draw(self.window):
+                    print("Buying a tower")
+                    pass
+                    # Place a tower
                 pygame.display.update()
                 loop_counter += 1
                 mainClock.tick(60)
