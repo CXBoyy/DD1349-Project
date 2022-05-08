@@ -2,6 +2,7 @@ import pygame, sys
 import button
 from enemies import enemy
 from enemies import single_track as st
+from towers.basictower import basictower
 import time
 from game_wave import Wave
 
@@ -17,8 +18,12 @@ class Game():
         self.window = pygame.display.set_mode((self.CANVAS_WIDTH, self.CANVAS_HEIGHT))
         self.SKY_BLUE = (202, 228, 241)
         self.map = None
+        
+        # Buttons
         back_button_img = pygame.image.load("pics/back.png").convert_alpha()
         self.back_button1 = button.Button(500, 50, back_button_img, 0.3, True)
+        buy_button_img = pygame.transform.scale(pygame.image.load("pics/buy.png").convert_alpha(), (86, 37))
+        self.buy_button = button.Button(600, 20, buy_button_img, 1, True)
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
@@ -60,6 +65,10 @@ class Game():
         
         print(self.wave_dict.values())
         
+        self.towers = [basictower(500,400)]
+        
+        self.selcted_tower = None
+        
         
 
     def game_loop(self, clock:pygame.time.Clock, map):
@@ -70,7 +79,7 @@ class Game():
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
-        wave_delay = 60
+        wave_delay = 6
         next_enemy = "1"
         countdown = wave_delay
         wave_clock = pygame.time.Clock()
@@ -81,12 +90,14 @@ class Game():
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
                 
+                pos = pygame.mouse.get_pos()
+                
                 if not current_wave.wave_started:
                     pass
                 
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
                     end_tick = pygame.time.get_ticks()
-                    countdown = 61 + ((start_tick - end_tick) // 1000)
+                    countdown = wave_delay + 1 + ((start_tick - end_tick) // 1000)
                     if end_tick - start_tick > wave_delay*1000:
                         loop_counter = 0
                         current_wave.wave_started = True
@@ -111,6 +122,7 @@ class Game():
                 wave_timer_text = font.render((str.format("Time until wave {}:   {} seconds", wave_counter, countdown)), True, (0, 0, 0))
                 wave_timer_rect = wave_timer_text.get_rect(center=(600, 11))
                 
+                # Drawing everything
                 self.check_events()
                 self.canvas.fill(self.SKY_BLUE)
                 self.window.blit(self.canvas, (0,0))
@@ -134,6 +146,8 @@ class Game():
                     #print("List: ", self.enemy_group.sprites())
                     for spawned_enemy in spawned_iterator:
                         #print("Enemy: ", spawnedEnemy)
+                        if loop_counter % 150 == 0:
+                            spawned_enemy.hit()
                         if spawned_enemy.dead:
                             spawned_enemies.remove(spawned_enemy)
                         
@@ -149,14 +163,31 @@ class Game():
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
                 
+                # draw tower
+                for tw in self.towers:
+                    tw.draw(self.window)
+
+                # loop towers
+                for tw in self.towers:
+                    #tw.attack(self.enemies)
+                    pass
+                
+                # Button interactions
                 if self.back_button1.draw(self.window):
                     self.playing = False
+                
+                if self.buy_button.draw(self.window):
+                    print("Buying a tower")
+                    pass
+                    # Place a tower
                 pygame.display.update()
                 loop_counter += 1
                 mainClock.tick(60)
         #pygame.quit()
 
     def check_events(self):
+        pos = pygame.mouse.get_pos()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
@@ -165,6 +196,12 @@ class Game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
+                for tw in self.towers:
+                    if tw.clickTower(pos[0], pos[1]):
+                        tw.selected = True
+                        self.selcted_tower = tw
+                    else:
+                        tw.selected = False
 
 
     def reset_vars(self):

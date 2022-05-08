@@ -22,11 +22,9 @@ class Enemy(pygame.sprite.Sprite):
     
         self.width = width                                                      # Size of the
         self.height = height                                                    # enemy image.
-        self.health = 1
         self.window = window
         self.image = None
         self.rect = None
-        self.speed = 1                                                          # To be set individually for each enemy type
         self.path = copy.deepcopy(path)
         self.currentPathNodePos = 0
         self.pathEnd = pathEnd
@@ -34,6 +32,10 @@ class Enemy(pygame.sprite.Sprite):
         self.distanceTraveled = 0
         self.directionalVector = normalize(self.path[1][0] - self.x, self.path[1][1] - self.y)       # Setting the starting directional vector
         self.game = game
+        
+        self.default_health = 6                                                 # To be set individually for each enemy type
+        self.health = self.default_health                                       # To be set individually for each enemy type
+        self.speed = 1                                                          # To be set individually for each enemy type 
         self.dead = False
     
     """ Draws the enemy.
@@ -59,6 +61,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.rotate(nodeVector)
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
             self.rect.center = (self.x, self.y)
+            self.display_health(self.window)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
@@ -100,7 +103,7 @@ class Enemy(pygame.sprite.Sprite):
     def hit(self):
         self.health -= 1
         if self.health <= 0:
-            return True
+            self.dead = True
         
     def rotate(self, nodeVector):
         #print("Trying to rotate")
@@ -120,4 +123,18 @@ class Enemy(pygame.sprite.Sprite):
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
         #print("Directional vector: ", self.directionalVector)
         #time.sleep(0.1)
+        
+    def display_health(self, window):
+        print(self.rect.center)
+        bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
+        length, width = 64, 10
+        increment = length / self.default_health
+        
+        print("Length", length)
+        print("Health", self.health)
+        print("Increment", increment)
+        pygame.draw.rect(window, (255, 0, 0), (bar_x, bar_y, length, width), 0)
+        pygame.draw.rect(window, (0, 255, 0), (bar_x, bar_y, increment * self.health, width), 0)
+        
+        
         
