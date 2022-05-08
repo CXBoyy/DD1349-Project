@@ -130,6 +130,8 @@ class Game():
                 self.window.blit(health_text, health_rect)
                 self.window.blit(wave_text, wave_rect)
                 self.window.blit(wave_timer_text, wave_timer_rect)
+                self.back_button1.draw(self.window)
+                self.buy_button.draw(self.window)
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0,0))
                 
@@ -172,10 +174,10 @@ class Game():
                     pass
                 
                 # Button interactions
-                if self.back_button1.draw(self.window):
+                if self.back_button1.clicked:
                     self.playing = False
-                
-                if self.buy_button.draw(self.window):
+                    self.back_button1.clicked = False
+                if self.buy_button.clicked:
                     print("Buying a tower")
                     self.show_grid = True
                     pass
@@ -205,6 +207,10 @@ class Game():
                         self.show_grid = False
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
+                    
+                if self.back_button1.rect.collidepoint(pos) and event.button == 1:
+                    self.back_button1.clicked = True
+                    
 
 
     def reset_vars(self):
