@@ -16,7 +16,8 @@ class basictower(Tower):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets\New\Towers\tower1\tower1_1.png"), (64, 64)))
 
     def draw(self, window):
-        super().draw(window)
+        super.draw_radius(window)
+        super.drawTower(window)
         
         if self.basic_count >= len(self.basic_imgs):
             self.basic_count = 0
