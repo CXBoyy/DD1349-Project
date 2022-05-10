@@ -47,37 +47,6 @@ class basictower(Tower):
     #             enemy_closest.append(enemy)
     #     enemy_closest.sort(key=lambda x: x.x)
     #     first_enemy = enemy_closest[0]
-    
-    
-    
-    def check_tower_actions(self, pos : tuple, event : pygame.event):
-        # if X <= self.x - self.tower_img[self.level-1].get_width()//2 + self.width and X >= self.x - self.tower_img[self.level-1].get_width()//2:
-        #     if Y <= self.y + self.height - self.tower_img[self.level-1].get_height()//2 and Y >= self.y - self.tower_img[self.level-1].get_height()//2:
-        #         return True
-        # return False
-        if self.tower_rect.collidepoint(pos):
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                print("Clicked")
-                if self.selected is False:
-                    print("Showing radius")
-                    self.selected = True
-                    return self
-                                
-                elif self.selected is True:
-                    print("Not showing radius")
-                    self.selected = False
-                    return None
-        
-        if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if self.selected is True:
-                self.selected = False
-                return None
-        
-        if self.tower_menu_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if self.selected is True:
-                self.selected = True
-                return None
-
             
                
         
