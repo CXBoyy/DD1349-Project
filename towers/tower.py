@@ -73,7 +73,6 @@ class Tower():
                         return self
                 
         if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            
             if self.selected is True:
                 self.selected = False
                 return None
@@ -85,4 +84,6 @@ class Tower():
         self.x = x
         self.y = y
         self.tower_rect.topleft = (x, y)
+        
+        
         
