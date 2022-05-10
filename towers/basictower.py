@@ -72,6 +72,12 @@ class basictower(Tower):
             if self.selected is True:
                 self.selected = False
                 return None
+        
+        if self.tower_menu_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.selected is True:
+                self.selected = True
+                return None
+
             
                
         

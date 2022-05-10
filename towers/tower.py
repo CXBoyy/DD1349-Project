@@ -15,11 +15,13 @@ class Tower():
         self.level = 1
         self.damage = 1
         self.selected = False
-        self.menu = Towermenu(self.x, self.y, menu_bg)
+        self.menu = Towermenu(self.x, self.y, menu_bg, [100, 400, 1000])
         self.menu.add_button(upgrade_button, "Upgrade")
         self.tower_img = []
         self.range = 10
         self.tower_rect = None
+        
+        self.tower_menu_rect = menu_bg.get_rect()
 
     def buyTower(self):
         pass
@@ -34,17 +36,13 @@ class Tower():
     def uppgradeCost(self):
         return self.cost[self.level-1]
 
-<<<<<<< HEAD
-    def drawTower(self, window):
+     
+    def drawTower(self, window : pygame.Surface):
         window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+        #window.blit(self.tower_img[self.level-1], (self.x, self.y))
         
         if self.selected:
             self.menu.draw(window)
-=======
-    def drawTower(self, window : pygame.Surface):
-        #window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
-        window.blit(self.tower_img[self.level-1], (self.x, self.y))
->>>>>>> origin/15/feat/add-grid-and-placement-ability-for-towers
 
     def draw_radius(self, window):
         if self.selected:
