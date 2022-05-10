@@ -2,6 +2,7 @@ import pygame
 import copy
 import numpy as np
 import operator
+import time
 from math import cos, sin
 
 def normalize(e1, e2):
@@ -10,53 +11,57 @@ def normalize(e1, e2):
         newVector = (vector[0] / norm, vector[1] / norm)
         return newVector
 
-class Enemy():
+class Enemy(pygame.sprite.Sprite):
     imgs = []
     
-    def __init__(self, window, x, y, width, height, path, pathEnd):
+    def __init__(self, window, x, y, width, height, path, pathEnd, game):
+        super().__init__()
+        
         self.x = x                                                              # Position of
         self.y = y                                                              # the enemy.
     
         self.width = width                                                      # Size of the
         self.height = height                                                    # enemy image.
-        self.health = 1
         self.window = window
-        self.img = None
-        self.speed = 1                                                          # To be set individually for each enemy type
+        self.image = None
+        self.rect = None
         self.path = copy.deepcopy(path)
         self.currentPathNodePos = 0
         self.pathEnd = pathEnd
         self.animation_count = 0
         self.distanceTraveled = 0
         self.directionalVector = normalize(self.path[1][0] - self.x, self.path[1][1] - self.y)       # Setting the starting directional vector
-    
-    
-    def normalize(e1, e2):
-        vector = (e1, e2)
-        norm = np.linalg.norm(vector)
-        newVector = (vector[0] / norm, vector[1] / norm)
-        return newVector
+        self.game = game
+        
+        self.default_health = 6                                                 # To be set individually for each enemy type
+        self.health = self.default_health                                       # To be set individually for each enemy type
+        self.speed = 1                                                          # To be set individually for each enemy type 
+        self.dead = False
     
     """ Draws the enemy.
     """  
-    def draw(self):
+    def update(self):
         if (self.x, self.y) >= self.pathEnd:
             print("Lost one life")
+            self.game.health -= 1
+            self.dead = True
             # Remove enemy from the map and take away one life
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
             index = self.animation_count // len(self.imgs)
-            self.img = self.imgs[index]
-            #time.sleep(1/100)
+            self.image = self.imgs[index]
+            self.rect = self.image.get_rect()
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
             #print("\nFactors: ", factor1, factor2)
-            print(self.directionalVector)
+            #print(self.directionalVector)
             #print("\nVectors: ", nodeVector, self.directionalVector)
             if factor1 != factor2:
                 self.rotate(nodeVector)
-            pygame.Surface.blit(self.window, self.img, (self.x-60, self.y-60))
+            #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
+            self.rect.center = (self.x, self.y)
+            self.display_health(self.window)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
@@ -98,10 +103,10 @@ class Enemy():
     def hit(self):
         self.health -= 1
         if self.health <= 0:
-            return True
+            self.dead = True
         
     def rotate(self, nodeVector):
-        print("Trying to rotate")
+        #print("Trying to rotate")
         dotProduct = np.dot(nodeVector, self.directionalVector)
         radianAngleBetweenVectors = np.arccos(dotProduct)/10
         degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
@@ -110,11 +115,21 @@ class Enemy():
         
         rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
                                       [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
-        print("Angle: ", degreeAngleBetweenVectors)
+        #print("Angle: ", degreeAngleBetweenVectors)
         goalVector = np.dot(rotationalMatrix2, self.directionalVector)
         #while self.directionalVector != goalVector:
-        self.img = pygame.transform.rotate(self.img, -degreeAngleBetweenVectors)   
+        self.image = pygame.transform.rotate(self.image, -degreeAngleBetweenVectors)   
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
-        print("Directional vector: ", self.directionalVector)
+        #print("Directional vector: ", self.directionalVector)
+        #time.sleep(0.1)
+        
+    def display_health(self, window):
+        bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
+        length, width = 64, 10
+        increment = length / self.default_health
+        pygame.draw.rect(window, (255, 0, 0), (bar_x, bar_y, length, width), 0)
+        pygame.draw.rect(window, (0, 255, 0), (bar_x, bar_y, increment * self.health, width), 0)
+        
+        
         
