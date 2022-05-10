@@ -1,4 +1,5 @@
 import pygame
+pygame.font.init()
 
 class Button:
     def __init__(self, x, y, img, name):
@@ -19,19 +20,19 @@ class Button:
         window.blit(self.img, (self.x, self.y))
 
 class Towermenu:
-    def __init__(self, x, y, img):
+    def __init__(self, x, y, img, item_cost):
         self.x = x
         self.y = y
         self.width = img.get_width()
         self.height = img.get_height()
-        self.item_names = []
+        self.item_cost = item_cost
         self.buttons = []
         self.items = 0
         self.background = img
+        self.font = pygame.font.SysFont("comicsans", 30)
         
     def add_button(self, img, name):
         self.items +=  1
-        inc_x = self.width/self.items/2
         button_x = self.x - self.background.get_width()/2
         button_y = self.y - 70
         self.buttons.append(Button(button_x, button_y, img, name))
@@ -45,3 +46,4 @@ class Towermenu:
         for button in self.buttons:
             if button.click(X, Y):
                 return button.name
+        return None
