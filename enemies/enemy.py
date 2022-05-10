@@ -54,10 +54,10 @@ class Enemy(pygame.sprite.Sprite):
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
-            #print("\nFactors: ", factor1, factor2)
             #print(self.directionalVector)
-            #print("\nVectors: ", nodeVector, self.directionalVector)
             if factor1 != factor2:
+                print("\nFactor1 ", factor1, "Factor2: ", factor2)
+                print("Trying to rotate")
                 self.rotate(nodeVector)
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
             self.rect.center = (self.x, self.y)
@@ -109,25 +109,26 @@ class Enemy(pygame.sprite.Sprite):
     def rotate(self, nodeVector):
         #print("Trying to rotate")
         dotProduct = np.dot(nodeVector, self.directionalVector)
-        radianAngleBetweenVectors = np.arccos(dotProduct)/10
+        radianAngleBetweenVectors = np.arccos(dotProduct)
         degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
         rotationalMatrix1 = np.array([[cos(-radianAngleBetweenVectors), -sin(-radianAngleBetweenVectors)], 
                                       [sin(-radianAngleBetweenVectors), cos(-radianAngleBetweenVectors)]])
         
         rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
                                       [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
-        #print("Angle: ", degreeAngleBetweenVectors)
+        print("\nAngle: ", degreeAngleBetweenVectors)
+        #print("\nVectors: ", nodeVector, self.directionalVector)
         goalVector = np.dot(rotationalMatrix2, self.directionalVector)
         #while self.directionalVector != goalVector:
         self.image = pygame.transform.rotate(self.image, -degreeAngleBetweenVectors)   
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
-        #print("Directional vector: ", self.directionalVector)
+        time.sleep(1)
+        print("Directional vector: ", self.directionalVector)
         vector_rect = pygame.Rect(self.directionalVector[0], self.directionalVector[1], 2, 2)
         vector_rect.topleft = (self.directionalVector[0], self.directionalVector[1])
         vector_rect.bottomright = (self.directionalVector[0] + 30, self.directionalVector[1] + 5)
         #pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
-        #time.sleep(0.1)
         
     def display_health(self, window):
         bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
