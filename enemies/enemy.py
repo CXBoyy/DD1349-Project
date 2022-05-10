@@ -60,6 +60,7 @@ class Enemy(pygame.sprite.Sprite):
             if factor1 != factor2:
                 self.rotate(nodeVector)
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
+            #self.rect.center = (self.x, self.y)
             self.rect.center = (self.x, self.y)
             self.display_health(self.window)
             self.animation_count += 1

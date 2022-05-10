@@ -5,6 +5,7 @@ from enemies import single_track as st
 from towers.basictower import basictower
 import time
 from game_wave import Wave
+from projectile import Projectile
 
 class Game():
 
@@ -71,15 +72,15 @@ class Game():
             for y_coordinate in range (0, 640, 64):
                 self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
                 
-        
-        #print("\n\n", self.map1_grid_rects)
-        #print("length: ", len(self.map1_grid_rects))
             
         
         self.towers = [basictower(500,400)
                        ]
         
         self.selected_tower = None
+        
+        # Test projectile
+        self.test_projectile = Projectile(self.towers[0], wave1[3])
         
         
 
@@ -165,6 +166,8 @@ class Game():
                     spawned_enemies.draw(self.window)
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
+                        
+                    self.test_projectile.update()
                         
                 if self.health <= 0:
                     #Game over
