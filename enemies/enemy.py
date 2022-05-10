@@ -62,6 +62,7 @@ class Enemy(pygame.sprite.Sprite):
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
             self.rect.center = (self.x, self.y)
             self.display_health(self.window)
+            pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
@@ -122,6 +123,10 @@ class Enemy(pygame.sprite.Sprite):
         #self.img = pygame.transform.rotate(self.img, 90)
         self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
         #print("Directional vector: ", self.directionalVector)
+        vector_rect = pygame.Rect(self.directionalVector[0], self.directionalVector[1], 2, 2)
+        vector_rect.topleft = (self.directionalVector[0], self.directionalVector[1])
+        vector_rect.bottomright = (self.directionalVector[0] + 30, self.directionalVector[1] + 5)
+        #pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
         #time.sleep(0.1)
         
     def display_health(self, window):
