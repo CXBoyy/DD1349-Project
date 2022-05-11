@@ -1,5 +1,7 @@
 import pygame
 from tower_menu import Towermenu
+import numpy as np
+from projectile import Projectile
 
 menu_bg = pygame.image.load(r"assets/New/menu_test_1.png")
 upgrade_button = pygame.image.load(r"assets/New/button_test_1.png")
@@ -43,12 +45,20 @@ class Tower():
         if self.selected:
             self.menu.draw(window)
             
-    def attack(self, )
+    def attack(self, enemies):
+        #print("attack")
+        for enemy in enemies:
+            distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
+            if distance <= self.range:
+                print("Attacking")
+                Projectile(self, enemy).update()
 
     def draw_radius(self, window):
         if self.selected:
             surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
-            pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+            circleRect = pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+            circleRect.center = (self.x+32, self.y+32)
+            #pygame.draw.rect(window, (0, 0, 255), circleRect)
             window.blit(surface, ((self.x + (self.width/2)) - self.range, (self.y + (self.height/2)) - self.range))
 
     def check_tower_actions(self, pos : tuple, event : pygame.event):

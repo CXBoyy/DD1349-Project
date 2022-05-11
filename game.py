@@ -80,7 +80,7 @@ class Game():
         self.selected_tower = None
         
         # Test projectile
-        self.test_projectile = Projectile(self.towers[0], wave1[3])
+        #self.test_projectile = Projectile(self.towers[0], wave1[3])
         
         
 
@@ -168,7 +168,11 @@ class Game():
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
                         
-                    self.test_projectile.update()
+                    #self.test_projectile.update()
+                    
+                    # loop towers
+                    for tw in self.towers:
+                        tw.attack(self.waves[wave_counter - 1])
                         
                 if self.health <= 0:
                     #Game over
@@ -184,9 +188,9 @@ class Game():
                 for tw in self.towers:
                     tw.draw(self.window)
 
-                # loop towers
-                for tw in self.towers:
-                    #tw.attack(self.enemies)
+                # # loop towers
+                # for tw in self.towers:
+                #     tw.attack(self.waves[wave_counter - 1])
                     
                     # Moving towers when left clicking on them.
                     if self.selected_tower == tw and tw.moving_tower:

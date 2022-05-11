@@ -34,8 +34,8 @@ class basictower(Tower):
         self.range = r
         
      
-    def attack(self, enemies):
-        pass
+    #def attack(self, enemies):
+    #    pass
     #     self.in_range = False
     #     enemy_closest = []
     #     for enemy in enemies:

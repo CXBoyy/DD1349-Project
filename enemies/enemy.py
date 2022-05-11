@@ -50,8 +50,7 @@ class Enemy(pygame.sprite.Sprite):
         else:
             index = self.animation_count // len(self.imgs)
             self.image = self.imgs[index]
-            self.rect = pygame.transform.scale(self.image, (64, 64)).get_rect()
-            #self.rect = self.image.get_rect()
+            self.rect = self.image.get_rect()
             self.rect.center = (self.x, self.y)
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)

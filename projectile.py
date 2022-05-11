@@ -1,16 +1,23 @@
 import pygame
-from enemies import enemy
-from towers import tower
+from enemies.enemy import Enemy
+#from towers.tower import Tower, normalize
 import numpy as np
 import time
+
+def normalize(e1, e2):
+        vector = (e1, e2)
+        norm = np.linalg.norm(vector)
+        newVector = (vector[0] / norm, vector[1] / norm)
+        return newVector
+
 class Projectile():
-    def __init__(self, source:tower.Tower ,target:enemy.Enemy):
+    def __init__(self, source ,target:Enemy):
         self.source = source
         self.x = source.x
         self.y = source.y
         self.target = target
         self.window = target.window
-        self.directionalVector = enemy.normalize( (self.target.x - self.x), (self.target.y - self.y) )
+        self.directionalVector = normalize( (self.target.x - self.x), (self.target.y - self.y) )
         self.image = None
         self.rect = pygame.Rect(self.x, self.y, 5, 5)
         self.dead = False
@@ -32,7 +39,7 @@ class Projectile():
         if not self.dead:
             if not self.check_collision():
                 print("Moving")
-                self.directionalVector = enemy.normalize( (self.target.x - self.x), (self.target.y - self.y) )
+                self.directionalVector = normalize( (self.target.x - self.x), (self.target.y - self.y) )
                 #print(self.directionalVector)
                 self.x = self.x + self.directionalVector[0] * self.speed
                 self.y = self.y + self.directionalVector[1] * self.speed
