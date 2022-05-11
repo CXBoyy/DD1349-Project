@@ -158,7 +158,8 @@ class Game():
                     for spawned_enemy in spawned_iterator:
                         #print("Enemy: ", spawnedEnemy)
                         if loop_counter % 150 == 0:
-                            spawned_enemy.hit()
+                            #spawned_enemy.hit()
+                            pass
                         if spawned_enemy.dead:
                             spawned_enemies.remove(spawned_enemy)
                         

@@ -50,7 +50,9 @@ class Enemy(pygame.sprite.Sprite):
         else:
             index = self.animation_count // len(self.imgs)
             self.image = self.imgs[index]
-            self.rect = self.image.get_rect()
+            self.rect = pygame.transform.scale(self.image, (64, 64)).get_rect()
+            #self.rect = self.image.get_rect()
+            self.rect.center = (self.x, self.y)
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
@@ -61,7 +63,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.rotate(nodeVector)
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
             #self.rect.center = (self.x, self.y)
-            self.rect.center = (self.x, self.y)
+            pygame.draw.rect(self.window, (0, 255, 0), self.rect)
             self.display_health(self.window)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):

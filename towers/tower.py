@@ -21,6 +21,7 @@ class Tower():
         self.range = 10
         self.tower_rect = None
         self.moving_tower = False
+        self.target = None
 
     def buyTower(self):
         pass
@@ -41,6 +42,8 @@ class Tower():
         
         if self.selected:
             self.menu.draw(window)
+            
+    def attack(self, )
 
     def draw_radius(self, window):
         if self.selected:
