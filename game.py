@@ -173,12 +173,14 @@ class Game():
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
                 
+
                 # Temporary point for center of tower, delete later
                 pygame.draw.circle(self.window, (255, 0, 0), (500, 400), 5)
                 
                 # draw tower
                 for tw in self.towers:
                     tw.draw(self.window)
+                    pygame.draw.rect(self.window, (0,0,255), tw.button_rect)
 
                 # loop towers
                 for tw in self.towers:
