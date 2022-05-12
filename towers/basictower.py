@@ -11,7 +11,7 @@ class basictower(Tower):
         self.basic_count = 0
         self.range = 200
         self.width = self.height = 60
-        self.in_range = False
+        self.enemy_is_in_range = False
 
         for x in range(1,9):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))

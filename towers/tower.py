@@ -21,9 +21,12 @@ class Tower():
         self.menu.add_button(upgrade_button, "Upgrade")
         self.tower_img = []
         self.range = 10
+        self.radius = self.range
         self.tower_rect = None
         self.moving_tower = False
         self.target = None
+        self.cooldown = 60
+        self.cooldown_counter = 0
 
     def buyTower(self):
         pass
@@ -45,13 +48,24 @@ class Tower():
         if self.selected:
             self.menu.draw(window)
             
-    def attack(self, enemies):
+    def attack1(self, enemies):
         #print("attack")
         for enemy in enemies:
             distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
             if distance <= self.range:
-                print("Attacking")
-                Projectile(self, enemy).update()
+                #print("Attacking")
+                return Projectile(self, enemy)
+            
+    def attack2(self, enemy):
+        #print("attack")
+        return Projectile(self, enemy)
+            
+    def in_range(self, enemy):
+        distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
+        if distance <= self.range:
+            return True
+        else:
+            return False
 
     def draw_radius(self, window):
         if self.selected:

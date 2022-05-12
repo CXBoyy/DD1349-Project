@@ -1,3 +1,5 @@
+from curses import window
+from xmlrpc.client import boolean
 import pygame, sys
 import button
 from enemies import enemy
@@ -104,6 +106,7 @@ class Game():
                 current_wave = self.wave_dict[wave_string]
                 
                 pos = pygame.mouse.get_pos()
+                projectiles = pygame.sprite.Group()
                 
                 if not current_wave.wave_started:
                     pass
@@ -170,9 +173,29 @@ class Game():
                         
                     #self.test_projectile.update()
                     
+                    # # loop towers
+                    # for tw in self.towers:
+                    #     attack_projectile = tw.attack(self.waves[wave_counter - 1])
+                    #     if attack_projectile is not None and tw.cooldown_counter % tw.cooldown == 0:
+                    #         projectiles.add(attack_projectile)
+                    #         print("Projectiles: ", projectiles.sprites())
+                    #     tw.cooldown_counter += 1
+                    # projectiles.update()
+                    # projectiles.draw(self.window)
+                    
                     # loop towers
                     for tw in self.towers:
-                        tw.attack(self.waves[wave_counter - 1])
+                        for enemy in self.waves[wave_counter - 1]:
+                            boolean_in_range = tw.in_range(enemy)
+                            if tw.target is not None and tw.target != enemy and not tw.in_range(tw.target):
+                                tw.target = enemy
+                            if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
+                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.in_range(tw.target):
+                                    tw.target = enemy
+                                    projectiles.add(tw.attack2(enemy))
+                        tw.cooldown_counter += 1
+                    projectiles.update()
+                    projectiles.draw(self.window)
                         
                 if self.health <= 0:
                     #Game over
