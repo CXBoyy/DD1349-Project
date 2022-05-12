@@ -17,7 +17,7 @@ class Tower():
         self.level = 1
         self.damage = 1
         self.selected = False
-        self.menu = Towermenu(self.x, self.y, menu_bg)
+        self.menu = Towermenu(self.x, self.y, menu_bg, [100, 400, 1000])
         self.menu.add_button(upgrade_button, "Upgrade")
         self.tower_img = []
         self.range = 10
@@ -27,6 +27,7 @@ class Tower():
         self.target = None
         self.cooldown = 60
         self.cooldown_counter = 0
+        self.tower_menu_rect = menu_bg.get_rect()
 
     def buyTower(self):
         pass
@@ -40,10 +41,11 @@ class Tower():
 
     def uppgradeCost(self):
         return self.cost[self.level-1]
+
      
     def drawTower(self, window : pygame.Surface):
-        #window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
-        window.blit(self.tower_img[self.level-1], (self.x, self.y))
+        window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+        #window.blit(self.tower_img[self.level-1], (self.x, self.y))
         
         if self.selected:
             self.menu.draw(window)
