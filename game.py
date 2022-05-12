@@ -6,6 +6,10 @@ from towers.basictower import basictower
 import time
 from game_wave import Wave
 
+
+money_button = pygame.image.load(r"assets/New/button_test_1.png")
+
+
 class Game():
 
     def __init__(self):
@@ -25,6 +29,7 @@ class Game():
         self.back_button1 = button.Button(500, 50, back_button_img, 0.3, True)
         buy_button_img = pygame.transform.scale(pygame.image.load("pics/buy.png").convert_alpha(), (86, 37))
         self.buy_button = button.Button(600, 20, buy_button_img, 1, True)
+
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
         self.map1_end = (896, 222)
@@ -81,6 +86,9 @@ class Game():
         
         self.selected_tower = None
         
+        self.money = 1000
+        self.life_font = pygame.font.SysFont("comicsans", 35)
+
         
 
     def game_loop(self, clock:pygame.time.Clock, map):
@@ -144,6 +152,15 @@ class Game():
                 self.window.blit(wave_timer_text, wave_timer_rect)
                 self.back_button1.draw(self.window)
                 self.buy_button.draw(self.window)
+                
+                # Draw currency
+                text_money = self.life_font.render(str(self.money), 1, (255, 255, 255))
+                money = pygame.transform.scale(money_button, (50, 50))
+                start_x = self.CANVAS_WIDTH - money_button.get_width() - 10
+
+                self.window.blit(text_money, (start_x - text_money.get_width() - 10, 75))
+                self.window.blit(money, (start_x, 65))
+                
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0,0))
                 

@@ -38,8 +38,8 @@ class Tower():
 
      
     def drawTower(self, window : pygame.Surface):
-        window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
-        #window.blit(self.tower_img[self.level-1], (self.x, self.y))
+        #window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+        window.blit(self.tower_img[self.level-1], (self.x, self.y))
         
         if self.selected:
             self.menu.draw(window)
