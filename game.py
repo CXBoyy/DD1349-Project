@@ -100,13 +100,13 @@ class Game():
         wave_clock = pygame.time.Clock()
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
+            projectiles = pygame.sprite.Group()
             while self.playing:
                 timer = wave_clock.tick()
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
                 
                 pos = pygame.mouse.get_pos()
-                projectiles = pygame.sprite.Group()
                 
                 if not current_wave.wave_started:
                     pass
@@ -193,6 +193,12 @@ class Game():
                                 if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.in_range(tw.target):
                                     tw.target = enemy
                                     projectiles.add(tw.attack2(enemy))
+                            # projectiles.update()
+                            # projectiles.draw(self.window)
+                        for projectile in projectiles:
+                            if projectile.dead:
+                                projectiles.remove(projectile)
+                                print("Projectiles: ", projectiles.sprites())
                         tw.cooldown_counter += 1
                     projectiles.update()
                     projectiles.draw(self.window)
