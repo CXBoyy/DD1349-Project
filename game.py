@@ -1,4 +1,3 @@
-from curses import window
 from xmlrpc.client import boolean
 import pygame, sys
 import button
@@ -228,6 +227,13 @@ class Game():
                     
                     # loop towers
                     for tw in self.towers:
+                        
+                        # Moving towers when left clicking on them.
+                        if self.selected_tower == tw and tw.moving_tower:
+                            for grid_rect in self.map1_grid_rects:
+                                if grid_rect.collidepoint(pos):
+                                    tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                                    
                         for enemy in self.waves[wave_counter - 1]:
                             boolean_in_range = tw.in_range(enemy)
                             if tw.target is not None and tw.target != enemy and not tw.in_range(tw.target):
@@ -270,11 +276,7 @@ class Game():
                 # for tw in self.towers:
                 #     tw.attack(self.waves[wave_counter - 1])
                     
-                    # Moving towers when left clicking on them.
-                    if self.selected_tower == tw and tw.moving_tower:
-                        for grid_rect in self.map1_grid_rects:
-                            if grid_rect.collidepoint(pos):
-                                tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                    
                 
                 # draw menu
                 self.menu.draw(self.window)
