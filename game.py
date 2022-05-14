@@ -5,9 +5,16 @@ from enemies import single_track as st
 from towers.basictower import basictower
 import time
 from game_wave import Wave
+from tower_menu import Buymenu
+
 
 
 money_button = pygame.image.load(r"assets/New/button_test_1.png")
+buy_menu_img = pygame.image.load(r"assets/New/buy_menu_test_1.png")
+buy_tower = pygame.image.load(r"assets/New/buy_tower_test.png")
+
+tower_names = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
+
 
 
 class Game():
@@ -81,13 +88,21 @@ class Game():
         #print("length: ", len(self.map1_grid_rects))
             
         
-        self.towers = [basictower(500,400)
-                       ]
+        self.towers = []
         
         self.selected_tower = None
         
         self.money = 1000
         self.life_font = pygame.font.SysFont("comicsans", 35)
+        
+        self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
+        self.menu.add_button(buy_tower, "buy_tower1", 250)
+        self.menu.add_button(buy_tower, "buy_tower2", 350)
+        self.menu.add_button(buy_tower, "buy_tower3", 450)
+        self.menu.add_button(buy_tower, "buy_tower4", 550)
+        
+        self.moving_object = None
+
 
         
 
@@ -111,6 +126,21 @@ class Game():
                 current_wave = self.wave_dict[wave_string]
                 
                 pos = pygame.mouse.get_pos()
+                
+                # check for moving object
+                if self.moving_object:
+                    self.moving_object.moveTower(pos[0], pos[1])
+                    tower_list = self.towers[:]
+                    collide = False
+                    for tower in tower_list:
+                        if tower.collide(self.moving_object):
+                            collide = True
+                            tower.place_color = (255, 0, 0, 100)
+                            self.moving_object.place_color = (255, 0, 0, 100)
+                        else:
+                            tower.place_color = (0, 0, 255, 100)
+                            if not collide:
+                                self.moving_object.place_color = (0, 0, 255, 100)
                 
                 if not current_wave.wave_started:
                     pass
@@ -198,6 +228,10 @@ class Game():
                 for tw in self.towers:
                     tw.draw(self.window)
                     pygame.draw.rect(self.window, (0,0,255), tw.button_rect)
+                    
+                # draw moving tower
+                if self.moving_object:
+                    self.moving_object.draw(self.window)
 
                 # loop towers
                 for tw in self.towers:
@@ -208,6 +242,9 @@ class Game():
                         for grid_rect in self.map1_grid_rects:
                             if grid_rect.collidepoint(pos):
                                 tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                
+                # draw menu
+                self.menu.draw(self.window)
                 
                 # Button interactions
                 if self.back_button1.clicked:
@@ -221,7 +258,10 @@ class Game():
                 pygame.display.update()
                 loop_counter += 1
                 mainClock.tick(60)
+                
+                    
         #pygame.quit()
+        
 
     def check_events(self):
         pos = pygame.mouse.get_pos()
@@ -249,7 +289,38 @@ class Game():
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
                     
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 3:
+                            if self.moving_object:
+                                if self.moving_object.name in tower_names:
+                                    self.towers.append(self.moving_object)
+                                self.moving_object.moving = False
+                                self.moving_object = None 
+                                self.show_grid = False
+                            
+                            else:
+                                buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                                if buy_menu_button:
+                                    print(buy_menu_button)
+                                    cost = self.menu.get_item_cost(buy_menu_button)
+                                    if self.money >= cost:
+                                        self.show_grid = True
+                                        self.money -= cost
+                                        self.add_tower(buy_menu_button)
+                    
 
 
     def reset_vars(self):
         self.LEFTMOUSECLICK = False
+        
+    def add_tower(self, name):
+        x, y = pygame.mouse.get_pos()
+        name_list = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower3"]
+        object_list = [basictower(x,y), basictower(x,y), basictower(x,y), basictower(x,y)]
+        
+        try:
+            obj = object_list[name_list.index(name)]
+            self.moving_object = obj
+            obj.moving = True
+        except Exception as e:
+            print(str(e) + "NOT VALID NAME")

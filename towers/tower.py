@@ -95,3 +95,7 @@ class Tower():
         self.y = y
         self.tower_rect.topleft = (x, y)
         
+        self.menu.x = x
+        self.menu.y = y
+        self.menu.update()
+        
