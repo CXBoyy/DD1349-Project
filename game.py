@@ -30,12 +30,13 @@ class Game():
         self.SKY_BLUE = (202, 228, 241)
         self.map = None
         self.show_grid = False
+        self.font = pygame.font.Font(None, 32)
         
         # Buttons
-        back_button_img = pygame.image.load("pics/back.png").convert_alpha()
-        self.back_button1 = button.Button(500, 50, back_button_img, 0.3, True)
-        buy_button_img = pygame.transform.scale(pygame.image.load("pics/buy.png").convert_alpha(), (86, 37))
-        self.buy_button = button.Button(600, 20, buy_button_img, 1, True)
+        self.back_button_img = pygame.image.load("pics/back.png").convert_alpha()
+        self.back_button1 = button.Button(500, 50, self.back_button_img, 0.3, True)
+        self.buy_button_img = pygame.transform.scale(pygame.image.load("pics/buy.png").convert_alpha(), (86, 37))
+        self.buy_button = button.Button(600, 20, self.buy_button_img, 1, True)
 
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial.png").convert_alpha()
@@ -107,14 +108,16 @@ class Game():
     def game_loop(self, clock:pygame.time.Clock, map):
         mainClock = clock 
         self.map = map
-        font = pygame.font.Font(None, 32)
+        font = self.font
         text = font.render("Now playing Map 1", True, (0, 0, 0))
         rect = text.get_rect(center=(500, 300))
         loop_counter = 0
         wave_counter = 1
         wave_delay = 6
+        spawn_delay = 120
         next_enemy = "1"
         countdown = wave_delay
+        game_won = False
         wave_clock = pygame.time.Clock()
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
@@ -143,9 +146,6 @@ class Game():
                             if not collide:
                                 self.moving_object.place_color = (0, 255, 0, 100)
                 
-                if not current_wave.wave_started:
-                    pass
-                
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
                     end_tick = pygame.time.get_ticks()
                     countdown = wave_delay + 1 + ((start_tick - end_tick) // 1000)
@@ -162,8 +162,7 @@ class Game():
                     if wave_counter < len(self.wave_dict):
                         wave_counter +=1
                     else:
-                        pass
-                        #Game won, all waves are over
+                        game_won = True
                 
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect()
@@ -195,8 +194,16 @@ class Game():
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0,0))
                 
+                for tw in self.towers:
+                    print("Inside tower loop")
+                    # Moving towers when left clicking on them.
+                    if self.selected_tower == tw and tw.moving_tower:
+                        for grid_rect in self.map1_grid_rects:
+                            if grid_rect.collidepoint(pos):
+                                tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                                
                 if current_wave.wave_started:
-                    if loop_counter % 120 == 0 and next_enemy != "1":
+                    if loop_counter % spawn_delay == 0 and next_enemy != "1":
                         spawned_enemies.add(next_enemy)
                         next_enemy = next(iterator, "1")
                     
@@ -214,20 +221,6 @@ class Game():
                     spawned_enemies.draw(self.window)
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
-                        
-                    #self.test_projectile.update()
-                    
-                    # # loop towers
-                    # for tw in self.towers:
-                    #     attack_projectile = tw.attack(self.waves[wave_counter - 1])
-                    #     if attack_projectile is not None and tw.cooldown_counter % tw.cooldown == 0:
-                    #         projectiles.add(attack_projectile)
-                    #         print("Projectiles: ", projectiles.sprites())
-                    #     tw.cooldown_counter += 1
-                    # projectiles.update()
-                    # projectiles.draw(self.window)
-                    
-                    # loop towers
                     for tw in self.towers:
                         # Moving towers when left clicking on them.
                         if self.selected_tower == tw and tw.moving_tower:
@@ -236,15 +229,16 @@ class Game():
                                     tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
                                     
                         for enemy in self.waves[wave_counter - 1]:
-                            boolean_in_range = tw.is_in_range(enemy)
-                            if tw.target is not None and tw.target != enemy and not tw.is_in_range(tw.target):
-                                tw.target = enemy
-                            if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
-                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
+                            if not enemy.dead:
+                                boolean_in_range = tw.is_in_range(enemy)
+                                if tw.target is not None and tw.target != enemy and not tw.is_in_range(tw.target):
                                     tw.target = enemy
-                                    projectiles.add(tw.attack2(enemy))
-                            # projectiles.update()
-                            # projectiles.draw(self.window)
+                                if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
+                                    if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
+                                        tw.target = enemy
+                                        projectiles.add(tw.attack2(enemy, tw.damage))
+                                # projectiles.update()
+                                # projectiles.draw(self.window)
                         for projectile in projectiles:
                             if projectile.dead:
                                 projectiles.remove(projectile)
@@ -253,9 +247,6 @@ class Game():
                     projectiles.update()
                     projectiles.draw(self.window)
                         
-                if self.health <= 0:
-                    #Game over
-                    pass
                     
                 for point in self.map1_path:
                     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
@@ -288,6 +279,10 @@ class Game():
                     self.show_grid = True
                     pass
                     # Place a tower
+                if self.health <= 0:
+                    self.game_over_screen()
+                if game_won:
+                    self.game_won_screen()
                 pygame.display.update()
                 loop_counter += 1
                 mainClock.tick(60)
@@ -321,6 +316,8 @@ class Game():
                     
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
+                    
+                
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 3:
@@ -362,3 +359,45 @@ class Game():
             obj.moving = True
         except Exception as e:
             print(str(e) + "NOT VALID NAME")
+
+    def game_over_screen(self):
+        show_screen = True
+        text1 = self.font.render("Game Over", True, (0, 0, 0))
+        text1_rect = text1.get_rect()
+        text1_rect.center = (self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2)
+        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img, 0.1, True)
+        
+        while show_screen:
+            self.window.fill((255,255,255))
+            self.window.blit(text1, text1_rect)
+            back_button2.draw(self.window)
+            for event in pygame.event.get():
+                pos = pygame.mouse.get_pos()
+                back_button2.check_button_actions(pos, event)
+            if back_button2.clicked:
+                print("Clicked game over")
+                self.playing = False
+                back_button2.clicked = False
+                show_screen = False
+            pygame.display.update()
+            
+    def game_won_screen(self):
+        show_screen = True
+        text1 = self.font.render("You won!", True, (0, 0, 0))
+        text1_rect = text1.get_rect()
+        text1_rect.center = (self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2)
+        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img, 0.1, True)
+        
+        while show_screen:
+            self.window.fill((255,255,255))
+            self.window.blit(text1, text1_rect)
+            back_button2.draw(self.window)
+            for event in pygame.event.get():
+                pos = pygame.mouse.get_pos()
+                back_button2.check_button_actions(pos, event)
+            if back_button2.clicked:
+                self.playing = False
+                back_button2.clicked = False
+                show_screen = False
+            pygame.display.update()
+                    

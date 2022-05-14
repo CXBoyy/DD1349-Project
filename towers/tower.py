@@ -63,9 +63,9 @@ class Tower():
                 #print("Attacking")
                 return Projectile(self, enemy)
             
-    def attack2(self, enemy):
+    def attack2(self, enemy, damage):
         #print("attack")
-        return Projectile(self, enemy)
+        return Projectile(self, enemy, damage)
             
     def is_in_range(self, enemy):
         distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
