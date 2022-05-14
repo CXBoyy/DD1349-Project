@@ -128,18 +128,20 @@ class Game():
                 
                 # check for moving object
                 if self.moving_object:
-                    self.moving_object.moveTower(pos[0], pos[1])
-                    tower_list = self.towers[:]
-                    collide = False
+                    for grid_rect in self.map1_grid_rects:
+                        if grid_rect.collidepoint(pos):
+                            self.moving_object.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                            tower_list = self.towers[:]
+                            collide = False
                     for tower in tower_list:
                         if tower.collide(self.moving_object):
                             collide = True
                             tower.place_color = (255, 0, 0, 100)
                             self.moving_object.place_color = (255, 0, 0, 100)
                         else:
-                            tower.place_color = (0, 0, 255, 100)
+                            tower.place_color = (0, 255, 0, 100)
                             if not collide:
-                                self.moving_object.place_color = (0, 0, 255, 100)
+                                self.moving_object.place_color = (0, 255, 0, 100)
                 
                 if not current_wave.wave_started:
                     pass
@@ -270,6 +272,9 @@ class Game():
                 # draw moving tower
                 if self.moving_object:
                     self.moving_object.draw(self.window)
+                    self.moving_object.draw_placement(self.window)
+                    for tower in self.towers:
+                        tower.draw_placement(self.window)
                 
                 # draw menu
                 self.menu.draw(self.window)
@@ -320,12 +325,17 @@ class Game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 3:
                             if self.moving_object:
-                                if self.moving_object.name in tower_names:
-                                    self.towers.append(self.moving_object)
-                                self.moving_object.moving = False
-                                self.moving_object = None 
-                                self.show_grid = False
-                            
+                                not_allowed = False
+                                tower_list = self.towers[:]
+                                for tower in tower_list:
+                                    if tower.collide(self.moving_object):
+                                        not_allowed = True
+                                if not not_allowed:
+                                    if self.moving_object.name in tower_names:
+                                        self.towers.append(self.moving_object)
+                                    self.moving_object.moving = False
+                                    self.moving_object = None 
+                                    self.show_grid = False
                             else:
                                 buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                                 if buy_menu_button:
