@@ -65,7 +65,7 @@ class Tower():
         #print("attack")
         return Projectile(self, enemy)
             
-    def in_range(self, enemy):
+    def is_in_range(self, enemy):
         distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
         if distance <= self.range:
             return True
