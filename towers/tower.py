@@ -1,5 +1,6 @@
 import pygame
 import numpy as np
+import math
 from projectile import Projectile
 from tower_menu import Button, Towermenu
 
@@ -30,6 +31,7 @@ class Tower():
         self.tower_menu_rect = menu_bg.get_rect()
         self.button_rect = upgrade_button.get_rect() 
         self.button_rect.center = (self.menu.buttons[0].x + 15, self.menu.buttons[0].y + 15)
+        self.place_color = (0,255,0, 100)
 
 
     def buyTower(self):
@@ -65,7 +67,7 @@ class Tower():
         #print("attack")
         return Projectile(self, enemy)
             
-    def in_range(self, enemy):
+    def is_in_range(self, enemy):
         distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
         if distance <= self.range:
             return True
@@ -79,6 +81,14 @@ class Tower():
             circleRect.center = (self.x+32, self.y+32)
             #pygame.draw.rect(window, (0, 0, 255), circleRect)
             window.blit(surface, ((self.x + (self.width/2)) - self.range, (self.y + (self.height/2)) - self.range))
+        
+    def draw_placement(self, window):
+        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
+        pygame.draw.rect(surface, self.place_color, pygame.Rect(0,0,64,64))
+
+        window.blit(surface, (self.x, self.y))
+
+
 
     def check_tower_actions(self, pos : tuple, event : pygame.event):
         if self.button_rect.collidepoint(pos):
@@ -90,14 +100,15 @@ class Tower():
         if self.tower_rect.collidepoint(pos):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:                   # Right mouse click
-                    if self.selected is False:
-                        print("Showing radius") 
-                        self.selected = True
-                        return self                 
-                    if self.selected is True:
-                        print("Not showing radius")
-                        self.selected = False
-                        return None
+                    if self.moving_tower is True:
+                        if self.selected is False:
+                            print("Showing radius") 
+                            self.selected = True
+                            return self                 
+                        if self.selected is True:
+                            print("Not showing radius")
+                            self.selected = False
+                            return None
         
                 if event.button == 1:                   # Left mouse click
                     print("\nClicked")
@@ -125,3 +136,11 @@ class Tower():
         self.menu.y = y
         self.menu.update()
         
+    def collide(self, otherTower):
+        x2 = otherTower.x
+        y2 = otherTower.y
+        dis = math.sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
+        if dis > 0:
+            return False
+        else:
+            return True

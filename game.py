@@ -1,4 +1,3 @@
-from curses import window
 from xmlrpc.client import boolean
 import pygame, sys
 import button
@@ -129,18 +128,20 @@ class Game():
                 
                 # check for moving object
                 if self.moving_object:
-                    self.moving_object.moveTower(pos[0], pos[1])
-                    tower_list = self.towers[:]
-                    collide = False
+                    for grid_rect in self.map1_grid_rects:
+                        if grid_rect.collidepoint(pos):
+                            self.moving_object.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                            tower_list = self.towers[:]
+                            collide = False
                     for tower in tower_list:
                         if tower.collide(self.moving_object):
                             collide = True
                             tower.place_color = (255, 0, 0, 100)
                             self.moving_object.place_color = (255, 0, 0, 100)
                         else:
-                            tower.place_color = (0, 0, 255, 100)
+                            tower.place_color = (0, 255, 0, 100)
                             if not collide:
-                                self.moving_object.place_color = (0, 0, 255, 100)
+                                self.moving_object.place_color = (0, 255, 0, 100)
                 
                 if not current_wave.wave_started:
                     pass
@@ -228,12 +229,18 @@ class Game():
                     
                     # loop towers
                     for tw in self.towers:
+                        # Moving towers when left clicking on them.
+                        if self.selected_tower == tw and tw.moving_tower:
+                            for grid_rect in self.map1_grid_rects:
+                                if grid_rect.collidepoint(pos):
+                                    tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                                    
                         for enemy in self.waves[wave_counter - 1]:
-                            boolean_in_range = tw.in_range(enemy)
-                            if tw.target is not None and tw.target != enemy and not tw.in_range(tw.target):
+                            boolean_in_range = tw.is_in_range(enemy)
+                            if tw.target is not None and tw.target != enemy and not tw.is_in_range(tw.target):
                                 tw.target = enemy
                             if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
-                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.in_range(tw.target):
+                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                     tw.target = enemy
                                     projectiles.add(tw.attack2(enemy))
                             # projectiles.update()
@@ -265,16 +272,9 @@ class Game():
                 # draw moving tower
                 if self.moving_object:
                     self.moving_object.draw(self.window)
-
-                # # loop towers
-                # for tw in self.towers:
-                #     tw.attack(self.waves[wave_counter - 1])
-                    
-                    # Moving towers when left clicking on them.
-                    if self.selected_tower == tw and tw.moving_tower:
-                        for grid_rect in self.map1_grid_rects:
-                            if grid_rect.collidepoint(pos):
-                                tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
+                    self.moving_object.draw_placement(self.window)
+                    for tower in self.towers:
+                        tower.draw_placement(self.window)
                 
                 # draw menu
                 self.menu.draw(self.window)
@@ -325,12 +325,17 @@ class Game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 3:
                             if self.moving_object:
-                                if self.moving_object.name in tower_names:
-                                    self.towers.append(self.moving_object)
-                                self.moving_object.moving = False
-                                self.moving_object = None 
-                                self.show_grid = False
-                            
+                                not_allowed = False
+                                tower_list = self.towers[:]
+                                for tower in tower_list:
+                                    if tower.collide(self.moving_object):
+                                        not_allowed = True
+                                if not not_allowed:
+                                    if self.moving_object.name in tower_names:
+                                        self.towers.append(self.moving_object)
+                                    self.moving_object.moving = False
+                                    self.moving_object = None 
+                                    self.show_grid = False
                             else:
                                 buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                                 if buy_menu_button:
