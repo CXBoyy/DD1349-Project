@@ -97,7 +97,7 @@ class Game():
         self.life_font = pygame.font.SysFont("comicsans", 35)
         
         self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
-        self.menu.add_button(buy_tower, "buy_tower1", 250)
+        self.menu.add_button(buy_tower, "buy_tower1", 100)
         self.menu.add_button(buy_tower, "buy_tower2", 350)
         self.menu.add_button(buy_tower, "buy_tower3", 450)
         self.menu.add_button(buy_tower, "buy_tower4", 550)
@@ -208,13 +208,9 @@ class Game():
                         next_enemy = next(iterator, "1")
                     
                     spawned_iterator = iter(spawned_enemies)
-                    #print("List: ", self.enemy_group.sprites())
                     for spawned_enemy in spawned_iterator:
-                        #print("Enemy: ", spawnedEnemy)
-                        if loop_counter % 150 == 0:
-                            #spawned_enemy.hit()
-                            pass
                         if spawned_enemy.dead:
+                            self.money += spawned_enemy.reward
                             spawned_enemies.remove(spawned_enemy)
                         
                     spawned_enemies.update()

@@ -35,7 +35,8 @@ class Enemy(pygame.sprite.Sprite):
         
         self.default_health = 6                                                 # To be set individually for each enemy type
         self.health = self.default_health                                       # To be set individually for each enemy type
-        self.speed = 1                                                          # To be set individually for each enemy type 
+        self.speed = 1                                                          # To be set individually for each enemy type
+        self.reward = 0                                                         # To be set individually for each enemy type
         self.dead = False
     
     """ Draws the enemy.
