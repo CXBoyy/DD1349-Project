@@ -1,3 +1,5 @@
+from curses import window
+from xmlrpc.client import boolean
 import pygame, sys
 import button
 from enemies import enemy
@@ -5,6 +7,7 @@ from enemies import single_track as st
 from towers.basictower import basictower
 import time
 from game_wave import Wave
+from projectile import Projectile
 from tower_menu import Buymenu
 
 
@@ -14,8 +17,6 @@ buy_menu_img = pygame.image.load(r"assets/New/buy_menu_test_1.png")
 buy_tower = pygame.image.load(r"assets/New/buy_tower_test.png")
 
 tower_names = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
-
-
 
 class Game():
 
@@ -83,15 +84,15 @@ class Game():
             for y_coordinate in range (0, 640, 64):
                 self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
                 
-        
-        #print("\n\n", self.map1_grid_rects)
-        #print("length: ", len(self.map1_grid_rects))
             
         
         self.towers = []
         
         self.selected_tower = None
         
+        # Test projectile
+        #self.test_projectile = Projectile(self.towers[0], wave1[3])
+    
         self.money = 1000
         self.life_font = pygame.font.SysFont("comicsans", 35)
         
@@ -102,8 +103,6 @@ class Game():
         self.menu.add_button(buy_tower, "buy_tower4", 550)
         
         self.moving_object = None
-
-
         
 
     def game_loop(self, clock:pygame.time.Clock, map):
@@ -120,6 +119,7 @@ class Game():
         wave_clock = pygame.time.Clock()
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
+            projectiles = pygame.sprite.Group()
             while self.playing:
                 timer = wave_clock.tick()
                 wave_string = "wave{}".format(wave_counter)
@@ -204,7 +204,8 @@ class Game():
                     for spawned_enemy in spawned_iterator:
                         #print("Enemy: ", spawnedEnemy)
                         if loop_counter % 150 == 0:
-                            spawned_enemy.hit()
+                            #spawned_enemy.hit()
+                            pass
                         if spawned_enemy.dead:
                             spawned_enemies.remove(spawned_enemy)
                         
@@ -212,6 +213,38 @@ class Game():
                     spawned_enemies.draw(self.window)
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
+                        
+                    #self.test_projectile.update()
+                    
+                    # # loop towers
+                    # for tw in self.towers:
+                    #     attack_projectile = tw.attack(self.waves[wave_counter - 1])
+                    #     if attack_projectile is not None and tw.cooldown_counter % tw.cooldown == 0:
+                    #         projectiles.add(attack_projectile)
+                    #         print("Projectiles: ", projectiles.sprites())
+                    #     tw.cooldown_counter += 1
+                    # projectiles.update()
+                    # projectiles.draw(self.window)
+                    
+                    # loop towers
+                    for tw in self.towers:
+                        for enemy in self.waves[wave_counter - 1]:
+                            boolean_in_range = tw.in_range(enemy)
+                            if tw.target is not None and tw.target != enemy and not tw.in_range(tw.target):
+                                tw.target = enemy
+                            if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
+                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.in_range(tw.target):
+                                    tw.target = enemy
+                                    projectiles.add(tw.attack2(enemy))
+                            # projectiles.update()
+                            # projectiles.draw(self.window)
+                        for projectile in projectiles:
+                            if projectile.dead:
+                                projectiles.remove(projectile)
+                                print("Projectiles: ", projectiles.sprites())
+                        tw.cooldown_counter += 1
+                    projectiles.update()
+                    projectiles.draw(self.window)
                         
                 if self.health <= 0:
                     #Game over
@@ -233,9 +266,9 @@ class Game():
                 if self.moving_object:
                     self.moving_object.draw(self.window)
 
-                # loop towers
-                for tw in self.towers:
-                    #tw.attack(self.enemies)
+                # # loop towers
+                # for tw in self.towers:
+                #     tw.attack(self.waves[wave_counter - 1])
                     
                     # Moving towers when left clicking on them.
                     if self.selected_tower == tw and tw.moving_tower:
