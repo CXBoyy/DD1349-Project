@@ -220,18 +220,6 @@ class Game():
                     spawned_enemies.draw(self.window)
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
-                        
-                    #self.test_projectile.update()
-                    
-                    # # loop towers
-                    # for tw in self.towers:
-                    #     attack_projectile = tw.attack(self.waves[wave_counter - 1])
-                    #     if attack_projectile is not None and tw.cooldown_counter % tw.cooldown == 0:
-                    #         projectiles.add(attack_projectile)
-                    #         print("Projectiles: ", projectiles.sprites())
-                    #     tw.cooldown_counter += 1
-                    # projectiles.update()
-                    # projectiles.draw(self.window)
                     for tw in self.towers:
                         for enemy in self.waves[wave_counter - 1]:
                             if not enemy.dead:
@@ -241,7 +229,7 @@ class Game():
                                 if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
                                     if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                         tw.target = enemy
-                                        projectiles.add(tw.attack2(enemy))
+                                        projectiles.add(tw.attack2(enemy, tw.damage))
                                 # projectiles.update()
                                 # projectiles.draw(self.window)
                         for projectile in projectiles:
@@ -249,8 +237,8 @@ class Game():
                                 projectiles.remove(projectile)
                                 print("Projectiles: ", projectiles.sprites())
                         tw.cooldown_counter += 1
-                        projectiles.update()
-                        projectiles.draw(self.window)
+                    projectiles.update()
+                    projectiles.draw(self.window)
                         
                     
                 for point in self.map1_path:

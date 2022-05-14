@@ -16,6 +16,7 @@ class basictower(Tower):
         self.in_range = False
         self.moving = False
         self.name = "buy_tower1"
+        self.damage = 2
 
         for x in range(1,9):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
