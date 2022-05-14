@@ -13,3 +13,4 @@ class SingleTrack(Enemy):
         self.default_health = 6  
         self.health = self.default_health
         self.speed = 1
+        self.reward = 30
