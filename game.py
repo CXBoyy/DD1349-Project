@@ -227,7 +227,6 @@ class Game():
                     
                     # loop towers
                     for tw in self.towers:
-                        
                         # Moving towers when left clicking on them.
                         if self.selected_tower == tw and tw.moving_tower:
                             for grid_rect in self.map1_grid_rects:
@@ -235,11 +234,11 @@ class Game():
                                     tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
                                     
                         for enemy in self.waves[wave_counter - 1]:
-                            boolean_in_range = tw.in_range(enemy)
-                            if tw.target is not None and tw.target != enemy and not tw.in_range(tw.target):
+                            boolean_in_range = tw.is_in_range(enemy)
+                            if tw.target is not None and tw.target != enemy and not tw.is_in_range(tw.target):
                                 tw.target = enemy
                             if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
-                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.in_range(tw.target):
+                                if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                     tw.target = enemy
                                     projectiles.add(tw.attack2(enemy))
                             # projectiles.update()
@@ -271,12 +270,6 @@ class Game():
                 # draw moving tower
                 if self.moving_object:
                     self.moving_object.draw(self.window)
-
-                # # loop towers
-                # for tw in self.towers:
-                #     tw.attack(self.waves[wave_counter - 1])
-                    
-                    
                 
                 # draw menu
                 self.menu.draw(self.window)
