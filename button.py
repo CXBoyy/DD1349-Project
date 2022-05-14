@@ -16,7 +16,6 @@ class Button():
         
     def check_button_actions(self, pos, event):
         if self.rect.collidepoint(pos):
-            print("Collding")
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 print("in here")
                 self.clicked = True
