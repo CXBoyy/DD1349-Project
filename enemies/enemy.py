@@ -102,8 +102,8 @@ class Enemy(pygame.sprite.Sprite):
         return nodeVector
     
     # Returns true if the enemy has died.
-    def hit(self):
-        self.health -= 1
+    def hit(self, damage):
+        self.health -= damage
         if self.health <= 0:
             self.dead = True
         
