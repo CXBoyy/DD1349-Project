@@ -13,6 +13,9 @@ class basictower(Tower):
         self.width = self.height = 60
         self.enemy_is_in_range = False
         self.cooldown = 90
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower1"
 
         for x in range(1,9):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
@@ -48,6 +51,16 @@ class basictower(Tower):
     #             enemy_closest.append(enemy)
     #     enemy_closest.sort(key=lambda x: x.x)
     #     first_enemy = enemy_closest[0]
+    
+    def collide(self, otherTower):
+        x2 = otherTower.x
+        y2 = otherTower.y
+
+        dis = math.sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
+        if dis >= 100:
+            return False
+        else:
+            return True
             
                
         

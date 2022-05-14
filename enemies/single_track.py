@@ -8,6 +8,8 @@ class SingleTrack(Enemy):
     
     def __init__(self, window, x, y, width, height, path, pathEnd, game):
         super().__init__(window, x, y, width, height, path, pathEnd, game)
+        self.name = "single_track"
+        self.money = 10
         self.default_health = 6  
         self.health = self.default_health
         self.speed = 1

@@ -1,7 +1,7 @@
 import pygame
-from tower_menu import Towermenu
 import numpy as np
 from projectile import Projectile
+from tower_menu import Button, Towermenu
 
 menu_bg = pygame.image.load(r"assets/New/menu_test_1.png")
 upgrade_button = pygame.image.load(r"assets/New/button_test_1.png")
@@ -28,6 +28,9 @@ class Tower():
         self.cooldown = 60
         self.cooldown_counter = 0
         self.tower_menu_rect = menu_bg.get_rect()
+        self.button_rect = upgrade_button.get_rect() 
+        self.button_rect.center = (self.menu.buttons[0].x + 15, self.menu.buttons[0].y + 15)
+
 
     def buyTower(self):
         pass
@@ -44,8 +47,8 @@ class Tower():
 
      
     def drawTower(self, window : pygame.Surface):
-        window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
-        #window.blit(self.tower_img[self.level-1], (self.x, self.y))
+        #window.blit(self.tower_img[self.level-1], (self.x-self.tower_img[self.level-1].get_width()//2, self.y-self.tower_img[self.level-1].get_height()//2))
+        window.blit(self.tower_img[self.level-1], (self.x, self.y))
         
         if self.selected:
             self.menu.draw(window)
@@ -78,16 +81,20 @@ class Tower():
             window.blit(surface, ((self.x + (self.width/2)) - self.range, (self.y + (self.height/2)) - self.range))
 
     def check_tower_actions(self, pos : tuple, event : pygame.event):
+        if self.button_rect.collidepoint(pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 3:
+                    if self.selected is True:
+                        print("test") 
         
         if self.tower_rect.collidepoint(pos):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:                   # Right mouse click
                     if self.selected is False:
-                        print("Showing radius")
+                        print("Showing radius") 
                         self.selected = True
-                        return self
-                                    
-                    elif self.selected is True:
+                        return self                 
+                    if self.selected is True:
                         print("Not showing radius")
                         self.selected = False
                         return None
@@ -114,5 +121,7 @@ class Tower():
         self.y = y
         self.tower_rect.topleft = (x, y)
         
-        
+        self.menu.x = x
+        self.menu.y = y
+        self.menu.update()
         
