@@ -94,6 +94,8 @@ class Game():
         #self.test_projectile = Projectile(self.towers[0], wave1[3])
     
         self.money = 1000
+        self.buying_tower = False
+        self.current_tower_cost = 0
         self.life_font = pygame.font.SysFont("comicsans", 35)
         
         self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
@@ -195,7 +197,6 @@ class Game():
                     self.window.blit(self.map1_grid_img, (0,0))
                 
                 for tw in self.towers:
-                    print("Inside tower loop")
                     # Moving towers when left clicking on them.
                     if self.selected_tower == tw and tw.moving_tower:
                         for grid_rect in self.map1_grid_rects:
@@ -313,19 +314,21 @@ class Game():
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
                     
-                
+            if event.type == pygame.    
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 3:
-                            if self.moving_object:
+                            if self.moving_object:                                          # Placement of new towers
                                 not_allowed = False
                                 tower_list = self.towers[:]
                                 for tower in tower_list:
                                     if tower.collide(self.moving_object):
                                         not_allowed = True
                                 if not not_allowed:
-                                    if self.moving_object.name in tower_names:
+                                    if self.moving_object.name in tower_names and self.buying_tower:
+                                        print("Placed")
                                         self.towers.append(self.moving_object)
+                                        self.money -= self.current_tower_cost
                                     self.moving_object.moving = False
                                     self.moving_object = None 
                                     self.show_grid = False
@@ -336,7 +339,7 @@ class Game():
                                     cost = self.menu.get_item_cost(buy_menu_button)
                                     if self.money >= cost:
                                         self.show_grid = True
-                                        self.money -= cost
+                                        self.current_tower_cost = cost
                                         self.add_tower(buy_menu_button)
                     
 
@@ -353,6 +356,7 @@ class Game():
             obj = object_list[name_list.index(name)]
             self.moving_object = obj
             obj.moving = True
+            self.buying_tower = True
         except Exception as e:
             print(str(e) + "NOT VALID NAME")
 
