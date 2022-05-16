@@ -38,6 +38,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 1                                                          # To be set individually for each enemy type
         self.reward = 0                                                         # To be set individually for each enemy type
         self.dead = False
+        self.out_of_bounds = False
     
     """ Draws the enemy.
     """  
@@ -45,7 +46,7 @@ class Enemy(pygame.sprite.Sprite):
         if (self.x, self.y) >= self.pathEnd:
             print("Lost one life")
             self.game.health -= 1
-            self.dead = True
+            self.out_of_bounds = True
             # Remove enemy from the map and take away one life
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
