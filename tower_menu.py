@@ -28,9 +28,11 @@ class Button:
 class BuyMenuButton(Button):
     def __init__(self, x, y, img, name, cost):
         self.name = name
-        self.img = img
         self.x = x
         self.y = y
+        self.img = img
+        self.rect = self.img.get_rect()
+        self.rect.topleft = (x,y)
         self.width = self.img.get_width()
         self.height = self.img.get_height()
         self.cost = cost
@@ -46,6 +48,8 @@ class Towermenu:
         self.buttons = []
         self.items = 0
         self.background = img
+        self.rect = self.background.get_rect()
+        self.rect.bottomright = (x + self.background.get_width()/2, y)
         self.font = pygame.font.SysFont("comicsans", 30)
         
     def add_button(self, img, name):
@@ -78,6 +82,8 @@ class Buymenu(Towermenu):
         self.buttons = []
         self.items = 0
         self.background = img
+        self.rect = self.background.get_rect()
+        self.rect.bottomright = (x + self.background.get_width()/2, y)
         self.font = pygame.font.SysFont("comicsans", 16)
     
     def add_button(self, img, name, cost):
@@ -99,3 +105,4 @@ class Buymenu(Towermenu):
             window.blit(test_img, (item.x - 5, item.y + item.height))
             text = self.font.render(str(item.cost), 1, (0,0,0))
             window.blit(text, (item.x + item.width/2 - text.get_width()/2 + 10, item.y + item.height))
+            pygame.draw.rect(window, (255, 255, 255), item.rect)

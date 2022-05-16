@@ -320,13 +320,28 @@ class Game():
                     self.moving_object = None
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
+                        print("menu rect: ", self.menu.rect)
                         if event.button == 3:
+                            #pos = pygame.mouse.get_pos()
                             if self.moving_object:                                          # Placement of new towers
                                 not_allowed = False
                                 tower_list = self.towers[:]
                                 for tower in tower_list:
                                     if tower.collide(self.moving_object):
                                         not_allowed = True
+                                if self.menu.rect.collidepoint(pos):
+                                    for button in self.menu.buttons:
+                                        if button.rect.collidepoint(pos):
+                                            buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                                            if buy_menu_button:
+                                                print(buy_menu_button)
+                                                cost = self.menu.get_item_cost(buy_menu_button)
+                                                if self.money >= cost:
+                                                    self.show_grid = True
+                                                    self.current_tower_cost = cost
+                                                    self.add_tower(buy_menu_button)
+                                    not_allowed = True
+                                
                                 if not not_allowed:
                                     if self.moving_object.name in tower_names and self.buying_tower:
                                         print("Placed")

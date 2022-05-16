@@ -10,7 +10,7 @@ class SingleTrack(Enemy):
         super().__init__(window, x, y, width, height, path, pathEnd, game)
         self.name = "single_track"
         self.money = 10
-        self.default_health = 6  
+        self.default_health = 10  
         self.health = self.default_health
-        self.speed = 1
+        self.speed = 2
         self.reward = 30
