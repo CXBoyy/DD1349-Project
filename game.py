@@ -314,7 +314,10 @@ class Game():
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
                     
-            if event.type == pygame.    
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if self.buying_tower:
+                    self.buying_tower = False
+                    self.moving_object = None
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 3:
