@@ -213,6 +213,8 @@ class Game():
                         if spawned_enemy.dead:
                             self.money += spawned_enemy.reward
                             spawned_enemies.remove(spawned_enemy)
+                        if spawned_enemy.out_of_bounds:
+                            spawned_enemies.remove(spawned_enemy)
                         
                     spawned_enemies.update()
                     spawned_enemies.draw(self.window)

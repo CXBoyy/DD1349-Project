@@ -105,4 +105,3 @@ class Buymenu(Towermenu):
             window.blit(test_img, (item.x - 5, item.y + item.height))
             text = self.font.render(str(item.cost), 1, (0,0,0))
             window.blit(text, (item.x + item.width/2 - text.get_width()/2 + 10, item.y + item.height))
-            pygame.draw.rect(window, (255, 255, 255), item.rect)
