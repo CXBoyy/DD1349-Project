@@ -1,9 +1,10 @@
+from platform import node
 import pygame
 import copy
 import numpy as np
 import operator
 import time
-from math import cos, sin
+from math import cos, sin, atan2, degrees
 
 def normalize(e1, e2):
         vector = (e1, e2)
@@ -39,6 +40,7 @@ class Enemy(pygame.sprite.Sprite):
         self.reward = 0                                                         # To be set individually for each enemy type
         self.dead = False
         self.out_of_bounds = False
+        self.angle1 = atan2(self.directionalVector[1], self.directionalVector[0])
     
     """ Draws the enemy.
     """  
@@ -55,15 +57,23 @@ class Enemy(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = (self.x, self.y)
             nodeVector = self.move()
-            factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
-            factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
-            #print(self.directionalVector)
-            if factor1 != factor2:
-                print("\nFactor1 ", factor1, "Factor2: ", factor2)
-                print("Trying to rotate")
-                self.rotate(nodeVector)
-            #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
-            #self.rect.center = (self.x, self.y)
+            #angle1 = atan2(self.directionalVector[1], self.directionalVector[0])
+            angle2 = atan2(nodeVector[1], nodeVector[0])
+            one_degree_in_radian = (np.pi)/180
+            angle1_deg = degrees(atan2(self.directionalVector[1], self.directionalVector[0]))
+            angle2_deg = degrees(atan2(nodeVector[1], nodeVector[0]))
+            if self.angle1 != angle2:
+                print("Rotating")
+                diff = (abs(angle2 - self.angle1))/30
+                self.angle1 += diff
+                #time.sleep(0.1)
+                print("Angle1: ", self.angle1)
+                print("Angle2: ", angle2)
+                self.rotate(degrees(-self.angle1))
+                #self.rotate(90)
+            else:
+                pass
+                
             pygame.draw.rect(self.window, (0, 255, 0), self.rect)
             self.display_health(self.window)
             pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
@@ -110,30 +120,9 @@ class Enemy(pygame.sprite.Sprite):
         if self.health <= 0:
             self.dead = True
         
-    def rotate(self, nodeVector):
-        #print("Trying to rotate")
-        dotProduct = np.dot(nodeVector, self.directionalVector)
-        radianAngleBetweenVectors = np.arccos(dotProduct)
-        degreeAngleBetweenVectors = np.degrees(radianAngleBetweenVectors)
-        rotationalMatrix1 = np.array([[cos(-radianAngleBetweenVectors), -sin(-radianAngleBetweenVectors)], 
-                                      [sin(-radianAngleBetweenVectors), cos(-radianAngleBetweenVectors)]])
-        
-        rotationalMatrix2 = np.array([[cos(-radianAngleBetweenVectors*10), -sin(-radianAngleBetweenVectors*10)], 
-                                      [sin(-radianAngleBetweenVectors*10), cos(-radianAngleBetweenVectors*10)]])
-        print("\nAngle: ", degreeAngleBetweenVectors)
-        #print("\nVectors: ", nodeVector, self.directionalVector)
-        goalVector = np.dot(rotationalMatrix2, self.directionalVector)
-        #while self.directionalVector != goalVector:
-        self.image = pygame.transform.rotate(self.image, -degreeAngleBetweenVectors)   
-        #self.img = pygame.transform.rotate(self.img, 90)
-        self.directionalVector = np.dot(rotationalMatrix1, self.directionalVector)
-        time.sleep(1)
-        print("Directional vector: ", self.directionalVector)
-        vector_rect = pygame.Rect(self.directionalVector[0], self.directionalVector[1], 2, 2)
-        vector_rect.topleft = (self.directionalVector[0], self.directionalVector[1])
-        vector_rect.bottomright = (self.directionalVector[0] + 30, self.directionalVector[1] + 5)
-        #pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
-        
+    def rotate(self, angle):
+            self.image = pygame.transform.rotate(self.image, angle)
+    
     def display_health(self, window):
         bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
         length, width = 64, 10
