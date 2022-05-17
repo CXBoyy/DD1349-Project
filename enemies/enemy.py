@@ -35,8 +35,10 @@ class Enemy(pygame.sprite.Sprite):
         
         self.default_health = 6                                                 # To be set individually for each enemy type
         self.health = self.default_health                                       # To be set individually for each enemy type
-        self.speed = 1                                                          # To be set individually for each enemy type 
+        self.speed = 1                                                          # To be set individually for each enemy type
+        self.reward = 0                                                         # To be set individually for each enemy type
         self.dead = False
+        self.out_of_bounds = False
     
     """ Draws the enemy.
     """  
@@ -44,13 +46,14 @@ class Enemy(pygame.sprite.Sprite):
         if (self.x, self.y) >= self.pathEnd:
             print("Lost one life")
             self.game.health -= 1
-            self.dead = True
+            self.out_of_bounds = True
             # Remove enemy from the map and take away one life
             # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
             index = self.animation_count // len(self.imgs)
             self.image = self.imgs[index]
             self.rect = self.image.get_rect()
+            self.rect.center = (self.x, self.y)
             nodeVector = self.move()
             factor1 = np.around(nodeVector[0] * self.directionalVector[1], 2)
             factor2 = np.around(nodeVector[1] * self.directionalVector[0], 2)
@@ -60,7 +63,8 @@ class Enemy(pygame.sprite.Sprite):
                 print("Trying to rotate")
                 self.rotate(nodeVector)
             #pygame.Surface.blit(self.window, self.image, (self.x-60, self.y-60))
-            self.rect.center = (self.x, self.y)
+            #self.rect.center = (self.x, self.y)
+            pygame.draw.rect(self.window, (0, 255, 0), self.rect)
             self.display_health(self.window)
             pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
             self.animation_count += 1
@@ -101,8 +105,8 @@ class Enemy(pygame.sprite.Sprite):
         return nodeVector
     
     # Returns true if the enemy has died.
-    def hit(self):
-        self.health -= 1
+    def hit(self, damage):
+        self.health -= damage
         if self.health <= 0:
             self.dead = True
         

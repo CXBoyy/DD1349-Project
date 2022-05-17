@@ -11,7 +11,12 @@ class basictower(Tower):
         self.basic_count = 0
         self.range = 200
         self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 90
         self.in_range = False
+        self.moving = False
+        self.name = "buy_tower1"
+        self.damage = 2
 
         for x in range(1,9):
             self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
@@ -34,8 +39,8 @@ class basictower(Tower):
         self.range = r
         
      
-    def attack(self, enemies):
-        pass
+    #def attack(self, enemies):
+    #    pass
     #     self.in_range = False
     #     enemy_closest = []
     #     for enemy in enemies:
