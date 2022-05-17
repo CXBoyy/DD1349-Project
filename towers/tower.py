@@ -138,9 +138,19 @@ class Tower():
         
     def collide(self, otherTower):
         x2 = otherTower.x
-        y2 = otherTower.y
+        y2 = otherTower.y   
         dis = math.sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
         if dis > 0:
             return False
         else:
             return True
+        
+    # def path_collide(self, path):
+    #     x1, y1 = path[0], path[1]
+    #     dis = math.sqrt((x1 - self.x)**2 + (y1 - self.y)**2)
+    #     print(x1)
+    #     print(y1)
+    #     if dis > 0:
+    #         return False
+    #     else:
+    #         return True

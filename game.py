@@ -1,5 +1,7 @@
 from xmlrpc.client import boolean
+from numpy import not_equal
 import pygame, sys
+import math
 import button
 from enemies import enemy
 from enemies import single_track as st
@@ -50,6 +52,7 @@ class Game():
                           ]
         
         self.map1_grid_rects = []
+        self.map1_path_rects = []
 
         wave1 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
@@ -83,7 +86,10 @@ class Game():
         for x_coordinate in range (0, 896, 64):
             for y_coordinate in range (0, 640, 64):
                 self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
-                
+            
+        # Adding path rects
+        #self.map1_path_rects = [self.map1_grid_rects[14], self.map1_grid_rects[15], self.map1_grid_rects[16], self.map1_grid_rects[17], self.map1_grid_rects[18], self.map1_grid_rects[32], self.map1_grid_rects[46], self.map1_grid_rects[60], self.map1_grid_rects[71], self.map1_grid_rects[72], self.map1_grid_rects[73], self.map1_grid_rects[74], self.map1_grid_rects[85], self.map1_grid_rects[99], self.map1_grid_rects[100], self.map1_grid_rects[101], self.map1_grid_rects[102], self.map1_grid_rects[103], self.map1_grid_rects[104], self.map1_grid_rects[105], self.map1_grid_rects[106], self.map1_grid_rects[107], self.map1_grid_rects[108], self.map1_grid_rects[109], self.map1_grid_rects[95], self.map1_grid_rects[81], self.map1_grid_rects[67], self.map1_grid_rects[53], self.map1_grid_rects[54], self.map1_grid_rects[55]]
+        self.map1_path_rects = [self.map1_grid_rects[1], self.map1_grid_rects[11], self.map1_grid_rects[21], self.map1_grid_rects[31], self.map1_grid_rects[41], self.map1_grid_rects[42], self.map1_grid_rects[43], self.map1_grid_rects[44], self.map1_grid_rects[45], self.map1_grid_rects[35], self.map1_grid_rects[25], self.map1_grid_rects[15], self.map1_grid_rects[16], self.map1_grid_rects[17], self.map1_grid_rects[27], self.map1_grid_rects[37], self.map1_grid_rects[47], self.map1_grid_rects[57], self.map1_grid_rects[67], self.map1_grid_rects[77], self.map1_grid_rects[87], self.map1_grid_rects[97], self.map1_grid_rects[107], self.map1_grid_rects[117], self.map1_grid_rects[116], self.map1_grid_rects[115], self.map1_grid_rects[114], self.map1_grid_rects[113], self.map1_grid_rects[123], self.map1_grid_rects[133]] 
             
         
         self.towers = []
@@ -140,6 +146,9 @@ class Game():
                         if tower.collide(self.moving_object):
                             collide = True
                             tower.place_color = (255, 0, 0, 100)
+                            self.moving_object.place_color = (255, 0, 0, 100)
+                        if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                            collide = True
                             self.moving_object.place_color = (255, 0, 0, 100)
                         else:
                             tower.place_color = (0, 255, 0, 100)
@@ -327,6 +336,8 @@ class Game():
                                 for tower in tower_list:
                                     if tower.collide(self.moving_object):
                                         not_allowed = True
+                                    if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                                        not_allowed = True
                                 if not not_allowed:
                                     if self.moving_object.name in tower_names:
                                         self.towers.append(self.moving_object)
@@ -343,8 +354,6 @@ class Game():
                                         self.money -= cost
                                         self.add_tower(buy_menu_button)
                     
-
-
     def reset_vars(self):
         self.LEFTMOUSECLICK = False
         
