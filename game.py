@@ -67,7 +67,24 @@ class Game():
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
         
-        self.waves = [wave1, wave2]
+        wave3 = [
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+
+                ]
+        
+        
+        
+        self.waves = [wave1, wave2, wave3]
         self.wave_dict : dict[str, Wave] = dict()
         
         self.health = 10
@@ -93,7 +110,7 @@ class Game():
         # Test projectile
         #self.test_projectile = Projectile(self.towers[0], wave1[3])
     
-        self.money = 1000
+        self.money = 300
         self.buying_tower = False
         self.current_tower_cost = 0
         self.life_font = pygame.font.SysFont("comicsans", 35)
@@ -235,7 +252,7 @@ class Game():
                                 if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
                                     if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                         tw.target = enemy
-                                        projectiles.add(tw.attack2(enemy, tw.damage))
+                                        projectiles.add(tw.attack2(enemy, tw.damage, tw.projectile_speed))
                                 # projectiles.update()
                                 # projectiles.draw(self.window)
                         for projectile in projectiles:

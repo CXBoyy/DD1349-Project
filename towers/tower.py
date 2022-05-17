@@ -17,6 +17,7 @@ class Tower():
         self.cost = [0,0,0]
         self.level = 1
         self.damage = 1
+        self.projectile_speed = 1
         self.selected = False
         self.menu = Towermenu(self.x, self.y, menu_bg, [100, 400, 1000])
         self.menu.add_button(upgrade_button, "Upgrade")
@@ -32,6 +33,7 @@ class Tower():
         self.button_rect = upgrade_button.get_rect() 
         self.button_rect.center = (self.menu.buttons[0].x + 15, self.menu.buttons[0].y + 15)
         self.place_color = (0,255,0, 100)
+        
 
 
     def buyTower(self):
@@ -63,9 +65,9 @@ class Tower():
                 #print("Attacking")
                 return Projectile(self, enemy)
             
-    def attack2(self, enemy, damage):
+    def attack2(self, enemy, damage, speed):
         #print("attack")
-        return Projectile(self, enemy, damage)
+        return Projectile(self, enemy, damage, speed)
             
     def is_in_range(self, enemy):
         distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
