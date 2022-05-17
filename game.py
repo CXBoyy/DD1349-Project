@@ -241,7 +241,6 @@ class Game():
                         for projectile in projectiles:
                             if projectile.dead:
                                 projectiles.remove(projectile)
-                                print("Projectiles: ", projectiles.sprites())
                         tw.cooldown_counter += 1
                     projectiles.update()
                     projectiles.draw(self.window)
@@ -319,7 +318,9 @@ class Game():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 if self.buying_tower:
                     self.buying_tower = False
+                    self.moving_object.selected = False
                     self.moving_object = None
+                    
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                         print("menu rect: ", self.menu.rect)
@@ -350,6 +351,7 @@ class Game():
                                         self.towers.append(self.moving_object)
                                         self.money -= self.current_tower_cost
                                     self.moving_object.moving = False
+                                    self.moving_object.selected = False
                                     self.moving_object = None 
                                     self.show_grid = False
                             else:
@@ -375,6 +377,7 @@ class Game():
         try:
             obj = object_list[name_list.index(name)]
             self.moving_object = obj
+            self.moving_object.selected = True
             obj.moving = True
             self.buying_tower = True
         except Exception as e:
