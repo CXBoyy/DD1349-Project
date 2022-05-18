@@ -121,7 +121,9 @@ class Enemy(pygame.sprite.Sprite):
             self.dead = True
         
     def rotate(self, angle):
-            self.image = pygame.transform.rotate(self.image, angle)
+        old_center = self.rect.center
+        self.image = pygame.transform.rotate(self.image, angle)
+        self.rect.center = old_center
     
     def display_health(self, window):
         bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
