@@ -31,7 +31,8 @@ class Tower():
         self.tower_menu_rect = menu_bg.get_rect()
         self.button_rect = upgrade_button.get_rect() 
         self.button_rect.center = (self.menu.buttons[0].x + 15, self.menu.buttons[0].y + 15)
-        self.place_color = (0,255,0, 100)
+        #self.place_color = (0,255,0, 100)
+        self.place_color = None
 
 
     def buyTower(self):
@@ -84,7 +85,8 @@ class Tower():
         
     def draw_placement(self, window):
         surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
-        pygame.draw.rect(surface, self.place_color, pygame.Rect(0,0,64,64))
+        if self.place_color is not None:
+            pygame.draw.rect(surface, self.place_color, pygame.Rect(0,0,64,64))
 
         window.blit(surface, (self.x, self.y))
 

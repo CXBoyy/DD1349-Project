@@ -63,14 +63,9 @@ class Enemy(pygame.sprite.Sprite):
             angle1_deg = degrees(atan2(self.directionalVector[1], self.directionalVector[0]))
             angle2_deg = degrees(atan2(nodeVector[1], nodeVector[0]))
             if self.angle1 != angle2:
-                print("Rotating")
                 diff = (angle2 - self.angle1)/5
                 self.angle1 += diff
-                #time.sleep(0.1)
-                print("Angle1: ", self.angle1)
-                print("Angle2: ", angle2)
                 self.rotate(degrees(-self.angle1))
-                #self.rotate(90)
             else:
                 pass
                 

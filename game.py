@@ -148,19 +148,24 @@ class Game():
                         if grid_rect.collidepoint(pos):
                             self.moving_object.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
                             tower_list = self.towers[:]
-                            collide = False
+                            colliding = False
+                    if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                        print("Colliding")
+                        colliding = True
+                        self.moving_object.place_color = (255, 0, 0, 100)
+                    elif not colliding:
+                        self.moving_object.place_color = (0, 255, 0, 100)
+                        
                     for tower in tower_list:
                         if tower.collide(self.moving_object):
-                            collide = True
-                            tower.place_color = (255, 0, 0, 100)
-                            self.moving_object.place_color = (255, 0, 0, 100)
-                        if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
-                            collide = True
+                            colliding = True
+                            #tower.place_color = (255, 0, 0, 100)
                             self.moving_object.place_color = (255, 0, 0, 100)
                         else:
-                            tower.place_color = (0, 255, 0, 100)
-                            if not collide:
+                            #tower.place_color = (0, 255, 0, 100)
+                            if not colliding:
                                 self.moving_object.place_color = (0, 255, 0, 100)
+                                pass
                 
                 if not current_wave.wave_started:                           # Checking if the wave has started or not
                     end_tick = pygame.time.get_ticks()
@@ -330,6 +335,8 @@ class Game():
                             if self.moving_object:                                          # Placement of new towers
                                 not_allowed = False
                                 tower_list = self.towers[:]
+                                if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                                    not_allowed = True
                                 for tower in tower_list:
                                     if tower.collide(self.moving_object):
                                         not_allowed = True
@@ -355,6 +362,7 @@ class Game():
                                         self.money -= self.current_tower_cost
                                     self.moving_object.moving = False
                                     self.moving_object.selected = False
+                                    self.moving_object.place_color = None
                                     self.moving_object = None 
                                     self.show_grid = False
                             else:
@@ -392,12 +400,17 @@ class Game():
         back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img_2, 0.1, True)
         
         while show_screen:
+            self.check_events()
             self.window.fill((255,255,255))
             self.window.blit(text1, text1_rect)
             back_button2.draw(self.window)
             for event in pygame.event.get():
                 pos = pygame.mouse.get_pos()
                 back_button2.check_button_actions(pos, event)
+                if event.type == pygame.QUIT:
+                    show_screen = False
+                    pygame.quit()
+                    sys.exit()
             if back_button2.clicked:
                 print("Clicked game over")
                 self.playing = False
@@ -419,6 +432,11 @@ class Game():
             for event in pygame.event.get():
                 pos = pygame.mouse.get_pos()
                 back_button2.check_button_actions(pos, event)
+                if event.type == pygame.QUIT:
+                    show_screen = False
+                    pygame.quit()
+                    sys.exit()
+                    
             if back_button2.clicked:
                 self.playing = False
                 back_button2.clicked = False
