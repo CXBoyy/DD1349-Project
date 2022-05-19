@@ -52,7 +52,74 @@ class basictower(Tower):
     #             enemy_closest.append(enemy)
     #     enemy_closest.sort(key=lambda x: x.x)
     #     first_enemy = enemy_closest[0]
+    
+class dubbletower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.basic_imgs = []
+        self.basic_count = 0
+        self.range = 175
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 75
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower2"
+        self.damage = 3
+
+        for x in range(1,9):
+            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        print("Tower coordinates: ", (self.x, self.y))
+        self.tower_rect.topleft = (self.x, self.y)
+        print("Rect: " ,self.tower_rect)
+        
+class heavytower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.basic_imgs = []
+        self.basic_count = 0
+        self.range = 150
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 110
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower3"
+        self.damage = 6
+
+        for x in range(1,9):
+            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        print("Tower coordinates: ", (self.x, self.y))
+        self.tower_rect.topleft = (self.x, self.y)
+        print("Rect: " ,self.tower_rect)
             
-               
+class missiletower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.basic_imgs = []
+        self.basic_count = 0
+        self.range = 200
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 150
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower4"
+        self.damage = 10
+
+        for x in range(1,9):
+            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        print("Tower coordinates: ", (self.x, self.y))
+        self.tower_rect.topleft = (self.x, self.y)
+        print("Rect: " ,self.tower_rect)               
         
 

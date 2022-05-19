@@ -1,7 +1,7 @@
 import pygame
 pygame.font.init()
 
-test_img = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (20, 20))
+test_img = pygame.transform.scale(pygame.image.load(r"assets/New/dollar_img.png"), (15, 15))
 class Button:
     def __init__(self, menu, img, name):
         self.name = name
@@ -28,9 +28,11 @@ class Button:
 class BuyMenuButton(Button):
     def __init__(self, x, y, img, name, cost):
         self.name = name
-        self.img = img
         self.x = x
         self.y = y
+        self.img = img
+        self.rect = self.img.get_rect()
+        self.rect.topleft = (x,y)
         self.width = self.img.get_width()
         self.height = self.img.get_height()
         self.cost = cost
@@ -46,6 +48,8 @@ class Towermenu:
         self.buttons = []
         self.items = 0
         self.background = img
+        self.rect = self.background.get_rect()
+        self.rect.bottomright = (x + self.background.get_width()/2, y)
         self.font = pygame.font.SysFont("comicsans", 30)
         
     def add_button(self, img, name):
@@ -78,12 +82,14 @@ class Buymenu(Towermenu):
         self.buttons = []
         self.items = 0
         self.background = img
+        self.rect = self.background.get_rect()
+        self.rect.bottomright = (x + self.background.get_width()/2, y)
         self.font = pygame.font.SysFont("comicsans", 16)
     
     def add_button(self, img, name, cost):
         self.items += 1
-        button_x = self.x - 200 + (self.items-1)*100
-        button_y = self.y - 68
+        button_x = self.x - 185 + (self.items-1)*100
+        button_y = self.y - 64
         self.buttons.append(BuyMenuButton(button_x, button_y, img, name, cost))
     
     def get_item_cost(self, name):
@@ -93,9 +99,9 @@ class Buymenu(Towermenu):
         return -1
         
     def draw(self, window):
-        window.blit(self.background, (self.x - self.background.get_width()/2, self.y-72))
+        window.blit(self.background, (self.x - self.background.get_width()/2, self.y-65))
         for item in self.buttons:
             item.draw(window)
-            window.blit(test_img, (item.x - 5, item.y + item.height))
+            window.blit(test_img, (item.x - 5, item.y + item.height - 2))
             text = self.font.render(str(item.cost), 1, (0,0,0))
-            window.blit(text, (item.x + item.width/2 - text.get_width()/2 + 10, item.y + item.height))
+            window.blit(text, (item.x + item.width - 33, item.y + item.height - 7))

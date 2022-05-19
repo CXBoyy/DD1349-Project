@@ -44,7 +44,6 @@ class Projectile(pygame.sprite.Sprite):
             #self.rect.center = (self.x, self.y)
             self.rect = pygame.Rect(self.x, self.y, 5, 5)
             self.check_collision()
-            print("Dead?: ", self.dead)
             #time.sleep(0.05)
             
     def move(self):

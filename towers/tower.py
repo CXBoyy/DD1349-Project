@@ -100,7 +100,7 @@ class Tower():
         if self.tower_rect.collidepoint(pos):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:                   # Right mouse click
-                    if self.moving_tower is True:
+                    #if self.moving_tower is True:
                         if self.selected is False:
                             print("Showing radius") 
                             self.selected = True
