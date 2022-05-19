@@ -61,18 +61,15 @@ class Game():
         self.map1_grid_rects = []
         self.map1_path_rects = []
 
+
         wave1 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-                 st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
-                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                 st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self)
                 ]
         
         wave2 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
-                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
@@ -83,18 +80,120 @@ class Game():
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        
+        wave4 = [
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                ]
+        
+        wave5 = [
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        
+        wave6 = [
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        
+        wave7 = [
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        
+        wave8 = [
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                ]
+        wave9 = [
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
+                 
+                ]
+        wave10 = [
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+                 st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
         
         
         
-        self.waves = [wave1, wave2, wave3]
+        
+        self.waves = [wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9, wave10]
         self.wave_dict : dict[str, Wave] = dict()
         
         self.health = 10
@@ -128,15 +227,18 @@ class Game():
         self.selected_tower = None
         
 
-        self.money = 250
+        self.money = 400
         self.buying_tower = False
         self.current_tower_cost = 0
         self.life_font = pygame.font.SysFont("comicsans", 35)
         
+        # Buy menu
         self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
+        
+        # Tower prices
         self.menu.add_button(buy_tower, "buy_tower1", 100)
-        self.menu.add_button(buy_tower_2, "buy_tower2", 350)
-        self.menu.add_button(buy_tower_3, "buy_tower3", 450)
+        self.menu.add_button(buy_tower_2, "buy_tower2", 200)
+        self.menu.add_button(buy_tower_3, "buy_tower3", 400)
         self.menu.add_button(buy_tower_4, "buy_tower4", 550)
         
         self.moving_object = None
@@ -149,7 +251,7 @@ class Game():
         loop_counter = 0
         wave_counter = 1
         wave_delay = 6
-        spawn_delay = 120
+        spawn_delay = 45
         next_enemy = "1"
         countdown = wave_delay
         game_won = False
@@ -263,7 +365,7 @@ class Game():
                                 if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
                                     if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                         tw.target = enemy
-                                        projectiles.add(tw.attack2(enemy, tw.damage))
+                                        projectiles.add(tw.attack2(enemy, tw.damage, tw.projectile_speed))
                         for projectile in projectiles:
                             if projectile.dead:
                                 projectiles.remove(projectile)
@@ -326,47 +428,51 @@ class Game():
                     
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
-                        if event.button == 1:
-                            if self.moving_object:                                          # Placement of new towers
-                                not_allowed = False
-                                tower_list = self.towers[:]
-                                if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
-                                    not_allowed = True
-                                for tower in tower_list:
-                                    if tower.collide(self.moving_object):
-                                        not_allowed = True
-                                    if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
-                                        not_allowed = True
-                                if self.menu.rect.collidepoint(pos):
-                                    for button in self.menu.buttons:
-                                        if button.rect.collidepoint(pos):
-                                            buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
-                                            if buy_menu_button:
-                                                cost = self.menu.get_item_cost(buy_menu_button)
-                                                if self.money >= cost:
-                                                    self.show_grid = True
-                                                    self.current_tower_cost = cost
-                                                    self.add_tower(buy_menu_button)
-                                    not_allowed = True
+                if event.button == 1:
+                    if self.moving_object:                                          # Placement of new towers
+                        not_allowed = False
+                        tower_list = self.towers[:]
+                        if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                            not_allowed = True
+                        for tower in tower_list:
+                            if tower.collide(self.moving_object):
+                                not_allowed = True
+                            if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
+                                not_allowed = True
+                        if self.menu.rect.collidepoint(pos):
+                            for button in self.menu.buttons:
+                                if button.rect.collidepoint(pos):
+                                    buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                                    if buy_menu_button:
+                                        cost = self.menu.get_item_cost(buy_menu_button)
+                                        if self.money >= cost:
+                                            self.show_grid = True
+                                            self.current_tower_cost = cost
+                                            self.add_tower(buy_menu_button)
+                            not_allowed = True
+                        
+                        if not not_allowed:
+                            if self.moving_object.name in tower_names and self.buying_tower:
+                                self.towers.append(self.moving_object)
+                                self.money -= self.current_tower_cost
+                                self.buying_tower = False
+                            self.moving_object.moving = False
+                            self.moving_object.selected = False
+                            self.moving_object.place_color = None
+                            self.moving_object = None 
+                            self.show_grid = False
+                    else:
+                        buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                        if buy_menu_button:
+                            cost = self.menu.get_item_cost(buy_menu_button)
+                            if self.money >= cost:
+                                self.show_grid = True
+                                self.current_tower_cost = cost
+                                self.add_tower(buy_menu_button)
                                 
-                                if not not_allowed:
-                                    if self.moving_object.name in tower_names and self.buying_tower:
-                                        self.towers.append(self.moving_object)
-                                        self.money -= self.current_tower_cost
-                                        self.buying_tower = False
-                                    self.moving_object.moving = False
-                                    self.moving_object.selected = False
-                                    self.moving_object.place_color = None
-                                    self.moving_object = None 
-                                    self.show_grid = False
-                            else:
-                                buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
-                                if buy_menu_button:
-                                    cost = self.menu.get_item_cost(buy_menu_button)
-                                    if self.money >= cost:
-                                        self.show_grid = True
-                                        self.current_tower_cost = cost
-                                        self.add_tower(buy_menu_button)
+                    
+                if self.back_button1.rect.collidepoint(pos) and event.button == 1:
+                    self.back_button1.clicked = True
                     
     def reset_vars(self):
         self.LEFTMOUSECLICK = False
