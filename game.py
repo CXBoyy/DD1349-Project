@@ -3,7 +3,7 @@ import pygame, sys
 import button
 from enemies import enemy
 from enemies import single_track as st
-from towers.basictower import basictower
+from towers.basictower import basictower, dubbletower, heavytower, missiletower
 import time
 from game_wave import Wave
 from projectile import Projectile
@@ -14,6 +14,10 @@ from tower_menu import Buymenu
 #money_button = pygame.image.load(r"assets/New/button_test_1.png")
 buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png")
 buy_tower = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (45, 45))
+buy_tower_2 = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45))
+buy_tower_3 = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (45, 45))
+buy_tower_4 = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (45, 45))
+
 
 tower_names = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
 
@@ -33,8 +37,9 @@ class Game():
         self.font = pygame.font.Font(None, 32)
         
         # Buttons
-        self.back_button_img = pygame.image.load("pics/back.png").convert_alpha()
-        self.back_button1 = button.Button(500, 50, self.back_button_img, 0.3, True)
+        self.back_button_img = pygame.transform.scale(pygame.image.load("pics/back.png").convert_alpha(), (100, 100))
+        self.back_button_img_2 = pygame.image.load("pics/back.png").convert_alpha()
+        self.back_button1 = button.Button(0, 0, self.back_button_img, 0.3, True)
 
         
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial_final.png").convert_alpha()
@@ -98,9 +103,9 @@ class Game():
         
         self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
         self.menu.add_button(buy_tower, "buy_tower1", 100)
-        self.menu.add_button(buy_tower, "buy_tower2", 350)
-        self.menu.add_button(buy_tower, "buy_tower3", 450)
-        self.menu.add_button(buy_tower, "buy_tower4", 550)
+        self.menu.add_button(buy_tower_2, "buy_tower2", 350)
+        self.menu.add_button(buy_tower_3, "buy_tower3", 450)
+        self.menu.add_button(buy_tower_4, "buy_tower4", 550)
         
         self.moving_object = None
         
@@ -163,13 +168,13 @@ class Game():
                         game_won = True
                 
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
-                health_rect = health_text.get_rect()
+                health_rect = health_text.get_rect(center=(90,11))
                 wave_text = font.render((str.format("Currently on Wave {}", wave_counter)), True, (0, 0, 0))
-                wave_rect = wave_text.get_rect(center=(375, 11))
+                wave_rect = wave_text.get_rect(center=(425, 11))
                 wave_timer_text = font.render((str.format("Time until wave {}:   {} seconds", wave_counter, countdown)), True, (0, 0, 0))
-                wave_timer_rect = wave_timer_text.get_rect(center=(700, 11))
+                wave_timer_rect = wave_timer_text.get_rect(center=(730, 11))
                 money_text = font.render((str.format("Money: {}", self.money)), True, (0, 0, 0))
-                money_rect = money_text.get_rect(center=(175, 11))
+                money_rect = money_text.get_rect(center=(225, 11))
                 
                 # Drawing everything
                 self.check_events()
@@ -243,12 +248,12 @@ class Game():
                     projectiles.draw(self.window)
                         
                     
-                for point in self.map1_path:
-                    pygame.draw.circle(self.window, (255, 0, 0), point, 5)
+                # for point in self.map1_path:
+                #     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
                 
 
-                # Temporary point for center of tower, delete later
-                pygame.draw.circle(self.window, (255, 0, 0), (500, 400), 5)
+                # # Temporary point for center of tower, delete later
+                # pygame.draw.circle(self.window, (255, 0, 0), (500, 400), 5)
                 
                 # draw tower
                 for tw in self.towers:
@@ -354,8 +359,8 @@ class Game():
         
     def add_tower(self, name):
         x, y = pygame.mouse.get_pos()
-        name_list = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower3"]
-        object_list = [basictower(x,y), basictower(x,y), basictower(x,y), basictower(x,y)]
+        name_list = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
+        object_list = [basictower(x,y), dubbletower(x,y), heavytower(x,y), missiletower(x,y)]
         
         try:
             obj = object_list[name_list.index(name)]
@@ -371,7 +376,7 @@ class Game():
         text1 = self.font.render("Game Over", True, (0, 0, 0))
         text1_rect = text1.get_rect()
         text1_rect.center = (self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2)
-        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img, 0.1, True)
+        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img_2, 0.1, True)
         
         while show_screen:
             self.window.fill((255,255,255))
@@ -392,7 +397,7 @@ class Game():
         text1 = self.font.render("You won!", True, (0, 0, 0))
         text1_rect = text1.get_rect()
         text1_rect.center = (self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2)
-        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img, 0.1, True)
+        back_button2 = button.Button(self.CANVAS_WIDTH/2, self.CANVAS_HEIGHT/2 + 50, self.back_button_img_2, 0.1, True)
         
         while show_screen:
             self.window.fill((255,255,255))
