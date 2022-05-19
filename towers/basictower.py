@@ -7,8 +7,6 @@ class basictower(Tower):
     def __init__(self, x, y):
         super().__init__(x,y)
         self.tower_img = []
-        self.basic_imgs = []
-        self.basic_count = 0
         self.range = 200
         self.width = self.height = 60
         self.enemy_is_in_range = False
@@ -19,41 +17,72 @@ class basictower(Tower):
         self.damage = 2
         self.projectile_speed = 3
 
-        for x in range(1,9):
-            self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
+    
+        self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
         
         self.tower_rect = self.tower_img[0].get_rect()
-        print("Tower coordinates: ", (self.x, self.y))
         self.tower_rect.topleft = (self.x, self.y)
-        print("Rect: " ,self.tower_rect)
 
     def draw(self, window):
         super().draw_radius(window)
         super().drawTower(window)
         
-        if self.basic_count >= len(self.basic_imgs):
-            self.basic_count = 0
-        # window.blit(self.basic_imgs[self.basic_count], ((self.x + self.width/2) - (self.basic_imgs[self.basic_count].get_width()/2), (self.y - (self.basic_imgs[self.basic_count].height()))))
-        self.basic_count += 1
+    
+class dubbletower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.range = 175
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 75
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower2"
+        self.damage = 3
 
-    def change_range(self, r):
-        self.range = r
         
-     
-    #def attack(self, enemies):
-    #    pass
-    #     self.in_range = False
-    #     enemy_closest = []
-    #     for enemy in enemies:
-    #         #x = enemy_x
-    #         #y = enemy_y
-    #         dis = math.sqrt((self.x - x)**2 + (self.y - y)**2)
-    #         if dis < self.range:
-    #             self.in_range = True
-    #             enemy_closest.append(enemy)
-    #     enemy_closest.sort(key=lambda x: x.x)
-    #     first_enemy = enemy_closest[0]
+        self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        self.tower_rect.topleft = (self.x, self.y)
+        
+class heavytower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.range = 150
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 110
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower3"
+        self.damage = 6
+
+        
+        self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        self.tower_rect.topleft = (self.x, self.y)
             
-               
+class missiletower(basictower):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.tower_img = []
+        self.range = 200
+        self.width = self.height = 60
+        self.enemy_is_in_range = False
+        self.cooldown = 150
+        self.in_range = False
+        self.moving = False
+        self.name = "buy_tower4"
+        self.damage = 10
+
+        
+        self.tower_img.append(pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (64, 64)))
+        
+        self.tower_rect = self.tower_img[0].get_rect()
+        self.tower_rect.topleft = (self.x, self.y)
         
 
