@@ -13,7 +13,6 @@ from tower_menu import Buymenu
 
 
 
-#money_button = pygame.image.load(r"assets/New/button_test_1.png")
 buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png")
 buy_tower = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/tower1/tower1_1.png"), (45, 45))
 buy_tower_2 = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45))
@@ -103,9 +102,7 @@ class Game():
         
         self.selected_tower = None
         
-        # Test projectile
-        #self.test_projectile = Projectile(self.towers[0], wave1[3])
-    
+
         self.money = 1000
         self.buying_tower = False
         self.current_tower_cost = 0
@@ -131,12 +128,10 @@ class Game():
         next_enemy = "1"
         countdown = wave_delay
         game_won = False
-        wave_clock = pygame.time.Clock()
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
             projectiles = pygame.sprite.Group()
             while self.playing:
-                timer = wave_clock.tick()
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
                 
@@ -150,7 +145,6 @@ class Game():
                             tower_list = self.towers[:]
                             colliding = False
                     if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
-                        print("Colliding")
                         colliding = True
                         self.moving_object.place_color = (255, 0, 0, 100)
                     elif not colliding:
@@ -159,10 +153,8 @@ class Game():
                     for tower in tower_list:
                         if tower.collide(self.moving_object):
                             colliding = True
-                            #tower.place_color = (255, 0, 0, 100)
                             self.moving_object.place_color = (255, 0, 0, 100)
                         else:
-                            #tower.place_color = (0, 255, 0, 100)
                             if not colliding:
                                 self.moving_object.place_color = (0, 255, 0, 100)
                                 pass
@@ -193,6 +185,8 @@ class Game():
                 wave_timer_rect = wave_timer_text.get_rect(center=(730, 11))
                 money_text = font.render((str.format("Money: {}", self.money)), True, (0, 0, 0))
                 money_rect = money_text.get_rect(center=(225, 11))
+                esc_text = font.render((str.format("Press esc to cancel", )), True, (255, 0, 0))
+                esc_rect = esc_text.get_rect(center=(110, 45))
                 
                 # Drawing everything
                 self.check_events()
@@ -203,15 +197,10 @@ class Game():
                 self.window.blit(wave_text, wave_rect)
                 self.window.blit(wave_timer_text, wave_timer_rect)
                 self.window.blit(money_text, money_rect)
+                if self.buying_tower:
+                    self.window.blit(esc_text, esc_rect)
                 self.back_button1.draw(self.window)
                 
-                # Draw currency
-                # text_money = self.life_font.render(str(self.money), 1, (255, 255, 255))
-                # money = pygame.transform.scale(money_button, (50, 50))
-                # start_x = self.CANVAS_WIDTH - money_button.get_width() - 10
-
-                # self.window.blit(text_money, (start_x - text_money.get_width() - 10, 75))
-                # self.window.blit(money, (start_x, 65))
                 
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0,0))
@@ -240,13 +229,7 @@ class Game():
                     spawned_enemies.draw(self.window)
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
-                    for tw in self.towers:
-                        # Moving towers when left clicking on them.
-                        if self.selected_tower == tw and tw.moving_tower:
-                            for grid_rect in self.map1_grid_rects:
-                                if grid_rect.collidepoint(pos):
-                                    tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
-                                    
+                    for tw in self.towers:                
                         for enemy in self.waves[wave_counter - 1]:
                             if not enemy.dead:
                                 boolean_in_range = tw.is_in_range(enemy)
@@ -256,8 +239,6 @@ class Game():
                                     if tw.target == None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                         tw.target = enemy
                                         projectiles.add(tw.attack2(enemy, tw.damage))
-                                # projectiles.update()
-                                # projectiles.draw(self.window)
                         for projectile in projectiles:
                             if projectile.dead:
                                 projectiles.remove(projectile)
@@ -266,17 +247,10 @@ class Game():
                     projectiles.draw(self.window)
                         
                     
-                # for point in self.map1_path:
-                #     pygame.draw.circle(self.window, (255, 0, 0), point, 5)
-                
-
-                # # Temporary point for center of tower, delete later
-                # pygame.draw.circle(self.window, (255, 0, 0), (500, 400), 5)
-                
+            
                 # draw tower
                 for tw in self.towers:
                     tw.draw(self.window)
-                    pygame.draw.rect(self.window, (0,0,255), tw.button_rect)
                     
                 # draw moving tower
                 if self.moving_object:
@@ -300,13 +274,11 @@ class Game():
                 loop_counter += 1
                 mainClock.tick(60)
                 
-                    
-        #pygame.quit()
-        
+                            
 
     def check_events(self):
         pos = pygame.mouse.get_pos()
-        
+         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
@@ -318,20 +290,18 @@ class Game():
                 if not isinstance(result_of_action, bool):
                     self.selected_tower = result_of_action
                 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.back_button1.rect.collidepoint(pos) and event.button == 1:
-                    self.back_button1.clicked = True
+                    
                     
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 if self.buying_tower:
                     self.buying_tower = False
                     self.moving_object.selected = False
                     self.moving_object = None
+                    self.show_grid = False
                     
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
-                        if event.button == 3:
-                            #pos = pygame.mouse.get_pos()
+                        if event.button == 1:
                             if self.moving_object:                                          # Placement of new towers
                                 not_allowed = False
                                 tower_list = self.towers[:]
@@ -347,7 +317,6 @@ class Game():
                                         if button.rect.collidepoint(pos):
                                             buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                                             if buy_menu_button:
-                                                print(buy_menu_button)
                                                 cost = self.menu.get_item_cost(buy_menu_button)
                                                 if self.money >= cost:
                                                     self.show_grid = True
@@ -357,9 +326,9 @@ class Game():
                                 
                                 if not not_allowed:
                                     if self.moving_object.name in tower_names and self.buying_tower:
-                                        print("Placed")
                                         self.towers.append(self.moving_object)
                                         self.money -= self.current_tower_cost
+                                        self.buying_tower = False
                                     self.moving_object.moving = False
                                     self.moving_object.selected = False
                                     self.moving_object.place_color = None
@@ -368,7 +337,6 @@ class Game():
                             else:
                                 buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                                 if buy_menu_button:
-                                    print(buy_menu_button)
                                     cost = self.menu.get_item_cost(buy_menu_button)
                                     if self.money >= cost:
                                         self.show_grid = True
@@ -412,7 +380,6 @@ class Game():
                     pygame.quit()
                     sys.exit()
             if back_button2.clicked:
-                print("Clicked game over")
                 self.playing = False
                 back_button2.clicked = False
                 show_screen = False

@@ -5,7 +5,6 @@ import game
 class Menu():
 
     def __init__(self, game1:game.Game):
-        #self.game = game.Game()
         self.game = game1
         self.MID_WIDTH, self.MID_HEIGHT = self.game.CANVAS_WIDTH / 2, self.game.CANVAS_HEIGHT / 2
         self.to_display = False
@@ -68,7 +67,6 @@ class Menu():
             if self.map1_button.clicked:
                 self.activate_buttons()
                 g = game.Game()
-                print("map1")
                 g.playing = True
                 g.game_loop(clock=mainClock, map="map1")
             pygame.display.update()
@@ -83,13 +81,10 @@ class Menu():
                 self.game.playing= False
                 self.to_display = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print("Clicking")
                 for button in self.buttons:
                     button.check_button_actions(pos, event)
-                    print("Button clicked: ", button.clicked)
                 if event.button == 1:
                     self.LEFTMOUSECLICK = True
-                    print("LMB Clicked")
     
     def activate_buttons(self):
         self.start_button.clicked = False
