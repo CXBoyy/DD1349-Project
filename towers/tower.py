@@ -12,6 +12,7 @@ class Tower():
         self.width = 0
         self.height = 0
         self.damage = 1
+        self.projectile_speed = 1
         self.selected = False
         self.tower_img = []
         self.range = 10
@@ -34,8 +35,8 @@ class Tower():
             if distance <= self.range:
                 return Projectile(self, enemy)
             
-    def attack2(self, enemy, damage):
-        return Projectile(self, enemy, damage)
+    def attack2(self, enemy, damage, speed):
+        return Projectile(self, enemy, damage, speed)
             
     def is_in_range(self, enemy):
         distance = np.hypot(enemy.x - self.x, enemy.y - self.y)

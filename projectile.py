@@ -10,7 +10,7 @@ def normalize(e1, e2):
         return newVector
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, source ,target:Enemy, damage):
+    def __init__(self, source ,target:Enemy, damage, speed):
         super().__init__()
         self.source = source
         self.x = source.x
@@ -22,7 +22,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.x, self.y, 5, 5)
         self.dead = False
         self.damage = damage
-        self.speed = 2.5
+        self.speed = speed
         
     def check_collision(self):
         if self.target.rect is not None:
