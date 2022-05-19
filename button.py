@@ -11,13 +11,11 @@ class Button():
         self.register = register
     
     def draw(self, surface:pygame.Surface):
-        #surface.blit(self.image, (self.rect.x, self.rect.y))
         surface.blit(self.image, (self.rect.topleft))
         
     def check_button_actions(self, pos, event):
         if self.rect.collidepoint(pos):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                print("in here")
                 self.clicked = True
         
     

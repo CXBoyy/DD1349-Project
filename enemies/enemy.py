@@ -46,7 +46,6 @@ class Enemy(pygame.sprite.Sprite):
     """  
     def update(self):
         if (self.x, self.y) >= self.pathEnd:
-            print("Lost one life")
             self.game.health -= 1
             self.out_of_bounds = True
             # Remove enemy from the map and take away one life
@@ -57,7 +56,6 @@ class Enemy(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = (self.x, self.y)
             nodeVector = self.move()
-            #angle1 = atan2(self.directionalVector[1], self.directionalVector[0])
             angle2 = atan2(nodeVector[1], nodeVector[0])
             one_degree_in_radian = (np.pi)/180
             angle1_deg = degrees(atan2(self.directionalVector[1], self.directionalVector[0]))
@@ -69,9 +67,7 @@ class Enemy(pygame.sprite.Sprite):
             else:
                 pass
                 
-            pygame.draw.rect(self.window, (0, 255, 0), self.rect)
             self.display_health(self.window)
-            pygame.draw.rect(self.window, (255, 255, 255), (self.directionalVector[0] + self.x, self.directionalVector[1] + self.y, 50, 5), 0)
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
@@ -88,24 +84,18 @@ class Enemy(pygame.sprite.Sprite):
             return False
     
     def move(self):
-        if self.currentPathNodePos >= len(self.path):
-            # Remove enemy from screen
-            pass
+       
+        x1, y1 = self.path[self.currentPathNodePos][0], self.path[self.currentPathNodePos][1]
+        x2, y2 = self.path[self.currentPathNodePos + 1][0], self.path[self.currentPathNodePos + 1][1]
+        distanceBetweenPoints = np.hypot((x2-x1), (y2-y1))
+        nodeVector = normalize(x2-x1, y2-y1)
+        new_x, new_y = (self.x + nodeVector[0] * self.speed, self.y + nodeVector[1] * self.speed)
+        self.distanceTraveled += np.hypot((new_x-self.x), (new_y - self.y))
+        self.x, self.y = new_x, new_y
         
-        else:
-            x1, y1 = self.path[self.currentPathNodePos][0], self.path[self.currentPathNodePos][1]
-            x2, y2 = self.path[self.currentPathNodePos + 1][0], self.path[self.currentPathNodePos + 1][1]
-            distanceBetweenPoints = np.hypot((x2-x1), (y2-y1))
-            nodeVector = normalize(x2-x1, y2-y1)
-            new_x, new_y = (self.x + nodeVector[0] * self.speed, self.y + nodeVector[1] * self.speed)
-            #self.directionalVector = normalize(new_x-self.x, new_y - self.y)
-            #self.directionalVector = (new_x-self.x, new_y - self.y)
-            self.distanceTraveled += np.hypot((new_x-self.x), (new_y - self.y))
-            self.x, self.y = new_x, new_y
-            
-            if self.distanceTraveled >= distanceBetweenPoints:                           # check if we have passed the point
-                self.currentPathNodePos += 1
-                self.distanceTraveled = 0
+        if self.distanceTraveled >= distanceBetweenPoints:                           # check if we have passed the point
+            self.currentPathNodePos += 1
+            self.distanceTraveled = 0
         
         return nodeVector
     

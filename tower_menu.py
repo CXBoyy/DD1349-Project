@@ -54,8 +54,6 @@ class Towermenu:
         
     def add_button(self, img, name):
         self.items +=  1
-        #button_x = self.x - self.background.get_width()/2
-        #button_y = self.y - 70
         self.buttons.append(Button(self, img, name))  
               
     def draw(self, window):
