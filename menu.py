@@ -25,7 +25,6 @@ class Menu():
     def blit_screen(self):
         self.game.window.blit(self.game.canvas, (0,0))
         pygame.display.update()
-        self.game.reset_vars()
 
     def display_MainMenu(self, clock:pygame.time.Clock):
         mainClock = clock

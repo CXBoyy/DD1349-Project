@@ -495,11 +495,13 @@ class Game():
                     
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
-                    
-    def reset_vars(self):
-        self.LEFTMOUSECLICK = False
         
     def add_tower(self, name):
+        """ Function that allows the player to buy a new tower by using the buy menu.
+
+        Args:
+            name (str): Name of the tower to buy. Has to be one of the strings in 'name_list'. Should be given by another method.
+        """
         x, y = pygame.mouse.get_pos()
         name_list = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
         object_list = [basictower(x,y), dubbletower(x,y), heavytower(x,y), missiletower(x,y)]
@@ -514,6 +516,8 @@ class Game():
             print(str(e) + "NOT VALID NAME")
 
     def game_over_screen(self):
+        """ A function that holds the game over screen.
+        """
         show_screen = True
         text1 = self.font.render("Game Over", True, (0, 0, 0))
         text1_rect = text1.get_rect()
@@ -539,6 +543,8 @@ class Game():
             pygame.display.update()
             
     def game_won_screen(self):
+        """ A function that holds the game won screen.
+        """
         show_screen = True
         text1 = self.font.render("You won!", True, (0, 0, 0))
         text1_rect = text1.get_rect()
