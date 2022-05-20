@@ -23,8 +23,13 @@ buy_tower_4 = pygame.transform.scale(pygame.image.load(r"assets/New/Towers/Tower
 tower_names = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
 
 class Game():
+    """ A class holding the main game loop and relevant methods and attributes.
+    """
 
     def __init__(self):
+        """ The constructor for the Game class.
+            Initializes the map, path, grids, waves etc.
+        """
         pygame.init()
         self.running, self.playing = True, False
         self.LEFTMOUSECLICK = False
@@ -42,7 +47,7 @@ class Game():
         self.back_button_img_2 = pygame.image.load("pics/back.png").convert_alpha()
         self.back_button1 = button.Button(0, 0, self.back_button_img, 0.3, True)
 
-        
+        ### Map
         self.map1_img = pygame.image.load("assets/New/Terrain/map1_trial_final.png").convert_alpha()
         self.map1_end = (896, 222)
         self.map1_grid_img = pygame.image.load("assets/New/Terrain/map1_grid.png").convert_alpha()              # Make the grid blit onto the map if the buy button is pressed
@@ -57,11 +62,27 @@ class Game():
                           (351, 478), (413, 478), (479, 478), (546, 478), (607, 478), (670, 478), (731, 465), (731, 415), (731, 349), (731, 285), 
                           (745, 232), (804, 222), (870, 222), (896, 222), (900, 222)
                          ]
-        
         self.map1_grid_rects = []
         self.map1_path_rects = []
+        
+        ### Adding grid rects        
+        for x_coordinate in range (0, 896, 64):
+            for y_coordinate in range (0, 640, 64):
+                self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
+            
+        ### Adding path rects
+        self.map1_path_rects = [self.map1_grid_rects[1], self.map1_grid_rects[11], self.map1_grid_rects[21], self.map1_grid_rects[31], 
+                                self.map1_grid_rects[41], self.map1_grid_rects[42], self.map1_grid_rects[43], self.map1_grid_rects[44], 
+                                self.map1_grid_rects[45], self.map1_grid_rects[35], self.map1_grid_rects[25], self.map1_grid_rects[15], 
+                                self.map1_grid_rects[16], self.map1_grid_rects[17], self.map1_grid_rects[27], self.map1_grid_rects[37], 
+                                self.map1_grid_rects[47], self.map1_grid_rects[57], self.map1_grid_rects[67], self.map1_grid_rects[77], 
+                                self.map1_grid_rects[87], self.map1_grid_rects[97], self.map1_grid_rects[107], self.map1_grid_rects[117], 
+                                self.map1_grid_rects[116], self.map1_grid_rects[115], self.map1_grid_rects[114], self.map1_grid_rects[113], 
+                                self.map1_grid_rects[123], self.map1_grid_rects[133], self.map1_grid_rects[139], self.map1_grid_rects[129], 
+                                self.map1_grid_rects[119], self.map1_grid_rects[109], self.map1_grid_rects[99], self.map1_grid_rects[89]]
 
 
+        ### Waves
         wave1 = [
                  st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
                  st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self)
@@ -190,70 +211,60 @@ class Game():
                  st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
                 ]
         
-        
-        
-        
         self.waves = [wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9, wave10]
         self.wave_dict : dict[str, Wave] = dict()
         
-        self.health = 10
         counter = 1
         for wave in self.waves:
             wave_string = "wave{}".format(counter)
             counter += 1
             self.wave_dict[wave_string] = Wave()
             for enemy in wave:
-                self.wave_dict[wave_string].add(enemy)
-        
-        # Adding grid rects        
-        for x_coordinate in range (0, 896, 64):
-            for y_coordinate in range (0, 640, 64):
-                self.map1_grid_rects.append(pygame.Rect(x_coordinate, y_coordinate, 64, 64))
+                self.wave_dict[wave_string].add(enemy) 
             
-        # Adding path rects
-        self.map1_path_rects = [self.map1_grid_rects[1], self.map1_grid_rects[11], self.map1_grid_rects[21], self.map1_grid_rects[31], 
-                                self.map1_grid_rects[41], self.map1_grid_rects[42], self.map1_grid_rects[43], self.map1_grid_rects[44], 
-                                self.map1_grid_rects[45], self.map1_grid_rects[35], self.map1_grid_rects[25], self.map1_grid_rects[15], 
-                                self.map1_grid_rects[16], self.map1_grid_rects[17], self.map1_grid_rects[27], self.map1_grid_rects[37], 
-                                self.map1_grid_rects[47], self.map1_grid_rects[57], self.map1_grid_rects[67], self.map1_grid_rects[77], 
-                                self.map1_grid_rects[87], self.map1_grid_rects[97], self.map1_grid_rects[107], self.map1_grid_rects[117], 
-                                self.map1_grid_rects[116], self.map1_grid_rects[115], self.map1_grid_rects[114], self.map1_grid_rects[113], 
-                                self.map1_grid_rects[123], self.map1_grid_rects[133], self.map1_grid_rects[139], self.map1_grid_rects[129], 
-                                self.map1_grid_rects[119], self.map1_grid_rects[109], self.map1_grid_rects[99], self.map1_grid_rects[89]] 
-            
-        
+        ### Placed towers
         self.towers = []
         
-        self.selected_tower = None
-        
-
-        self.money = 400
         self.buying_tower = False
         self.current_tower_cost = 0
+        self.selected_tower = None
+        self.moving_object = None
+        
+        ### Starting money and player lives
+        self.health = 10
+        self.money = 400
+        
         self.life_font = pygame.font.SysFont("comicsans", 35)
         
-        # Buy menu
+        ### Buy menu
         self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width()/2, self.CANVAS_HEIGHT, buy_menu_img)
         
-        # Tower prices
+        ### Tower prices
         self.menu.add_button(buy_tower, "buy_tower1", 100)
         self.menu.add_button(buy_tower_2, "buy_tower2", 200)
         self.menu.add_button(buy_tower_3, "buy_tower3", 400)
         self.menu.add_button(buy_tower_4, "buy_tower4", 550)
         
-        self.moving_object = None
-        
 
     def game_loop(self, clock:pygame.time.Clock, map):
+        """ The main game loop method.
+        
+        Args:
+            clock (pygame.time.Clock): A clock object to keep a constant frame rate.
+            map (str): Name of the map to play. There is only one map at the moment, however.
+        """
+        
         mainClock = clock 
         self.map = map
         font = self.font
+        
+        #
         loop_counter = 0
         wave_counter = 1
         wave_delay = 6
+        countdown = wave_delay
         spawn_delay = 45
         next_enemy = "1"
-        countdown = wave_delay
         game_won = False
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
@@ -264,7 +275,7 @@ class Game():
                 
                 pos = pygame.mouse.get_pos()
                 
-                # check for moving object
+                # Check for moving object
                 if self.moving_object:
                     for grid_rect in self.map1_grid_rects:
                         if grid_rect.collidepoint(pos):
@@ -286,7 +297,8 @@ class Game():
                                 self.moving_object.place_color = (0, 255, 0, 100)
                                 pass
                 
-                if not current_wave.wave_started:                           # Checking if the wave has started or not
+                # Checking if the wave has started or not
+                if not current_wave.wave_started:
                     end_tick = pygame.time.get_ticks()
                     countdown = wave_delay + 1 + ((start_tick - end_tick) // 1000)
                     if end_tick - start_tick > wave_delay*1000:
@@ -304,6 +316,7 @@ class Game():
                     else:
                         game_won = True
                 
+                # Initialize all text
                 health_text = font.render((str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect(center=(90,11))
                 wave_text = font.render((str.format("Currently on Wave {}", wave_counter)), True, (0, 0, 0))
@@ -332,19 +345,21 @@ class Game():
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0,0))
                 
+                # Moving towers when left clicking on them
                 for tw in self.towers:
-                    # Moving towers when left clicking on them.
                     if self.selected_tower == tw and tw.moving_tower:
                         for grid_rect in self.map1_grid_rects:
                             if grid_rect.collidepoint(pos):
                                 tw.moveTower(grid_rect.center[0] - 32, grid_rect.center[1] - 32)
                                 
                 if current_wave.wave_started:
+                    # Spawning enemies
                     if loop_counter % spawn_delay == 0 and next_enemy != "1":
                         spawned_enemies.add(next_enemy)
                         next_enemy = next(iterator, "1")
                     
                     spawned_iterator = iter(spawned_enemies)
+                    # Removing enemies outside of the map/dead enemies
                     for spawned_enemy in spawned_iterator:
                         if spawned_enemy.dead:
                             self.money += spawned_enemy.reward
@@ -354,8 +369,11 @@ class Game():
                         
                     spawned_enemies.update()
                     spawned_enemies.draw(self.window)
+                    
                     if not bool(spawned_enemies):
                         current_wave.wave_finished = True
+                    
+                    # Tower attacks
                     for tw in self.towers:                
                         for enemy in self.waves[wave_counter - 1]:
                             if not enemy.dead:
@@ -374,29 +392,30 @@ class Game():
                     projectiles.draw(self.window)
                         
                     
-            
-                # draw tower
+                # Draw towers
                 for tw in self.towers:
                     tw.draw(self.window)
                     
-                # draw moving tower
+                # Draw moving tower
                 if self.moving_object:
                     self.moving_object.draw(self.window)
                     self.moving_object.draw_placement(self.window)
                     for tower in self.towers:
                         tower.draw_placement(self.window)
                 
-                # draw menu
+                # Draw menu
                 self.menu.draw(self.window)
                 
                 # Button interactions
                 if self.back_button1.clicked:
                     self.playing = False
                     self.back_button1.clicked = False
+                
                 if self.health <= 0:
                     self.game_over_screen()
                 if game_won:
                     self.game_won_screen()
+                    
                 pygame.display.update()
                 loop_counter += 1
                 mainClock.tick(60)
@@ -404,6 +423,9 @@ class Game():
                             
 
     def check_events(self):
+        """ A method to check pygame events during the game loop.
+            Checks for left mouse click, collisions, key presses etc.
+        """
         pos = pygame.mouse.get_pos()
          
         for event in pygame.event.get():
