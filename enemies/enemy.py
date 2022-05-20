@@ -2,20 +2,32 @@ from platform import node
 import pygame
 import copy
 import numpy as np
-import operator
-import time
 from math import cos, sin, atan2, degrees
 
 def normalize(e1, e2):
-        vector = (e1, e2)
-        norm = np.linalg.norm(vector)
-        newVector = (vector[0] / norm, vector[1] / norm)
-        return newVector
+    """ A method to normalize a vector
+
+    Args:
+        e1 (double): x-coordinate of the vector
+        e2 (double): y-coordinate of the vector
+
+    Returns:
+        tuple: the normalized vector
+    """
+    vector = (e1, e2)
+    norm = np.linalg.norm(vector)
+    newVector = (vector[0] / norm, vector[1] / norm)
+    return newVector
 
 class Enemy(pygame.sprite.Sprite):
+    """ Abstract class for the enemies.
+        Inherits from the pygame.sprite.Sprite class.
+    """
     imgs = []
     
     def __init__(self, window, x, y, width, height, path, pathEnd, game):
+        """ Constructor method for enemies.
+        """
         super().__init__()
         
         self.x = x                                                              # Position of
@@ -41,15 +53,13 @@ class Enemy(pygame.sprite.Sprite):
         self.dead = False
         self.out_of_bounds = False
         self.angle1 = atan2(self.directionalVector[1], self.directionalVector[0])
-    
-    """ Draws the enemy.
-    """  
+        
     def update(self):
+        """ Update method. Rotates enemies and draws them on the screen.
+        """
         if (self.x, self.y) >= self.pathEnd:
             self.game.health -= 1
             self.out_of_bounds = True
-            # Remove enemy from the map and take away one life
-            # return True                                                   # Maybe use this to signal that the enemy should be removed from the map?
         else:
             index = self.animation_count // len(self.imgs)
             self.image = self.imgs[index]
@@ -71,20 +81,13 @@ class Enemy(pygame.sprite.Sprite):
             self.animation_count += 1
             if self.animation_count >= len(self.imgs):
                 self.animation_count = 0
-        
-    
-    """ Returns true if the enemy was hit
-    :return: Bool
-    """
-    def collide(self, x, y):
-        if x <= self.x + self.width and x >= self.x:                  # Hitbox of the
-            if y <= self.y + self.height and y >= self.y:             # enemy unit.
-                return True
-        else:
-            return False
     
     def move(self):
-       
+        """ Update the coordinates of the enemy
+
+        Returns:
+            tuple: the vector denoting the direction of movement
+        """
         x1, y1 = self.path[self.currentPathNodePos][0], self.path[self.currentPathNodePos][1]
         x2, y2 = self.path[self.currentPathNodePos + 1][0], self.path[self.currentPathNodePos + 1][1]
         distanceBetweenPoints = np.hypot((x2-x1), (y2-y1))
@@ -99,18 +102,32 @@ class Enemy(pygame.sprite.Sprite):
         
         return nodeVector
     
-    # Returns true if the enemy has died.
     def hit(self, damage):
+        """ Register a hit and decrease enemy health.
+
+        Args:
+            damage (int): the damage dealt to enemy
+        """
         self.health -= damage
         if self.health <= 0:
             self.dead = True
         
     def rotate(self, angle):
+        """ Function for rotation of enemies
+
+        Args:
+            angle (double): angle to rotate
+        """
         old_center = self.rect.center
         self.image = pygame.transform.rotate(self.image, angle)
         self.rect.center = old_center
     
     def display_health(self, window):
+        """ Function to display health bar for enemies.
+
+        Args:
+            window (pygame.Surface): the window to draw the health bar on
+        """
         bar_x, bar_y = (self.x - 32), (self.rect.center[1] - 45)
         length, width = 64, 10
         increment = length / self.default_health
