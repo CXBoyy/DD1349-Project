@@ -17,6 +17,8 @@ start_img = pygame.image.load("pics/start_button.png").convert_alpha()
 exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
 
 def main():
+    """ Main method for game
+    """
     clock = pygame.time.Clock()
     print(g.playing)
     while g.running:
