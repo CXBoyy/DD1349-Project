@@ -450,17 +450,24 @@ class Game():
                     
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # Left mouse click
                 if event.button == 1:
-                    if self.moving_object:                                          # Placement of new towers
+                    
+                     # Placement of new towers
+                    if self.moving_object:
                         not_allowed = False
                         tower_list = self.towers[:]
+                        
+                        # Check if player is trying to place a new tower on the enemy path
                         if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
                             not_allowed = True
+                            
+                        # Check if player is trying to place a new tower on top of other towers
                         for tower in tower_list:
                             if tower.collide(self.moving_object):
                                 not_allowed = True
-                            if self.moving_object.tower_rect.collidelist(self.map1_path_rects) != -1:
-                                not_allowed = True
+                        
+                        # Check if player is pressing the buy buttons
                         if self.menu.rect.collidepoint(pos):
                             for button in self.menu.buttons:
                                 if button.rect.collidepoint(pos):
@@ -473,6 +480,7 @@ class Game():
                                             self.add_tower(buy_menu_button)
                             not_allowed = True
                         
+                        # Place a new tower on left click
                         if not not_allowed:
                             if self.moving_object.name in tower_names and self.buying_tower:
                                 self.towers.append(self.moving_object)
@@ -483,6 +491,8 @@ class Game():
                             self.moving_object.place_color = None
                             self.moving_object = None 
                             self.show_grid = False
+                    
+                    # Start placement of a new tower upon buy button click
                     else:
                         buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                         if buy_menu_button:
@@ -492,7 +502,7 @@ class Game():
                                 self.current_tower_cost = cost
                                 self.add_tower(buy_menu_button)
                                 
-                    
+                # Return to the main screen    
                 if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
         
