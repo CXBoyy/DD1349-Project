@@ -4,6 +4,11 @@ from .tower import Tower
 import math
 
 class basictower(Tower):
+    """ Class for basictower
+
+    Args:
+        Tower (_type_): Tower lvl 1
+    """
     def __init__(self, x, y):
         super().__init__(x,y)
         self.tower_img = []
@@ -24,11 +29,21 @@ class basictower(Tower):
         self.tower_rect.topleft = (self.x, self.y)
 
     def draw(self, window):
+        """ Draws the tower
+
+        Args:
+            window (_type_): surface
+        """
         super().draw_radius(window)
         super().drawTower(window)
         
     
 class dubbletower(basictower):
+    """ Class for dubbletower
+
+    Args:
+        basictower (Tower): Tower lvl 2
+    """
     def __init__(self, x, y):
         super().__init__(x, y)
         self.tower_img = []
@@ -49,6 +64,11 @@ class dubbletower(basictower):
         self.tower_rect.topleft = (self.x, self.y)
         
 class heavytower(basictower):
+    """ Class for heavytower
+
+    Args:
+        basictower (_type_): Tower lvl 3
+    """
     def __init__(self, x, y):
         super().__init__(x, y)
         self.tower_img = []
@@ -69,6 +89,11 @@ class heavytower(basictower):
         self.tower_rect.topleft = (self.x, self.y)
             
 class missiletower(basictower):
+    """ Class for missiletower
+
+    Args:
+        basictower (_type_): Tower lvl 4
+    """
     def __init__(self, x, y):
         super().__init__(x, y)
         self.tower_img = []
