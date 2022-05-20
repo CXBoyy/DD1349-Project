@@ -88,29 +88,6 @@ class Tower():
 
         window.blit(surface, (self.x, self.y))
 
-
-
-    def check_tower_actions(self, pos : tuple, event : pygame.event): 
-        """ A method to check pygame events during the game loop.
-        """   
-        if self.tower_rect.collidepoint(pos):
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:                   # Right mouse click
-                    if self.selected is False:
-                        self.selected = True
-                        return self                 
-                    if self.selected is True:
-                        self.selected = False
-                        return None
-                
-        if not self.tower_rect.collidepoint(pos) and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if self.selected is True:
-                self.selected = False
-                return None
-            
-        else:
-            return False
-
     def moveTower(self,x,y):
         """ Moves tower 
 
