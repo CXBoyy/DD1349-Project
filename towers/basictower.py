@@ -72,7 +72,7 @@ class missiletower(basictower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.tower_img = []
-        self.range = 150
+        self.range = 250
         self.width = self.height = 60
         self.enemy_is_in_range = False
         self.cooldown = 300
