@@ -412,11 +412,6 @@ class Game():
                 pygame.quit()
                 sys.exit()
                 
-            for tw in self.towers:
-                result_of_action = tw.check_tower_actions(pos, event)
-                if not isinstance(result_of_action, bool):
-                    self.selected_tower = result_of_action
-                
                     
                     
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:

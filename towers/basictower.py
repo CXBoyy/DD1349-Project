@@ -35,7 +35,7 @@ class dubbletower(basictower):
         self.range = 250
         self.width = self.height = 60
         self.enemy_is_in_range = False
-        self.cooldown = 60
+        self.cooldown = 30
         self.in_range = False
         self.moving = False
         self.name = "buy_tower2"
