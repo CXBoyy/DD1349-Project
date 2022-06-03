@@ -1,5 +1,5 @@
+import asyncio
 import pygame
-import button
 import game
 import menu
 
@@ -16,7 +16,7 @@ pygame.display.set_caption("Tower defense")
 start_img = pygame.image.load("pics/start_button.png").convert_alpha()
 exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
 
-def main():
+async def main():
     """ Main method for game
     """
     clock = pygame.time.Clock()
@@ -29,7 +29,8 @@ def main():
                 g.running = False
         pygame.display.update()
         clock.tick(g.FPS)
+        await asyncio.sleep(0)
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run( main() )

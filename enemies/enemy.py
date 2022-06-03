@@ -1,8 +1,6 @@
-from platform import node
 import pygame
 import copy
-import numpy as np
-from math import cos, sin, atan2, degrees
+from math import cos, sin, atan2, degrees, sqrt
 
 def normalize(e1, e2):
     """ A method to normalize a vector
@@ -15,7 +13,7 @@ def normalize(e1, e2):
         tuple: the normalized vector
     """
     vector = (e1, e2)
-    norm = np.linalg.norm(vector)
+    norm = sqrt(e1**2 + e2**2)
     newVector = (vector[0] / norm, vector[1] / norm)
     return newVector
 
@@ -67,9 +65,6 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.center = (self.x, self.y)
             nodeVector = self.move()
             angle2 = atan2(nodeVector[1], nodeVector[0])
-            one_degree_in_radian = (np.pi)/180
-            angle1_deg = degrees(atan2(self.directionalVector[1], self.directionalVector[0]))
-            angle2_deg = degrees(atan2(nodeVector[1], nodeVector[0]))
             if self.angle1 != angle2:
                 diff = (angle2 - self.angle1)/5
                 self.angle1 += diff
@@ -90,10 +85,10 @@ class Enemy(pygame.sprite.Sprite):
         """
         x1, y1 = self.path[self.currentPathNodePos][0], self.path[self.currentPathNodePos][1]
         x2, y2 = self.path[self.currentPathNodePos + 1][0], self.path[self.currentPathNodePos + 1][1]
-        distanceBetweenPoints = np.hypot((x2-x1), (y2-y1))
+        distanceBetweenPoints = sqrt((x2-x1)**2 + (y2-y1)**2)
         nodeVector = normalize(x2-x1, y2-y1)
         new_x, new_y = (self.x + nodeVector[0] * self.speed, self.y + nodeVector[1] * self.speed)
-        self.distanceTraveled += np.hypot((new_x-self.x), (new_y - self.y))
+        self.distanceTraveled += sqrt((new_x-self.x)**2 + (new_y - self.y)**2)
         self.x, self.y = new_x, new_y
         
         if self.distanceTraveled >= distanceBetweenPoints:                           # check if we have passed the point
