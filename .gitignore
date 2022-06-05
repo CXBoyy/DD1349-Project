@@ -1,0 +1,10 @@
+# Compiled python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Vs Code
+.vscode
+
+# Mac File Path
+.DS_Store
