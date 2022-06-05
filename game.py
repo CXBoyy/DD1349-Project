@@ -408,9 +408,9 @@ class Game():
                     self.back_button1.clicked = False
                 
                 if self.health <= 0:
-                    self.game_over_screen()
+                    await self.game_over_screen()
                 if game_won:
-                    self.game_won_screen()
+                    await self.game_won_screen()
                     
                 pygame.display.update()
                 loop_counter += 1
@@ -517,7 +517,7 @@ class Game():
         except Exception as e:
             print(str(e) + "NOT VALID NAME")
 
-    def game_over_screen(self):
+    async def game_over_screen(self):
         """ A function that holds the game over screen.
         """
         show_screen = True
@@ -543,8 +543,9 @@ class Game():
                 back_button2.clicked = False
                 show_screen = False
             pygame.display.update()
+            await asyncio.sleep(0)
             
-    def game_won_screen(self):
+    async def game_won_screen(self):
         """ A function that holds the game won screen.
         """
         show_screen = True
@@ -570,4 +571,5 @@ class Game():
                 back_button2.clicked = False
                 show_screen = False
             pygame.display.update()
+            await asyncio.sleep(0)
                     
