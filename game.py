@@ -73,51 +73,21 @@ class Game():
         self.map1_path_rects = []
 
         # Adding grid rects
-        for x_coordinate in range(0, 896, 64):
-            for y_coordinate in range(0, 640, 64):
-                self.map1_grid_rects.append(pygame.Rect(
-                    x_coordinate, y_coordinate, 64, 64))
-                
-        print(self.map1_grid_rects)
+        for x_coordinate in range(32, 896, 64):
+            col = []
+            for y_coordinate in range(32, 640, 64):
+                col.append((x_coordinate, y_coordinate))
+            self.map1_grid_rects.append(col)
 
-        # Adding path rects
-        self.map1_path_rects = [
-            self.map1_grid_rects[1],
-            self.map1_grid_rects[11],
-            self.map1_grid_rects[21],
-            self.map1_grid_rects[31],
-            self.map1_grid_rects[41],
-            self.map1_grid_rects[42],
-            self.map1_grid_rects[43],
-            self.map1_grid_rects[44],
-            self.map1_grid_rects[45],
-            self.map1_grid_rects[35],
-            self.map1_grid_rects[25],
-            self.map1_grid_rects[15],
-            self.map1_grid_rects[16],
-            self.map1_grid_rects[17],
-            self.map1_grid_rects[27],
-            self.map1_grid_rects[37],
-            self.map1_grid_rects[47],
-            self.map1_grid_rects[57],
-            self.map1_grid_rects[67],
-            self.map1_grid_rects[77],
-            self.map1_grid_rects[87],
-            self.map1_grid_rects[97],
-            self.map1_grid_rects[107],
-            self.map1_grid_rects[117],
-            self.map1_grid_rects[116],
-            self.map1_grid_rects[115],
-            self.map1_grid_rects[114],
-            self.map1_grid_rects[113],
-            self.map1_grid_rects[123],
-            self.map1_grid_rects[133],
-            self.map1_grid_rects[139],
-            self.map1_grid_rects[129],
-            self.map1_grid_rects[119],
-            self.map1_grid_rects[109],
-            self.map1_grid_rects[99],
-            self.map1_grid_rects[89]]
+        # Adding board dictionary
+        self.map1_dict : dict[tuple, bool] = dict()
+        for i in range (0, 14):
+            for j in range (0, 10):
+                self.map1_dict[(i,j)] = False
+        for path_coordinate in self.map1_path:
+            i = int(path_coordinate[0] / 64)
+            j = int(path_coordinate[1] / 64)
+            self.map1_dict[(i,j)] = True
 
         # Waves
         wave1 = [
@@ -362,31 +332,28 @@ class Game():
                 wave_string = "wave{}".format(wave_counter)
                 current_wave = self.wave_dict[wave_string]
 
-                pos = pygame.mouse.get_pos()
+                pos = list(pygame.mouse.get_pos())
+                
+                if pos[0] > self.CANVAS_WIDTH:
+                    pos[0] = self.CANVAS_WIDTH - 64
+                if pos[0] < 0:
+                    pos[0] = 32
+                if pos[1] > self.CANVAS_HEIGHT:
+                    pos[1] = self.CANVAS_HEIGHT - 64
+                if pos[1] < 0:
+                    pos[1] = 32
 
                 # Check for moving object
                 if self.moving_object:
-                    for grid_rect in self.map1_grid_rects:
-                        if grid_rect.collidepoint(pos):
-                            self.moving_object.moveTower(
-                                grid_rect.center[0] - 32, grid_rect.center[1] - 32)
-                            tower_list = self.towers[:]
-                            colliding = False
-                    if self.moving_object.tower_rect.collidelist(
-                            self.map1_path_rects) != -1:
+                    grid = ( int(pos[0] / 64), int(pos[1] / 64))
+                    self.moving_object.moveTower(grid[0] * 64, grid[1] * 64)
+                    tower_list = self.towers[:]
+                    colliding = False
+                    if self.map1_dict[grid]:
                         colliding = True
                         self.moving_object.place_color = (255, 0, 0, 100)
                     elif not colliding:
                         self.moving_object.place_color = (0, 255, 0, 100)
-
-                    for tower in tower_list:
-                        if tower.collide(self.moving_object):
-                            colliding = True
-                            self.moving_object.place_color = (255, 0, 0, 100)
-                        else:
-                            if not colliding:
-                                self.moving_object.place_color = (
-                                    0, 255, 0, 100)
 
                 # Checking if the wave has started or not
                 if not current_wave.wave_started:
@@ -447,14 +414,6 @@ class Game():
 
                 if self.show_grid:
                     self.window.blit(self.map1_grid_img, (0, 0))
-
-                # Moving towers when left clicking on them
-                for tw in self.towers:
-                    if self.selected_tower == tw and tw.moving_tower:
-                        for grid_rect in self.map1_grid_rects:
-                            if grid_rect.collidepoint(pos):
-                                tw.moveTower(
-                                    grid_rect.center[0] - 32, grid_rect.center[1] - 32)
 
                 if current_wave.wave_started:
                     # Spawning enemies
@@ -534,7 +493,7 @@ class Game():
         """ A method to check pygame events during the game loop.
             Checks for left mouse click, collisions, key presses etc.
         """
-        pos = pygame.mouse.get_pos()
+        pos = list(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -556,19 +515,12 @@ class Game():
                     # Placement of new towers
                     if self.moving_object:
                         not_allowed = False
-                        tower_list = self.towers[:]
 
                         # Check if player is trying to place a new tower on the
-                        # enemy path
-                        if self.moving_object.tower_rect.collidelist(
-                                self.map1_path_rects) != -1:
+                        # enemy path or on top of another tower
+                        grid = ( int(pos[0] / 64), int(pos[1] / 64))
+                        if self.map1_dict[grid]:
                             not_allowed = True
-
-                        # Check if player is trying to place a new tower on top
-                        # of other towers
-                        for tower in tower_list:
-                            if tower.collide(self.moving_object):
-                                not_allowed = True
 
                         # Check if player is pressing the buy buttons
                         if self.menu.rect.collidepoint(pos):
@@ -591,11 +543,14 @@ class Game():
                                 self.towers.append(self.moving_object)
                                 self.money -= self.current_tower_cost
                                 self.buying_tower = False
+                                tower_pos = (int(self.moving_object.x / 64), int(self.moving_object.y / 64))
+                                self.map1_dict[tower_pos] = True
                             self.moving_object.moving = False
                             self.moving_object.selected = False
                             self.moving_object.place_color = None
                             self.moving_object = None
                             self.show_grid = False
+                            
 
                     # Start placement of a new tower upon buy button click
                     else:
