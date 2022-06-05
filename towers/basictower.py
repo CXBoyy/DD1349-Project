@@ -1,7 +1,5 @@
-from asyncio.proactor_events import _ProactorBaseWritePipeTransport
 import pygame
 from .tower import Tower
-import math
 
 
 class basictower(Tower):

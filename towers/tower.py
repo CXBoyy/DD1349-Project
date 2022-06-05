@@ -1,6 +1,5 @@
 import pygame
-import numpy as np
-import math
+from math import sqrt
 from projectile import Projectile
 from tower_menu import Button, Towermenu
 
@@ -57,7 +56,7 @@ class Tower():
         Returns:
             boolean: True if in range
         """
-        distance = np.hypot(enemy.x - self.x, enemy.y - self.y)
+        distance = sqrt((enemy.x - self.x)**2 + (enemy.y - self.y)**2)
         if distance <= self.range:
             return True
         else:
@@ -114,8 +113,8 @@ class Tower():
             boolean: False if not collide
         """
         x2 = otherTower.x
-        y2 = otherTower.y
-        dis = math.sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
+        y2 = otherTower.y   
+        dis = sqrt((x2 - self.x)**2 + (y2 - self.y)**2)
         if dis > 0:
             return False
         else:

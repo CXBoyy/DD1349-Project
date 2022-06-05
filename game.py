@@ -1,13 +1,16 @@
+<<<<<<< HEAD
+import pygame, sys, asyncio
+=======
 from xmlrpc.client import boolean
 from numpy import not_equal
 import pygame
 import sys
 import math
+>>>>>>> 7044bbfb6bfc9b4bd5ad36c587aebcb5fb2bfc11
 import button
 from enemies import enemy
 from enemies import single_track as st
 from towers.basictower import basictower, dubbletower, heavytower, missiletower
-import time
 from game_wave import Wave
 from projectile import Projectile
 from tower_menu import Buymenu
@@ -338,7 +341,7 @@ class Game():
         self.menu.add_button(buy_tower_3, "buy_tower3", 400)
         self.menu.add_button(buy_tower_4, "buy_tower4", 550)
 
-    def game_loop(self, clock: pygame.time.Clock, map):
+    async def game_loop(self, clock:pygame.time.Clock, map):
         """ The main game loop method.
 
         Args:
@@ -525,13 +528,16 @@ class Game():
                     self.back_button1.clicked = False
 
                 if self.health <= 0:
-                    self.game_over_screen()
+                    await self.game_over_screen()
                 if game_won:
-                    self.game_won_screen()
-
+                    await self.game_won_screen()
+                    
                 pygame.display.update()
                 loop_counter += 1
-                mainClock.tick(60)
+                #mainClock.tick(60)
+                await asyncio.sleep(0)
+                
+                            
 
     def check_events(self):
         """ A method to check pygame events during the game loop.
@@ -639,7 +645,7 @@ class Game():
         except Exception as e:
             print(str(e) + "NOT VALID NAME")
 
-    def game_over_screen(self):
+    async def game_over_screen(self):
         """ A function that holds the game over screen.
         """
         show_screen = True
@@ -670,8 +676,9 @@ class Game():
                 back_button2.clicked = False
                 show_screen = False
             pygame.display.update()
-
-    def game_won_screen(self):
+            await asyncio.sleep(0)
+            
+    async def game_won_screen(self):
         """ A function that holds the game won screen.
         """
         show_screen = True
@@ -702,3 +709,5 @@ class Game():
                 back_button2.clicked = False
                 show_screen = False
             pygame.display.update()
+            await asyncio.sleep(0)
+                    

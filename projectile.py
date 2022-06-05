@@ -1,7 +1,6 @@
 import pygame
 from enemies.enemy import Enemy
-import numpy as np
-import time
+from math import sqrt
 
 
 def normalize(e1, e2):
@@ -16,7 +15,7 @@ def normalize(e1, e2):
     """
 
     vector = (e1, e2)
-    norm = np.linalg.norm(vector)
+    norm = sqrt(e1**2 + e2**2)
     newVector = (vector[0] / norm, vector[1] / norm)
     return newVector
 
