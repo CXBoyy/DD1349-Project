@@ -1,7 +1,16 @@
 # Compiled python
-__pycache__/
-*.py[cod]
-*$py.class
+*.log
+
+*.pot
+
+*.pyc
+
+*/*/*/__pycache__/
+
+*/*/__pycache__/
+
+*/__pycache__/
+
 
 # Vs Code
 .vscode
