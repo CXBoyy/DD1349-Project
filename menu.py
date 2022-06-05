@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 import button
 import game
@@ -34,8 +35,8 @@ class Menu():
         self.game.window.blit(self.game.canvas, (0,0))
         pygame.display.update()
 
-    def display_MainMenu(self, clock:pygame.time.Clock):
-        """ DIsplays the main menu
+    async def display_MainMenu(self, clock:pygame.time.Clock):
+        """ Displays the main menu
 
         Args:
             clock (pygame.time.Clock): Make game in 60 fps
@@ -57,7 +58,7 @@ class Menu():
                 self.activate_buttons()
                 g = game.Game()
                 g.playing = True
-                g.game_loop(clock=mainClock, map="map1")
+                await g.game_loop(clock=mainClock, map="map1")
             if self.exit_button.clicked:
                 self.activate_buttons()
                 self.game.running = False
@@ -65,6 +66,7 @@ class Menu():
                 self.to_display = False
             pygame.display.update()
             mainClock.tick(60)
+            await asyncio.sleep(0)
             
 
     def check_events(self):

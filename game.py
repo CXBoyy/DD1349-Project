@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, asyncio
 import button
 from enemies import enemy
 from enemies import single_track as st
@@ -242,7 +242,7 @@ class Game():
         self.menu.add_button(buy_tower_4, "buy_tower4", 550)
         
 
-    def game_loop(self, clock:pygame.time.Clock, map):
+    async def game_loop(self, clock:pygame.time.Clock, map):
         """ The main game loop method.
         
         Args:
@@ -414,7 +414,8 @@ class Game():
                     
                 pygame.display.update()
                 loop_counter += 1
-                mainClock.tick(60)
+                #mainClock.tick(60)
+                await asyncio.sleep(0)
                 
                             
 

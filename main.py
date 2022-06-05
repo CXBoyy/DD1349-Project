@@ -22,7 +22,7 @@ async def main():
     clock = pygame.time.Clock()
     print(g.playing)
     while g.running:
-        menuVar.display_MainMenu(clock)
+        await menuVar.display_MainMenu(clock)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 menuVar.to_display = False
