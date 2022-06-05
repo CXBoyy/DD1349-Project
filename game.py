@@ -1,12 +1,4 @@
-<<<<<<< HEAD
 import pygame, sys, asyncio
-=======
-from xmlrpc.client import boolean
-from numpy import not_equal
-import pygame
-import sys
-import math
->>>>>>> 7044bbfb6bfc9b4bd5ad36c587aebcb5fb2bfc11
 import button
 from enemies import enemy
 from enemies import single_track as st
@@ -14,17 +6,6 @@ from towers.basictower import basictower, dubbletower, heavytower, missiletower
 from game_wave import Wave
 from projectile import Projectile
 from tower_menu import Buymenu
-
-
-buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png")
-buy_tower = pygame.transform.scale(pygame.image.load(
-    r"assets/New/Towers/tower1/tower1_1.png"), (45, 45))
-buy_tower_2 = pygame.transform.scale(pygame.image.load(
-    r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45))
-buy_tower_3 = pygame.transform.scale(pygame.image.load(
-    r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (45, 45))
-buy_tower_4 = pygame.transform.scale(pygame.image.load(
-    r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (45, 45))
 
 
 tower_names = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
@@ -58,6 +39,17 @@ class Game():
             "pics/back.png").convert_alpha()
         self.back_button1 = button.Button(
             0, 0, self.back_button_img, 0.3, True)
+        
+        # Buy buttons
+        buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png").convert_alpha()
+        buy_tower = pygame.transform.scale(pygame.image.load(
+            r"assets/New/Towers/tower1/tower1_1.png"), (45, 45)).convert_alpha()
+        buy_tower_2 = pygame.transform.scale(pygame.image.load(
+            r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45)).convert_alpha()
+        buy_tower_3 = pygame.transform.scale(pygame.image.load(
+            r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (45, 45)).convert_alpha()
+        buy_tower_4 = pygame.transform.scale(pygame.image.load(
+            r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (45, 45)).convert_alpha()
 
         # Map
         self.map1_img = pygame.image.load(
@@ -85,6 +77,8 @@ class Game():
             for y_coordinate in range(0, 640, 64):
                 self.map1_grid_rects.append(pygame.Rect(
                     x_coordinate, y_coordinate, 64, 64))
+                
+        print(self.map1_grid_rects)
 
         # Adding path rects
         self.map1_path_rects = [
@@ -393,7 +387,6 @@ class Game():
                             if not colliding:
                                 self.moving_object.place_color = (
                                     0, 255, 0, 100)
-                                pass
 
                 # Checking if the wave has started or not
                 if not current_wave.wave_started:
@@ -516,8 +509,6 @@ class Game():
                 if self.moving_object:
                     self.moving_object.draw(self.window)
                     self.moving_object.draw_placement(self.window)
-                    for tower in self.towers:
-                        tower.draw_placement(self.window)
 
                 # Draw menu
                 self.menu.draw(self.window)
@@ -534,7 +525,7 @@ class Game():
                     
                 pygame.display.update()
                 loop_counter += 1
-                #mainClock.tick(60)
+                mainClock.tick(60)
                 await asyncio.sleep(0)
                 
                             

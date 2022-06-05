@@ -23,7 +23,7 @@ class basictower(Tower):
         self.projectile_speed = 4
 
         self.tower_img.append(pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)))
+            r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)).convert_alpha())
 
         self.tower_rect = self.tower_img[0].get_rect()
         self.tower_rect.topleft = (self.x, self.y)
@@ -59,7 +59,7 @@ class dubbletower(basictower):
         self.projectile_speed = 6
 
         self.tower_img.append(pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (64, 64)))
+            r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (64, 64)).convert_alpha())
 
         self.tower_rect = self.tower_img[0].get_rect()
         self.tower_rect.topleft = (self.x, self.y)
@@ -86,7 +86,7 @@ class heavytower(basictower):
         self.projectile_speed = 4
 
         self.tower_img.append(pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (64, 64)))
+            r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (64, 64)).convert_alpha())
 
         self.tower_rect = self.tower_img[0].get_rect()
         self.tower_rect.topleft = (self.x, self.y)
@@ -113,7 +113,7 @@ class missiletower(basictower):
         self.projectile_speed = 4
 
         self.tower_img.append(pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (64, 64)))
+            r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (64, 64)).convert_alpha())
 
         self.tower_rect = self.tower_img[0].get_rect()
         self.tower_rect.topleft = (self.x, self.y)
