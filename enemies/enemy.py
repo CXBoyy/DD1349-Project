@@ -73,7 +73,8 @@ class Enemy(pygame.sprite.Sprite):
         """
         if (self.x, self.y) >= self.pathEnd:
             self.game.health -= 1
-            self.out_of_bounds = True
+            #self.out_of_bounds = True
+            self.kill()
         else:
             index = self.animation_count // len(self.imgs)
             self.image = self.imgs[index].convert_alpha()
@@ -124,8 +125,10 @@ class Enemy(pygame.sprite.Sprite):
             damage (int): the damage dealt to enemy
         """
         self.health -= damage
-        if self.health <= 0:
+        if self.health <= 0 and not self.dead:
             self.dead = True
+            self.kill()
+            return True
 
     def rotate(self, angle):
         """ Function for rotation of enemies

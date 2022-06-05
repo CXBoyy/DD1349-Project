@@ -141,24 +141,8 @@ class Game():
         ]
 
         wave5 = [
-            st.SingleTrackLvl2(
-                self.window,
-                0,
-                97,
-                5,
-                5,
-                self.map1_path,
-                self.map1_end,
-                self),
-            st.SingleTrackLvl2(
-                self.window,
-                0,
-                97,
-                5,
-                5,
-                self.map1_path,
-                self.map1_end,
-                self),
+            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
+            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
             st.SingleTrackLvl2(
                 self.window,
                 0,
@@ -325,6 +309,7 @@ class Game():
         spawn_delay = 45
         next_enemy = "1"
         game_won = False
+        pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN])
         if self.map == "map1":
             start_tick = pygame.time.get_ticks()
             projectiles = pygame.sprite.Group()
@@ -344,10 +329,9 @@ class Game():
                     pos[1] = 32
 
                 # Check for moving object
-                if self.moving_object:
+                if self.moving_object is not None and self.moving_object.moving:
                     grid = ( int(pos[0] / 64), int(pos[1] / 64))
                     self.moving_object.moveTower(grid[0] * 64, grid[1] * 64)
-                    tower_list = self.towers[:]
                     colliding = False
                     if self.map1_dict[grid]:
                         colliding = True
@@ -379,25 +363,26 @@ class Game():
                 health_text = font.render(
                     (str.format("Lives: {}", self.health)), True, (0, 0, 0))
                 health_rect = health_text.get_rect(center=(90, 11))
+                
                 wave_text = font.render(
                     (str.format("Currently on Wave {}", wave_counter)), True, (0, 0, 0))
                 wave_rect = wave_text.get_rect(center=(425, 11))
+                
                 wave_timer_text = font.render(
-                    (str.format(
-                        "Time until wave {}:   {} seconds",
-                        wave_counter,
-                        countdown)),
-                    True,
-                    (0,
-                     0,
-                     0))
+                    (str.format("Time until wave {}:   {} seconds", wave_counter, countdown)), True, (0, 0, 0))
                 wave_timer_rect = wave_timer_text.get_rect(center=(730, 11))
+                
                 money_text = font.render(
                     (str.format("Money: {}", self.money)), True, (0, 0, 0))
                 money_rect = money_text.get_rect(center=(225, 11))
+                
                 esc_text = font.render(
                     (str.format("Press esc to cancel", )), True, (255, 0, 0))
                 esc_rect = esc_text.get_rect(center=(110, 45))
+                
+                fps_text = font.render(
+                        str.format("FPS: {}", int(mainClock.get_fps())), True, (0, 0, 0))
+                fps_rect = fps_text.get_rect(center=(830, 50))
 
                 # Drawing everything
                 self.check_events()
@@ -408,6 +393,7 @@ class Game():
                 self.window.blit(wave_text, wave_rect)
                 self.window.blit(wave_timer_text, wave_timer_rect)
                 self.window.blit(money_text, money_rect)
+                self.window.blit(fps_text, fps_rect)
                 if self.buying_tower:
                     self.window.blit(esc_text, esc_rect)
                 self.back_button1.draw(self.window)
@@ -420,15 +406,6 @@ class Game():
                     if loop_counter % spawn_delay == 0 and next_enemy != "1":
                         spawned_enemies.add(next_enemy)
                         next_enemy = next(iterator, "1")
-
-                    spawned_iterator = iter(spawned_enemies)
-                    # Removing enemies outside of the map/dead enemies
-                    for spawned_enemy in spawned_iterator:
-                        if spawned_enemy.dead:
-                            self.money += spawned_enemy.reward
-                            spawned_enemies.remove(spawned_enemy)
-                        if spawned_enemy.out_of_bounds:
-                            spawned_enemies.remove(spawned_enemy)
 
                     spawned_enemies.update()
                     spawned_enemies.draw(self.window)
@@ -445,19 +422,21 @@ class Game():
                                         tw.target):
                                     tw.target = enemy
                                 if boolean_in_range is True and tw.cooldown_counter % tw.cooldown == 0:
-                                    if tw.target is None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(
-                                            tw.target):
+                                    if tw.target is None or tw.target == enemy or tw.target.dead is True or not tw.is_in_range(tw.target):
                                         tw.target = enemy
                                         projectiles.add(
-                                            tw.attack2(
-                                                enemy,
-                                                tw.damage,
-                                                tw.projectile_speed))
+                                            tw.attack2(enemy, tw.damage, tw.projectile_speed))
+                            if enemy.dead:
+                                enemy.kill()
                         for projectile in projectiles:
                             if projectile.dead:
-                                projectiles.remove(projectile)
+                                #projectiles.remove(projectile)
+                                projectile.kill()
                         tw.cooldown_counter += 1
-                    projectiles.update()
+                    for projectile in projectiles:
+                        reward = projectile.update()
+                        if reward is not None:
+                            self.money += reward
                     projectiles.draw(self.window)
 
                 # Draw towers
@@ -465,7 +444,7 @@ class Game():
                     tw.draw(self.window)
 
                 # Draw moving tower
-                if self.moving_object:
+                if self.moving_object is not None and self.moving_object.moving:
                     self.moving_object.draw(self.window)
                     self.moving_object.draw_placement(self.window)
 
@@ -513,7 +492,7 @@ class Game():
                 if event.button == 1:
 
                     # Placement of new towers
-                    if self.moving_object:
+                    if self.moving_object is not None and self.moving_object.moving:
                         not_allowed = False
 
                         # Check if player is trying to place a new tower on the
@@ -563,8 +542,7 @@ class Game():
                                 self.add_tower(buy_menu_button)
 
                 # Return to the main screen
-                if self.back_button1.rect.collidepoint(
-                        pos) and event.button == 1:
+                if self.back_button1.rect.collidepoint(pos) and event.button == 1:
                     self.back_button1.clicked = True
 
     def add_tower(self, name):
@@ -576,11 +554,10 @@ class Game():
         x, y = pygame.mouse.get_pos()
         name_list = ["buy_tower1", "buy_tower2", "buy_tower3", "buy_tower4"]
         object_list = [
-            basictower(
-                x, y), dubbletower(
-                x, y), heavytower(
-                x, y), missiletower(
-                    x, y)]
+            basictower(x, y), 
+            dubbletower(x, y),
+            heavytower(x, y), 
+            missiletower(x, y)]
 
         try:
             obj = object_list[name_list.index(name)]
@@ -639,6 +616,7 @@ class Game():
             True)
 
         while show_screen:
+            self.check_events()
             self.window.fill((255, 255, 255))
             self.window.blit(text1, text1_rect)
             back_button2.draw(self.window)

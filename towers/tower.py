@@ -20,7 +20,7 @@ class Tower():
         self.range = 10
         self.radius = self.range
         self.tower_rect = None
-        self.moving_tower = False
+        self.moving = False
         self.target = None
         self.cooldown = 60
         self.cooldown_counter = 0
@@ -32,7 +32,7 @@ class Tower():
         Args:
             window (pygame.Surface): surface
         """
-        window.blit(self.tower_img[0], (self.x, self.y))
+        window.blit(self.tower_img[0].convert_alpha(), (self.x, self.y))
 
     def attack2(self, enemy, damage, speed):
         """ Attack a enemy
@@ -74,7 +74,7 @@ class Tower():
             circleRect = pygame.draw.circle(
                 surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
             circleRect.center = (self.x + 32, self.y + 32)
-            window.blit(surface, ((self.x + (self.width / 2)) -
+            window.blit(surface.convert_alpha(), ((self.x + (self.width / 2)) -
                         self.range, (self.y + (self.height / 2)) - self.range))
 
     def draw_placement(self, window):
@@ -90,7 +90,7 @@ class Tower():
                 surface, self.place_color, pygame.Rect(
                     0, 0, 64, 64))
 
-        window.blit(surface, (self.x, self.y))
+        window.blit(surface.convert_alpha(), (self.x, self.y))
 
     def moveTower(self, x, y):
         """ Moves tower

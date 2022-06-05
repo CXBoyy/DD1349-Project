@@ -40,7 +40,7 @@ class Projectile(pygame.sprite.Sprite):
         self.window = target.window
         self.directionalVector = normalize(
             (self.target.x - self.x), (self.target.y - self.y))
-        self.image = pygame.Surface((10, 10))
+        self.image = pygame.Surface((10, 10)).convert_alpha()
         self.rect = pygame.Rect(self.x, self.y, 5, 5)
         self.dead = False
         self.damage = damage
@@ -54,11 +54,11 @@ class Projectile(pygame.sprite.Sprite):
         """
         if self.target.rect is not None:
             if self.rect.colliderect(self.target.rect):
-                self.target.hit(self.damage)
+                killed_by_this_projectile = self.target.hit(self.damage)
                 self.dead = True
-                return True
-            else:
-                return False
+                self.kill()
+                if killed_by_this_projectile:
+                    return self.target.reward
 
     def update(self):
         """ A function to update the drawing and movement of the projectile.
@@ -66,7 +66,7 @@ class Projectile(pygame.sprite.Sprite):
         if not self.dead:
             self.move()
             self.rect = pygame.Rect(self.x, self.y, 5, 5)
-            self.check_collision()
+            return self.check_collision()
 
     def move(self):
         """ A function to update the coordinates of the projectile.
