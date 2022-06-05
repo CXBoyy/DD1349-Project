@@ -1,2 +1,19 @@
-# Ignore all pycache folders
-__pycache__/
+# Compiled python
+*.log
+
+*.pot
+
+*.pyc
+
+*/*/*/__pycache__/
+
+*/*/__pycache__/
+
+*/__pycache__/
+
+
+# Vs Code
+.vscode
+
+# Mac File Path
+.DS_Store

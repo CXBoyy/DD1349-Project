@@ -7,6 +7,7 @@ from tower_menu import Button, Towermenu
 class Tower():
     """ Abstract class for towers
     """
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -25,16 +26,14 @@ class Tower():
         self.cooldown_counter = 0
         self.place_color = None
 
-
-    def drawTower(self, window : pygame.Surface):
+    def drawTower(self, window: pygame.Surface):
         """ Draws the tower
 
         Args:
-            window (pygame.Surface): surface 
+            window (pygame.Surface): surface
         """
         window.blit(self.tower_img[0], (self.x, self.y))
-        
-                    
+
     def attack2(self, enemy, damage, speed):
         """ Attack a enemy
 
@@ -47,7 +46,7 @@ class Tower():
             Projectile: the projectile
         """
         return Projectile(self, enemy, damage, speed)
-            
+
     def is_in_range(self, enemy):
         """ Check if enemy is in tower range
 
@@ -55,7 +54,7 @@ class Tower():
             enemy (Enemy): enemy to attack
 
         Returns:
-            boolean: True if in range 
+            boolean: True if in range
         """
         distance = sqrt((enemy.x - self.x)**2 + (enemy.y - self.y)**2)
         if distance <= self.range:
@@ -70,25 +69,31 @@ class Tower():
             window (pygame.Surface): surface
         """
         if self.selected:
-            surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
-            circleRect = pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
-            circleRect.center = (self.x+32, self.y+32)
-            window.blit(surface, ((self.x + (self.width/2)) - self.range, (self.y + (self.height/2)) - self.range))
-        
+            surface = pygame.Surface(
+                (self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
+            circleRect = pygame.draw.circle(
+                surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+            circleRect.center = (self.x + 32, self.y + 32)
+            window.blit(surface, ((self.x + (self.width / 2)) -
+                        self.range, (self.y + (self.height / 2)) - self.range))
+
     def draw_placement(self, window):
-        """ Draws range circle 
+        """ Draws range circle
 
         Args:
             window (pygame.Surface): surface
         """
-        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
+        surface = pygame.Surface(
+            (self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
         if self.place_color is not None:
-            pygame.draw.rect(surface, self.place_color, pygame.Rect(0,0,64,64))
+            pygame.draw.rect(
+                surface, self.place_color, pygame.Rect(
+                    0, 0, 64, 64))
 
         window.blit(surface, (self.x, self.y))
 
-    def moveTower(self,x,y):
-        """ Moves tower 
+    def moveTower(self, x, y):
+        """ Moves tower
 
         Args:
             x (int): x-pos
@@ -97,8 +102,7 @@ class Tower():
         self.x = x
         self.y = y
         self.tower_rect.topleft = (x, y)
-        
-        
+
     def collide(self, otherTower):
         """ Check if tower collide with an other tower
 
