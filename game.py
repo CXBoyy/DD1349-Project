@@ -483,6 +483,7 @@ class Game():
                 if self.buying_tower:
                     self.buying_tower = False
                     self.moving_object.selected = False
+                    self.moving_object.kill()
                     self.moving_object = None
                     self.show_grid = False
 

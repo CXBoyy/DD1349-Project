@@ -72,28 +72,22 @@ class Tower(pygame.sprite.DirtySprite):
             window (pygame.Surface): surface
         """
         if self.selected:
-            surface = pygame.Surface(
-                (self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
-            circleRect = pygame.draw.circle(
-                surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+            surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32).convert_alpha()
+            circleRect = pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
             circleRect.center = (self.x + 32, self.y + 32)
-            window.blit(surface.convert_alpha(), ((self.x + (self.width / 2)) -
-                        self.range, (self.y + (self.height / 2)) - self.range))
+            window.blit(surface, ((self.x + (self.width / 2)) - self.range, (self.y + (self.height / 2)) - self.range))
 
     def draw_placement(self, window):
-        """ Draws range circle
+        """ Draws a red or green square around the tower to denote allowed placement.
 
         Args:
             window (pygame.Surface): surface
         """
-        surface = pygame.Surface(
-            (self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
+        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32).convert_alpha()
         if self.place_color is not None:
-            pygame.draw.rect(
-                surface, self.place_color, pygame.Rect(
-                    0, 0, 64, 64))
+            pygame.draw.rect(surface, self.place_color, pygame.Rect(0, 0, 64, 64))
 
-        window.blit(surface.convert_alpha(), (self.x, self.y))
+        window.blit(surface, (self.x, self.y))
 
     def moveTower(self, x, y):
         """ Moves tower
@@ -130,9 +124,8 @@ class Tower(pygame.sprite.DirtySprite):
         Args:
             window (_type_): surface
         """
-        if self.dirty == 1:
-            self.draw_radius(window)
-            self.drawTower(window)
-            self.dirty = 0
-            self.counter += 1
-            print(self.counter)
+        self.draw_radius(window)
+        self.drawTower(window)
+        self.dirty = 0
+        self.counter += 1
+        print(self.counter)
