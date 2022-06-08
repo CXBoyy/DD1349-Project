@@ -17,16 +17,17 @@ class Tower(pygame.sprite.DirtySprite):
         self.damage = 1
         self.projectile_speed = 1
         self.selected = False
-        self.tower_img = []
+        self.image = None
         self.range = 10
         self.radius = self.range
-        self.tower_rect = None
+        self.rect = None
         self.moving = False
         self.target = None
         self.cooldown = 60
         self.cooldown_counter = 0
         self.place_color = None
         self.dirty = 0
+        self.counter = 0
 
     def drawTower(self, window: pygame.Surface):
         """ Draws the tower
@@ -34,7 +35,7 @@ class Tower(pygame.sprite.DirtySprite):
         Args:
             window (pygame.Surface): surface
         """
-        window.blit(self.tower_img[0].convert_alpha(), (self.x, self.y))
+        window.blit(self.image.convert_alpha(), (self.x, self.y))
 
     def attack2(self, enemy, damage, speed):
         """ Attack a enemy
@@ -103,7 +104,7 @@ class Tower(pygame.sprite.DirtySprite):
         """
         self.x = x
         self.y = y
-        self.tower_rect.topleft = (x, y)
+        self.rect.topleft = (x, y)
         self.dirty = 1
 
     def collide(self, otherTower):
@@ -132,3 +133,6 @@ class Tower(pygame.sprite.DirtySprite):
         if self.dirty == 1:
             self.draw_radius(window)
             self.drawTower(window)
+            self.dirty = 0
+            self.counter += 1
+            print(self.counter)

@@ -11,7 +11,7 @@ class basictower(Tower):
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.tower_img = []
+        self.image = None
         self.range = 300
         self.width = self.height = 60
         self.enemy_is_in_range = False
@@ -22,11 +22,11 @@ class basictower(Tower):
         self.damage = 2
         self.projectile_speed = 4
 
-        self.tower_img.append(pygame.transform.scale(pygame.image.load(
+        self.image = (pygame.transform.scale(pygame.image.load(
             r"assets/New/Towers/tower1/tower1_1.png"), (64, 64)).convert_alpha())
 
-        self.tower_rect = self.tower_img[0].get_rect()
-        self.tower_rect.topleft = (self.x, self.y)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)
 
 
 class dubbletower(basictower):
@@ -38,7 +38,7 @@ class dubbletower(basictower):
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.tower_img = []
+        self.image = None
         self.range = 250
         self.width = self.height = 60
         self.enemy_is_in_range = False
@@ -49,11 +49,11 @@ class dubbletower(basictower):
         self.damage = 1
         self.projectile_speed = 6
 
-        self.tower_img.append(pygame.transform.scale(pygame.image.load(
+        self.image = (pygame.transform.scale(pygame.image.load(
             r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (64, 64)).convert_alpha())
 
-        self.tower_rect = self.tower_img[0].get_rect()
-        self.tower_rect.topleft = (self.x, self.y)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)
 
 
 class heavytower(basictower):
@@ -65,7 +65,7 @@ class heavytower(basictower):
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.tower_img = []
+        self.image = None
         self.range = 150
         self.width = self.height = 60
         self.enemy_is_in_range = False
@@ -76,11 +76,11 @@ class heavytower(basictower):
         self.damage = 6
         self.projectile_speed = 4
 
-        self.tower_img.append(pygame.transform.scale(pygame.image.load(
+        self.image = (pygame.transform.scale(pygame.image.load(
             r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (64, 64)).convert_alpha())
 
-        self.tower_rect = self.tower_img[0].get_rect()
-        self.tower_rect.topleft = (self.x, self.y)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)
 
 
 class missiletower(basictower):
@@ -92,7 +92,7 @@ class missiletower(basictower):
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.tower_img = []
+        self.image = None
         self.range = 250
         self.width = self.height = 60
         self.enemy_is_in_range = False
@@ -103,8 +103,8 @@ class missiletower(basictower):
         self.damage = 10
         self.projectile_speed = 4
 
-        self.tower_img.append(pygame.transform.scale(pygame.image.load(
+        self.image = (pygame.transform.scale(pygame.image.load(
             r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (64, 64)).convert_alpha())
 
-        self.tower_rect = self.tower_img[0].get_rect()
-        self.tower_rect.topleft = (self.x, self.y)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)

@@ -329,13 +329,15 @@ class Game():
                 # Check for moving object
                 if self.moving_object is not None and self.moving_object.moving:
                     grid = ( int(pos[0] / 64), int(pos[1] / 64))
-                    self.moving_object.moveTower(grid[0] * 64, grid[1] * 64)
-                    colliding = False
-                    if self.map1_dict[grid]:
-                        colliding = True
-                        self.moving_object.place_color = (255, 0, 0, 100)
-                    elif not colliding:
-                        self.moving_object.place_color = (0, 255, 0, 100)
+                    old_grid = ( int(self.moving_object.x / 64), int(self.moving_object.y / 64))
+                    if grid != old_grid:
+                        self.moving_object.moveTower(grid[0] * 64, grid[1] * 64)
+                        colliding = False
+                        if self.map1_dict[grid]:
+                            colliding = True
+                            self.moving_object.place_color = (255, 0, 0, 100)
+                        elif not colliding:
+                            self.moving_object.place_color = (0, 255, 0, 100)
 
                 # Checking if the wave has started or not
                 if not current_wave.wave_started:
@@ -502,11 +504,9 @@ class Game():
                         if self.menu.rect.collidepoint(pos):
                             for button in self.menu.buttons:
                                 if button.rect.collidepoint(pos):
-                                    buy_menu_button = self.menu.get_clicked(
-                                        pos[0], pos[1])
+                                    buy_menu_button = self.menu.get_clicked(pos[0], pos[1])
                                     if buy_menu_button:
-                                        cost = self.menu.get_item_cost(
-                                            buy_menu_button)
+                                        cost = self.menu.get_item_cost(buy_menu_button)
                                         if self.money >= cost:
                                             self.show_grid = True
                                             self.current_tower_cost = cost
