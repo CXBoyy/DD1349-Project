@@ -4,11 +4,12 @@ from projectile import Projectile
 from tower_menu import Button, Towermenu
 
 
-class Tower():
+class Tower(pygame.sprite.DirtySprite):
     """ Abstract class for towers
     """
 
     def __init__(self, x, y):
+        super().__init__()
         self.x = x
         self.y = y
         self.width = 0
@@ -25,6 +26,7 @@ class Tower():
         self.cooldown = 60
         self.cooldown_counter = 0
         self.place_color = None
+        self.dirty = 0
 
     def drawTower(self, window: pygame.Surface):
         """ Draws the tower
@@ -102,6 +104,7 @@ class Tower():
         self.x = x
         self.y = y
         self.tower_rect.topleft = (x, y)
+        self.dirty = 1
 
     def collide(self, otherTower):
         """ Check if tower collide with an other tower
@@ -119,3 +122,13 @@ class Tower():
             return False
         else:
             return True
+    
+    def draw(self, window):
+        """ Draws the tower
+
+        Args:
+            window (_type_): surface
+        """
+        if self.dirty == 1:
+            self.draw_radius(window)
+            self.drawTower(window)

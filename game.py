@@ -1,10 +1,8 @@
 import pygame, sys, asyncio
 import button
-from enemies import enemy
 from enemies import single_track as st
 from towers.basictower import basictower, dubbletower, heavytower, missiletower
 from game_wave import Wave
-from projectile import Projectile
 from tower_menu import Buymenu
 
 
@@ -262,7 +260,7 @@ class Game():
                 self.wave_dict[wave_string].add(enemy)
 
         # Placed towers
-        self.towers = []
+        self.towers = pygame.sprite.Group()
 
         self.buying_tower = False
         self.current_tower_cost = 0
@@ -440,8 +438,7 @@ class Game():
                     projectiles.draw(self.window)
 
                 # Draw towers
-                for tw in self.towers:
-                    tw.draw(self.window)
+                self.towers.draw(self.window)
 
                 # Draw moving tower
                 if self.moving_object is not None and self.moving_object.moving:
@@ -519,7 +516,7 @@ class Game():
                         # Place a new tower on left click
                         if not not_allowed:
                             if self.moving_object.name in tower_names and self.buying_tower:
-                                self.towers.append(self.moving_object)
+                                self.towers.add(self.moving_object)
                                 self.money -= self.current_tower_cost
                                 self.buying_tower = False
                                 tower_pos = (int(self.moving_object.x / 64), int(self.moving_object.y / 64))

@@ -28,15 +28,6 @@ class basictower(Tower):
         self.tower_rect = self.tower_img[0].get_rect()
         self.tower_rect.topleft = (self.x, self.y)
 
-    def draw(self, window):
-        """ Draws the tower
-
-        Args:
-            window (_type_): surface
-        """
-        super().draw_radius(window)
-        super().drawTower(window)
-
 
 class dubbletower(basictower):
     """ Class for dubbletower
