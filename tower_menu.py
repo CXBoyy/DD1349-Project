@@ -73,7 +73,7 @@ class Towermenu:
         self.background = img
         self.rect = self.background.get_rect()
         self.rect.bottomright = (x + self.background.get_width() / 2, y)
-        self.font = pygame.font.SysFont("comicsans", 30)
+        self.font = pygame.font.Font(None, 32)
 
     def add_button(self, img, name):
         """ Adds button
@@ -92,12 +92,7 @@ class Towermenu:
             window (_type_): surface
         """
         window.blit(
-            self.background,
-            (self.x -
-             self.background.get_width() /
-             2,
-             self.y -
-             70))
+            self.background, (self.x - self.background.get_width() / 2, self.y - 70))
         for item in self.buttons:
             item.draw(window)
 
@@ -166,22 +161,9 @@ class Buymenu(Towermenu):
         Args:
             window (_type_): surface
         """
-        window.blit(
-            self.background,
-            (self.x -
-             self.background.get_width() /
-             2,
-             self.y -
-             65))
+        window.blit(self.background, (self.x - self.background.get_width() / 2, self.y - 65))
         for item in self.buttons:
             item.draw(window)
             window.blit(test_img, (item.x - 5, item.y + item.height - 2))
-            text = self.font.render(str(item.cost), 1, (0, 0, 0))
-            window.blit(
-                text,
-                (item.x +
-                 item.width -
-                 33,
-                 item.y +
-                 item.height -
-                 7))
+            text = self.font.render(str(item.cost), 1, (0, 0, 0)).convert_alpha()
+            window.blit(text,(item.x + item.width - 33, item.y + item.height - 7))

@@ -40,7 +40,7 @@ class Projectile(pygame.sprite.Sprite):
         self.window = target.window
         self.directionalVector = normalize(
             (self.target.x - self.x), (self.target.y - self.y))
-        self.image = pygame.Surface((10, 10)).convert_alpha()
+        self.image = pygame.Surface((10, 10))
         self.rect = pygame.Rect(self.x, self.y, 5, 5)
         self.dead = False
         self.damage = damage

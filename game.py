@@ -32,22 +32,22 @@ class Game():
 
         # Buttons
         self.back_button_img = pygame.transform.scale(
-            pygame.image.load("pics/back.png").convert_alpha(), (100, 100))
+            pygame.image.load("pics/back.png"), (100, 100))
         self.back_button_img_2 = pygame.image.load(
-            "pics/back.png").convert_alpha()
+            "pics/back.png")
         self.back_button1 = button.Button(
             0, 0, self.back_button_img, 0.3, True)
         
         # Buy buttons
-        buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png").convert_alpha()
+        buy_menu_img = pygame.image.load(r"assets/New/in-game_menu.png")
         buy_tower = pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/tower1/tower1_1.png"), (45, 45)).convert_alpha()
+            r"assets/New/Towers/tower1/tower1_1.png"), (45, 45))
         buy_tower_2 = pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45)).convert_alpha()
+            r"assets/New/Towers/Tower3/Tower_3_body_cannon.png"), (45, 45))
         buy_tower_3 = pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (45, 45)).convert_alpha()
+            r"assets/New/Towers/Tower4/Tower_4_body_cannon.png"), (45, 45))
         buy_tower_4 = pygame.transform.scale(pygame.image.load(
-            r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (45, 45)).convert_alpha()
+            r"assets/New/Towers/Tower5/Tower_5_body_cannon.png"), (45, 45))
 
         # Map
         self.map1_img = pygame.image.load(
@@ -88,155 +88,25 @@ class Game():
             self.map1_dict[(i,j)] = True
 
         # Waves
-        wave1 = [
-            st.SingleTrack(
-                self.window,
-                0,
-                97,
-                5,
-                5,
-                self.map1_path,
-                self.map1_end,
-                self),
-            st.SingleTrack(
-                self.window,
-                0,
-                97,
-                2,
-                5,
-                self.map1_path,
-                self.map1_end,
-                self)]
+        wave1 = [st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 2)]
 
-        wave2 = [
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
+        wave2 = [st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 4)]
 
-        wave3 = [
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
+        wave3 = [st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 6)]
 
-        wave4 = [
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 2, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-        ]
+        wave4 = [st.SingleTrack(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 11)]
 
-        wave5 = [
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(
-                self.window,
-                0,
-                97,
-                5,
-                5,
-                self.map1_path,
-                self.map1_end,
-                self)]
+        wave5 = [st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 3)]
 
-        wave6 = [
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
+        wave6 = [st.SingleTrackLvl2(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 9)]
 
-        wave7 = [
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
+        wave7 = [st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 4)]
 
-        wave8 = [
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
-        wave9 = [
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-
-        ]
-        wave10 = [
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self),
-            st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self)
-        ]
+        wave8 = [st.SingleTrackLvl3(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 12)]
+        
+        wave9 = [st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 16)]
+        
+        wave10 = [st.SingleTrackLvl4(self.window, 0, 97, 5, 5, self.map1_path, self.map1_end, self) for _ in range(0, 32)]
 
         self.waves = [
             wave1,
@@ -249,6 +119,7 @@ class Game():
             wave8,
             wave9,
             wave10]
+        
         self.wave_dict: dict[str, Wave] = dict()
 
         counter = 1
@@ -274,12 +145,7 @@ class Game():
         self.life_font = pygame.font.SysFont("comicsans", 35)
 
         # Buy menu
-        self.menu = Buymenu(
-            self.CANVAS_WIDTH -
-            buy_menu_img.get_width() /
-            2,
-            self.CANVAS_HEIGHT,
-            buy_menu_img)
+        self.menu = Buymenu(self.CANVAS_WIDTH - buy_menu_img.get_width() / 2, self.CANVAS_HEIGHT, buy_menu_img)
 
         # Tower prices
         self.menu.add_button(buy_tower, "buy_tower1", 100)
@@ -462,7 +328,7 @@ class Game():
                     
                 pygame.display.update()
                 loop_counter += 1
-                mainClock.tick(60)
+                mainClock.tick(100000)
                 await asyncio.sleep(0)
                 
                             

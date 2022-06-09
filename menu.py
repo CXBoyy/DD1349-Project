@@ -15,8 +15,8 @@ class Menu():
         self.to_display = False
 
         # Load imgaes
-        start_img = pygame.image.load("pics/start_button.png").convert_alpha()
-        exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
+        start_img = pygame.image.load("pics/start_button.png")
+        exit_img = pygame.image.load("pics/exit_button.png")
 
         # Add buttons
         self.start_button = button.Button(

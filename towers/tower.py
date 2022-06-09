@@ -1,7 +1,7 @@
 import pygame
 from math import sqrt
 from projectile import Projectile
-from tower_menu import Button, Towermenu
+import functools
 
 
 class Tower(pygame.sprite.DirtySprite):
@@ -35,7 +35,7 @@ class Tower(pygame.sprite.DirtySprite):
         Args:
             window (pygame.Surface): surface
         """
-        window.blit(self.image.convert_alpha(), (self.x, self.y))
+        window.blit(self.image, (self.x, self.y))
 
     def attack2(self, enemy, damage, speed):
         """ Attack a enemy
@@ -65,17 +65,35 @@ class Tower(pygame.sprite.DirtySprite):
         else:
             return False
 
+    @functools.lru_cache
+    def get_radius_surf(self, *args):
+        surf = pygame.Surface(
+                (self.range * 4, self.range * 4))
+        surf.set_alpha(100)
+        pygame.draw.circle(
+                surf, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+        return surf
+    
+    @functools.lru_cache
+    def get_placement_surf(self, *args):
+        surf = pygame.Surface(
+                (64, 64))
+        surf.set_alpha(100)
+        return surf
+    
     def draw_radius(self, window):
         """ Draws tower range
 
         Args:
             window (pygame.Surface): surface
         """
-        if self.selected:
-            surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32).convert_alpha()
-            circleRect = pygame.draw.circle(surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
-            circleRect.center = (self.x + 32, self.y + 32)
-            window.blit(surface, ((self.x + (self.width / 2)) - self.range, (self.y + (self.height / 2)) - self.range))
+        # if self.selected:
+        #     surface = self.get_radius_surf()
+        #     circleRect = pygame.draw.circle(
+        #                 surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
+        #     circleRect.center = (self.x + 32, self.y + 32)
+        #     window.blit(surface, ((self.x + (self.width / 2)) - self.range, (self.y + (self.height / 2)) - self.range))
+        pass
 
     def draw_placement(self, window):
         """ Draws a red or green square around the tower to denote allowed placement.
@@ -83,11 +101,12 @@ class Tower(pygame.sprite.DirtySprite):
         Args:
             window (pygame.Surface): surface
         """
-        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32).convert_alpha()
-        if self.place_color is not None:
-            pygame.draw.rect(surface, self.place_color, pygame.Rect(0, 0, 64, 64))
+        # surface = self.get_placement_surf()
+        # if self.place_color is not None:
+        #     pygame.draw.rect(surface, self.place_color, pygame.Rect(0, 0, 64, 64))
 
-        window.blit(surface, (self.x, self.y))
+        # window.blit(surface, (self.x, self.y))
+        pass
 
     def moveTower(self, x, y):
         """ Moves tower
@@ -127,5 +146,3 @@ class Tower(pygame.sprite.DirtySprite):
         self.draw_radius(window)
         self.drawTower(window)
         self.dirty = 0
-        self.counter += 1
-        print(self.counter)

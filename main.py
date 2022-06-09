@@ -12,10 +12,6 @@ SKY_BLUE_COLOR = (202, 228, 241)
 
 pygame.display.set_caption("Tower defense")
 
-# Images
-start_img = pygame.image.load("pics/start_button.png").convert_alpha()
-exit_img = pygame.image.load("pics/exit_button.png").convert_alpha()
-
 async def main():
     """ Main method for game
     """

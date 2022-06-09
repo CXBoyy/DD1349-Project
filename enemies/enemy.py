@@ -77,7 +77,7 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
         else:
             index = self.animation_count // len(self.imgs)
-            self.image = self.imgs[index].convert_alpha()
+            self.image = self.imgs[index]
             self.rect = self.image.get_rect()
             self.rect.center = (self.x, self.y)
             nodeVector = self.move()
@@ -137,7 +137,7 @@ class Enemy(pygame.sprite.Sprite):
             angle (double): angle to rotate
         """
         old_center = self.rect.center
-        self.image = pygame.transform.rotate(self.image, angle).convert_alpha()
+        self.image = pygame.transform.rotate(self.image, angle)
         self.rect.center = old_center
 
     def display_health(self, window):
